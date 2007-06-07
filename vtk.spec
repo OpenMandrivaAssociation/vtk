@@ -41,7 +41,7 @@ BuildRequires: 	cmake >= 1.8
 BuildRequires:  python-devel
 BuildRequires:  tcl
 BuildRequires:  XFree86-devel
-BuildRequires:  expat-devel
+BuildRequires:  expat-devel >= 2.0.1
 BuildRequires:  jpeg-devel
 BuildRequires:  png-devel
 BuildRequires:  tiff-devel
@@ -286,8 +286,8 @@ export QTDIR=/usr/lib/qt3/
 cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
 	-DCMAKE_CXX_COMPILER:PATH=%{_bindir}/c++ \
 	-DCMAKE_C_COMPILER:PATH=%{_bindir}/gcc \
-	-DCMAKE_CXX_FLAGS:STRING="$RPM_OPT_FLAGS" \
-	-DCMAKE_C_FLAGS:STRING="$RPM_OPT_FLAGS" \
+	-DCMAKE_CXX_FLAGS:STRING="%{optflags}" \
+	-DCMAKE_C_FLAGS:STRING="%{optflags}" \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DPYTHON_INCLUDE_PATH:PATH=%{python_include_path} \
 	-DPYTHON_LIBRARY:FILEPATH=%{python_library} \
@@ -300,7 +300,7 @@ cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
 	-DBUILD_EXAMPLES:BOOL=ON \
 	-DBUILD_SHARED_LIBS:BOOL=ON \
 	-DBUILD_TESTING:BOOL=ON \
-	-DOPENGL_INCLUDE_PATH:FILEPATH=/usr/X11R6/include/GL \
+	-DOPENGL_INCLUDE_PATH:FILEPATH=/usr/include/GL \
 	-DVTK_USE_SYSTEM_EXPAT:BOOL=ON \
 	-DVTK_USE_SYSTEM_JPEG:BOOL=ON \
 	-DVTK_USE_SYSTEM_PNG:BOOL=ON \
@@ -309,9 +309,9 @@ cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
 	-DVTK_USE_SYSTEM_FREETYPE:BOOL=ON \
 	-DVTK_USE_ANSI_STDLIB:BOOL=ON \
 	-DVTK_USE_PARALLEL:BOOL=ON \
-	-DEXPAT_LIBRARY:FILEPATH=%{_libdir}/libexpat.so.0 \
+	-DEXPAT_LIBRARY:FILEPATH=%{_libdir}/libexpat.so.1 \
 	-DPYTHON_UTIL_LIBRARY:FILEPATH=/%{_lib}/libutil.so.1 \
-	-DVTK_PYTHON_SETUP_ARGS:STRING=--prefix="$RPM_BUILD_ROOT%{_prefix}" \
+	-DVTK_PYTHON_SETUP_ARGS:STRING=--prefix="%{buildroot}%{_prefix}" \
 	-DVTK_USE_GUISUPPORT:BOOL=ON \
 	-DVTK_USE_QVTK:BOOL=ON \
 	-DQT_INCLUDE_DIR:FILEPATH=%{qt_dir}/include \
@@ -353,68 +353,60 @@ cd Utilities/Doxygen
 make DoxygenDoc
 )
 
-
-
-
-
-
-
-
 %install
+rm -rf %{buildroot}
 
-rm -rf $RPM_BUILD_ROOT
-
-make install DESTDIR=$RPM_BUILD_ROOT
+make install DESTDIR=%{buildroot}
 
 %if "%{_lib}" != "lib"
-mv  $RPM_BUILD_ROOT/%{_prefix}/lib $RPM_BUILD_ROOT/%{_libdir}
-mkdir $RPM_BUILD_ROOT/%{_prefix}/lib
-mv $RPM_BUILD_ROOT/%{_libdir}/qt3 $RPM_BUILD_ROOT/%{_prefix}/lib
-perl -e 's@/lib/@/%{_lib}/@g' -pi $RPM_BUILD_ROOT/%{_libdir}/vtk-*/VTKConfig.cmake
-perl -e 's@/lib"@/%{_lib}"@g' -pi $RPM_BUILD_ROOT/%{_libdir}/vtk-*/VTKConfig.cmake
+mv  %{buildroot}%{_prefix}/lib %{buildroot}%{_libdir}
+mkdir %{buildroot}%{_prefix}/lib
+mv %{buildroot}%{_libdir}/qt3 %{buildroot}%{_prefix}/lib
+perl -e 's@/lib/@/%{_lib}/@g' -pi %{buildroot}%{_libdir}/vtk-*/VTKConfig.cmake
+perl -e 's@/lib"@/%{_lib}"@g' -pi %{buildroot}%{_libdir}/vtk-*/VTKConfig.cmake
 %endif
 
 %if %build_java
 #install java
-install -d -m 755 $RPM_BUILD_ROOT%{_libdir}/vtk/java
-install  -m 644 lib/vtk.jar     $RPM_BUILD_ROOT%{_libdir}/vtk/java
-install  -m 644 java/vtk/*.java $RPM_BUILD_ROOT%{_libdir}/vtk/java
+install -d -m 755 %{buildroot}%{_libdir}/vtk/java
+install  -m 644 lib/vtk.jar     %{buildroot}%{_libdir}/vtk/java
+install  -m 644 java/vtk/*.java %{buildroot}%{_libdir}/vtk/java
 %endif
 
 #install doc
-install -d -m 755 $RPM_BUILD_ROOT/%_datadir/vtk-docs
-cp -a Utilities/Doxygen/doc/html $RPM_BUILD_ROOT/%_datadir/vtk-docs/api
+install -d -m 755 %{buildroot}%{_datadir}/vtk-docs
+cp -a Utilities/Doxygen/doc/html %{buildroot}%{_datadir}/vtk-docs/api
 
 #install test-suite and examples
 for d in Common Filtering Graphics Hybrid IO Imaging Parallel Rendering VolumeRendering Widgets
 do
-	mkdir -p $RPM_BUILD_ROOT/%_datadir/vtk-examples/Testing/$d
-	cp -a $d/Testing/* $RPM_BUILD_ROOT/%_datadir/vtk-examples/Testing/$d
+	mkdir -p %{buildroot}%{_datadir}/vtk-examples/Testing/$d
+	cp -a $d/Testing/* %{buildroot}%{_datadir}/vtk-examples/Testing/$d
 done
-cp -a Examples $RPM_BUILD_ROOT/%_datadir/vtk-examples
+cp -a Examples %{buildroot}%{_datadir}/vtk-examples
 
 # get rid of unwanted files
-find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name "*.o" -exec rm -f {} \;
-find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name CMakeCache.txt -exec rm -f {} \;
-find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name Makefile -exec rm -f {} \;
-find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name DartTestfile.txt -exec rm -f {} \;
-find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name .NoDartCoverage -exec rm -f {} \;
-find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name "cmake.*" -exec rm -f {} \;
-rm -rf `find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name CVS -type d`
-rm -rf `find $RPM_BUILD_ROOT/%_datadir/vtk-examples -name "CMake*"`
+find %{buildroot}%{_datadir}/vtk-examples -name "*.o" -exec rm -f {} \;
+find %{buildroot}%{_datadir}/vtk-examples -name CMakeCache.txt -exec rm -f {} \;
+find %{buildroot}%{_datadir}/vtk-examples -name Makefile -exec rm -f {} \;
+find %{buildroot}%{_datadir}/vtk-examples -name DartTestfile.txt -exec rm -f {} \;
+find %{buildroot}%{_datadir}/vtk-examples -name .NoDartCoverage -exec rm -f {} \;
+find %{buildroot}%{_datadir}/vtk-examples -name "cmake.*" -exec rm -f {} \;
+rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name CVS -type d`
+rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name "CMake*"`
 
 # install test suite binaries and add each prg path in test-suite-files
 rm -f test-suite-files
 (
 cd bin
 for f in `find -type f | grep -v '.so$' | grep -v vtk`; do
-   cp $f $RPM_BUILD_ROOT/%{_bindir}
+   cp $f %{buildroot}%{_bindir}
    echo %{_bindir}/$f >> ../test-suite-files
 done
 )
 
-%multiarch_includes  $RPM_BUILD_ROOT/%{_includedir}/vtk-*/vtkConfigure.h
-%multiarch_includes  $RPM_BUILD_ROOT/%{_includedir}/vtk-*/vtknetcdf/ncconfig.h
+%multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtkConfigure.h
+%multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtknetcdf/ncconfig.h
 
 
 
@@ -551,16 +543,13 @@ done
 
 %files examples
 %defattr(0644,root,root,0755)
-%dir %_datadir/vtk-examples
-%_datadir/vtk-examples/Examples
-%_datadir/vtk-examples/Testing
+%dir %{_datadir}/vtk-examples
+%{_datadir}/vtk-examples/Examples
+%{_datadir}/vtk-examples/Testing
 
 %files doc
 %defattr(0644,root,root,0755)
-%_datadir/vtk-docs/api
+%{_datadir}/vtk-docs/api
 
 %clean 
-rm -rf $RPM_BUILD_ROOT
-
-
-
+rm -rf %{buildroot}
