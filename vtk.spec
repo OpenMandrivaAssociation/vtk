@@ -4,8 +4,8 @@
 %{?_with_java: %{expand: %%global build_java 1}}
 
 %define name 	vtk
-%define version 5.0.2
-%define release %mkrel 3
+%define version 5.0.3
+%define release %mkrel 1
 
 %define short_version %(echo %{version} | cut -d. -f1,2)
 %define libname %mklibname %{name}
@@ -30,8 +30,9 @@ Source0:   	http://www.vtk.org/files/release/%{short_version}/vtk-%{version}.tar
 # fix qt method calls in python
 Patch0:		vtk-python-qt.patch
 Patch1:		vtk-vtkLoadPythonTkWidgets.patch
-# fix wrong char without const
-Patch3:		vtk-python-const-char.patch
+# tcl 8.5 fix
+Source10:	tk8.5.tar.bz2
+Patch2:		vtk-tcl8.5.patch
 # BioImageXD contains classes to read lsm files (from zeiss)
 Source1:	BioImageXD.tar.bz2
 # do not install widgets
@@ -150,7 +151,7 @@ implicit modeling, polygon reduction, mesh smoothing, cutting, contouring,
 and Delaunay triangulation.  Moreover, dozens of imaging algorithms have been
 integrated into the system. This allows mixing 2D imaging / 3D graphics
 algorithms and data.
-
+ 
 This package contains tcl bindings for VTK.
 
 
@@ -158,6 +159,7 @@ This package contains tcl bindings for VTK.
 %package -n python-%{name}
 Summary: Python bindings for VTK
 Requires: %{libname} = %{version}
+Requires(pre): %{libname} = %{version}
 Group:   Development/Python
 Obsoletes:	%{name}-python
 Provides:	%{name}-python
@@ -264,8 +266,12 @@ This package contains class api generated with doxygen.
 %setup -q -n VTK
 %patch0 -p1
 %patch1 -p0
-# %patch2
-%patch3 -p0
+
+# fix for tcl 8.5
+%patch2 -p1
+cd Utilities/TclTk
+tar xvjf %{SOURCE10}
+cd -
 
 rm -rf `find -type d -name CVS`
 
@@ -273,7 +279,7 @@ rm -rf `find -type d -name CVS`
 find -type f | xargs perl -pi -e 's#../../../../VTKData#%{_datadir}/vtk-data#g'
 
 # install extra classes from BioImageXD
-tar xvjf %{SOURCE1}
+tar xjf %{SOURCE1}
 cd BioImageXD
 rm -rf `find -type d -name .svn`
 %patch10
@@ -449,7 +455,7 @@ done
 %{_libdir}/libvtkHybrid.so.*
 %{_libdir}/libvtkImaging.so.*
 %{_libdir}/libvtkIO.so.*
-%{_libdir}/libvtkMPEG2Encode.so.*
+# %{_libdir}/libvtkMPEG2Encode.so.*
 %{_libdir}/libvtkNetCDF.so.*
 # %{_libdir}/libvtkParallel.so.*
 %{_libdir}/libvtkRendering.so.*
@@ -476,7 +482,7 @@ done
 %{_libdir}/libvtkHybrid.so
 %{_libdir}/libvtkImaging.so
 %{_libdir}/libvtkIO.so
-%{_libdir}/libvtkMPEG2Encode.so
+# %{_libdir}/libvtkMPEG2Encode.so
 %{_libdir}/libvtkNetCDF.so
 # %{_libdir}/libvtkParallel.so
 %{_libdir}/libvtkRendering.so
@@ -515,7 +521,7 @@ done
 %dir %{_libdir}/vtk-*/testing
 %{_libdir}/vtk-*/testing/*.py
 %{py_platsitedir}/vtk
-%{py_platsitedir}/VTK-5.0.2-py2.5.egg-info
+%{py_platsitedir}/VTK-*.egg-info
 
 %files -n python-%{name}-devel
 %defattr(0755,root,root,0755)
