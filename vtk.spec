@@ -414,7 +414,8 @@ done
 %multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtkConfigure.h
 %multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtknetcdf/ncconfig.h
 
-
+# drop files which which shouldn't be there
+rm -rf %{buildroot}/TclTk
 
 %post -n %{libname} -p /sbin/ldconfig
 
