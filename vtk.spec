@@ -41,7 +41,7 @@ BuildRoot: 	%{_tmppath}/%name-root
 BuildRequires: 	cmake >= 1.8 
 BuildRequires:  python-devel
 BuildRequires:  tcl
-BuildRequires:  XFree86-devel
+BuildRequires:  X11-devel
 BuildRequires:  expat-devel >= 2.0.1
 BuildRequires:  jpeg-devel
 BuildRequires:  png-devel
