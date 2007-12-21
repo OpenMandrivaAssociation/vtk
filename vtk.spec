@@ -37,6 +37,7 @@ Patch2:		vtk-tcl8.5.patch
 Source1:	BioImageXD.tar.bz2
 # do not install widgets
 Patch10:        vtk-bioimagexd-widgets.patch
+BuildRoot: 	%{_tmppath}/%name-root
 BuildRequires: 	cmake >= 1.8 
 BuildRequires:  python-devel
 BuildRequires:  tcl
