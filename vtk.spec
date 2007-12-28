@@ -5,7 +5,7 @@
 
 %define name 	vtk
 %define version 5.0.3
-%define release %mkrel 2
+%define release %mkrel 3
 
 %define short_version %(echo %{version} | cut -d. -f1,2)
 %define libname %mklibname %{name}
@@ -245,7 +245,7 @@ corresponding packages (vtk-python, vtk-tcl).
 %package test-suite
 Summary:  Tests programs for VTK
 Requires: %{libname} = %{version}
-Requires: %{name}-data = %{short_version}
+Requires: %{name}-data = %{version}
 Group:    Development/Other
 
 %description test-suite
