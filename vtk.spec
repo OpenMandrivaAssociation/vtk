@@ -417,31 +417,51 @@ done
 # drop files which which shouldn't be there
 rm -rf %{buildroot}/TclTk
 
+%if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n tcl-%{name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n python-%{name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{libname}-qt -p /sbin/ldconfig
+%endif
 
 %if %build_java
+%if %mdkversion < 200900
 %post -n java-%{name} -p /sbin/ldconfig
+%endif
 
 %endif
 
 
 
+%if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n tcl-%{name} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n python-%{name} -p /sbin/ldconfig 
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{libname}-qt -p /sbin/ldconfig
+%endif
 
 %if %build_java
+%if %mdkversion < 200900
 %postun -n java-%{name} -p /sbin/ldconfig
+%endif
 
 %endif
 
