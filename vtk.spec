@@ -201,7 +201,6 @@ This package contains python bindings for VTK.
 Summary: QT VTK widget
 Requires: vtk, qt
 Group: System/Libraries
-# %define _requires_exceptions foobar
 
 %description -n %{libname}-qt
 The vtkQt classes combine VTK and Qt(TM) for X11.
