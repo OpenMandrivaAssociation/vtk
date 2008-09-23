@@ -33,6 +33,8 @@ Patch1:		vtk-vtkLoadPythonTkWidgets.patch
 # tcl 8.5 fix
 Source10:	tk8.5.tar.bz2
 Patch2:		vtk-tcl8.5.patch
+# fixes for gcc 4.3
+Patch3:		vtk-gcc4.3.patch
 # BioImageXD contains classes to read lsm files (from zeiss)
 Source1:	BioImageXD.tar.bz2
 # do not install widgets
@@ -265,6 +267,7 @@ This package contains class api generated with doxygen.
 %setup -q -n VTK
 %patch0 -p1
 %patch1 -p0
+%patch3 -p1
 
 # fix for tcl 8.5
 %patch2 -p1
@@ -317,12 +320,13 @@ cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
 	-DEXPAT_LIBRARY:FILEPATH=%{_libdir}/libexpat.so.1 \
 	-DPYTHON_UTIL_LIBRARY:FILEPATH=/%{_lib}/libutil.so.1 \
 	-DVTK_PYTHON_SETUP_ARGS:STRING=--prefix="%{buildroot}%{_prefix}" \
+	-DPYTHON_EXECUTABLE:FILEPATH=%{_bindir}/python \
 	-DVTK_USE_GUISUPPORT:BOOL=ON \
 	-DVTK_USE_QVTK:BOOL=ON \
 	-DQT_INCLUDE_DIR:FILEPATH=%{qt_dir}/include \
 	-DQT_MOC_EXECUTABLE:FILEPATH=%{qt_dir}/bin/moc \
 	-DQT_QASSISTANTCLIENT_LIBRARY:FILEPATH=%{qt_dir}/lib/libqassistantclient.a \
-	-DQT_QT_LIBRARY:FILEPATH=%{qt_dir}/%{_lib}/libqt-mt.so \
+	-DQT_QT_LIBRARY:FILEPATH=%{_libdir}/libqt-mt.so \
 	-DQT_UIC_EXECUTABLE:FILEPATH=%{qt_dir}/bin/uic \
         -DQT3_QGLOBAL_H_FILE:PATH=%{qt_dir}/include/qglobal.h \
         -DQT_QMAKE_EXECUTABLE_FINDQT:PATH=%{qt_dir}/bin/qmake \
