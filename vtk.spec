@@ -5,7 +5,7 @@
 
 %define name 	vtk
 %define version 5.0.3
-%define release %mkrel 3
+%define release %mkrel 4
 
 %define short_version %(echo %{version} | cut -d. -f1,2)
 %define libname %mklibname %{name}
@@ -15,8 +15,8 @@
 %define python_library %{_libdir}/python%{pyver}/config/libpython%{pyver}.a
 %define python_site_package %{_libdir}/python%{pyver}/site-packages
 
-%define qt_dir %{_prefix}/lib/qt3
-%define qt_designer_plugins_dir %{qt_dir}/plugins/%{_lib}/designer
+%define qt_dir %{qt3dir}
+%define qt_designer_plugins_dir %{qt3plugins}/designer
 
 
 Summary:   	Toolkit for 3D computer graphics, image processing, and visualization
