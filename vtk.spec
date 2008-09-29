@@ -11,13 +11,7 @@
 %define libname %mklibname %{name}
 %define libname_devel %mklibname %{name} -d
 
-%define python_include_path %{_includedir}/python%{pyver}
-%define python_library %{_libdir}/python%{pyver}/config/libpython%{pyver}.a
-%define python_site_package %{_libdir}/python%{pyver}/site-packages
-
-%define qt_dir %{qt3dir}
-%define qt_designer_plugins_dir %{qt3plugins}/designer
-
+%define qt_designer_plugins_dir %{qt4plugins}/designer
 
 Summary:   	Toolkit for 3D computer graphics, image processing, and visualization
 Name:      	%name
@@ -35,6 +29,10 @@ Source10:	tk8.5.tar.bz2
 Patch2:		vtk-tcl8.5.patch
 # fixes for gcc 4.3
 Patch3:		vtk-gcc4.3.patch
+# support cmake's libsuffix
+Patch4:		vtk-libsuffix.patch
+Patch5:		vtk-fix-underlink.patch
+Patch6:		vtk-python-2.5.patch
 # BioImageXD contains classes to read lsm files (from zeiss)
 Source1:	BioImageXD.tar.bz2
 # do not install widgets
@@ -57,7 +55,7 @@ BuildRequires:  cvs
 BuildRequires:  gnuplot
 BuildRequires:  tcl
 BuildRequires:  tk
-BuildRequires:  qt3-devel
+BuildRequires:  qt4-devel
 # needed for backport to 2006.0
 %if %mdkversion >= 200610
 BuildRequires:	tk-devel
@@ -156,8 +154,6 @@ algorithms and data.
  
 This package contains tcl bindings for VTK.
 
-
-
 %package -n python-%{name}
 Summary: Python bindings for VTK
 Requires: %{libname} = %{version}
@@ -201,7 +197,7 @@ This package contains python bindings for VTK.
 
 %package -n %{libname}-qt
 Summary: QT VTK widget
-Requires: vtk, qt
+Requires: vtk
 Group: System/Libraries
 
 %description -n %{libname}-qt
@@ -268,11 +264,14 @@ This package contains class api generated with doxygen.
 %patch0 -p1
 %patch1 -p0
 %patch3 -p1
+%patch4 -p0
+%patch5 -p0
+%patch6 -p0
 
 # fix for tcl 8.5
 %patch2 -p1
 cd Utilities/TclTk
-tar xvjf %{SOURCE10}
+tar xjf %{SOURCE10}
 cd -
 
 rm -rf `find -type d -name CVS`
@@ -288,27 +287,19 @@ rm -rf `find -type d -name .svn`
 sh bin/install_classes.sh . ..
 
 %build
-
-export QTDIR=/usr/lib/qt3/
-
-cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
-	-DCMAKE_CXX_COMPILER:PATH=%{_bindir}/c++ \
-	-DCMAKE_C_COMPILER:PATH=%{_bindir}/gcc \
-	-DCMAKE_CXX_FLAGS:STRING="%{optflags}" \
-	-DCMAKE_C_FLAGS:STRING="%{optflags}" \
+%define _disable_ld_as_needed 1
+%cmake \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
-	-DPYTHON_INCLUDE_PATH:PATH=%{python_include_path} \
-	-DPYTHON_LIBRARY:FILEPATH=%{python_library} \
 	-DVTK_DATA_ROOT:PATH=%{_datadir}/vtk-data-%{version} \
 	-DVTK_WRAP_PYTHON:BOOL=ON \
 	-DVTK_WRAP_JAVA:BOOL=OFF \
 	-DVTK_WRAP_TCL:BOOL=ON \
 	-DVTK_USE_RENDERING:BOOL=ON \
+	-DDESIRED_QT_VERSION=4 \
 	-DBUILD_DOCUMENTATION:BOOL=ON \
 	-DBUILD_EXAMPLES:BOOL=ON \
 	-DBUILD_SHARED_LIBS:BOOL=ON \
 	-DBUILD_TESTING:BOOL=ON \
-	-DOPENGL_INCLUDE_PATH:FILEPATH=/usr/include/GL \
 	-DVTK_USE_SYSTEM_EXPAT:BOOL=ON \
 	-DVTK_USE_SYSTEM_JPEG:BOOL=ON \
 	-DVTK_USE_SYSTEM_PNG:BOOL=ON \
@@ -317,25 +308,12 @@ cmake	-DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
 	-DVTK_USE_SYSTEM_FREETYPE:BOOL=ON \
 	-DVTK_USE_ANSI_STDLIB:BOOL=ON \
 	-DVTK_USE_PARALLEL:BOOL=ON \
-	-DEXPAT_LIBRARY:FILEPATH=%{_libdir}/libexpat.so.1 \
-	-DPYTHON_UTIL_LIBRARY:FILEPATH=/%{_lib}/libutil.so.1 \
-	-DVTK_PYTHON_SETUP_ARGS:STRING=--prefix="%{buildroot}%{_prefix}" \
-	-DPYTHON_EXECUTABLE:FILEPATH=%{_bindir}/python \
 	-DVTK_USE_GUISUPPORT:BOOL=ON \
 	-DVTK_USE_QVTK:BOOL=ON \
-	-DQT_INCLUDE_DIR:FILEPATH=%{qt_dir}/include \
-	-DQT_MOC_EXECUTABLE:FILEPATH=%{qt_dir}/bin/moc \
-	-DQT_QASSISTANTCLIENT_LIBRARY:FILEPATH=%{qt_dir}/lib/libqassistantclient.a \
-	-DQT_QT_LIBRARY:FILEPATH=%{_libdir}/libqt-mt.so \
-	-DQT_UIC_EXECUTABLE:FILEPATH=%{qt_dir}/bin/uic \
-        -DQT3_QGLOBAL_H_FILE:PATH=%{qt_dir}/include/qglobal.h \
-        -DQT_QMAKE_EXECUTABLE_FINDQT:PATH=%{qt_dir}/bin/qmake \
+	-DVTK_PYTHON_SETUP_ARGS:STRING="--prefix=%{_prefix} --root=%{buildroot}" \
 	-DVTK_INSTALL_QT_PLUGIN_DIR:STRING=%{qt_designer_plugins_dir} \
 	-DVTK_USE_GL2PS:BOOL=ON	\
 	-DVTK_HAVE_GETSOCKNAME_WITH_SOCKLEN_T:INTERNAL=1 \
-.
-
-
 
 %if %build_java
 cmake	-DJAVA_INCLUDE_PATH:PATH=$JAVA_HOME/include \
@@ -355,22 +333,19 @@ cmake	-DJAVA_INCLUDE_PATH:PATH=$JAVA_HOME/include \
 # -Wno-deprecated -fpermissive 
 
 %make
-
 # build docs
 (
 cd Utilities/Doxygen
-make DoxygenDoc
+%make DoxygenDoc
 )
 
 %install
 rm -rf %{buildroot}
 
-make install DESTDIR=%{buildroot}
+make install DESTDIR=%{buildroot} -C build
 
-%if "%{_lib}" != "lib"
-mv  %{buildroot}%{_prefix}/lib %{buildroot}%{_libdir}
-mkdir %{buildroot}%{_prefix}/lib
-mv %{buildroot}%{_libdir}/qt3 %{buildroot}%{_prefix}/lib
+%if 0
+mv -fr  %{buildroot}%{_prefix}/lib/* %{buildroot}%{_libdir}
 perl -e 's@/lib/@/%{_lib}/@g' -pi %{buildroot}%{_libdir}/vtk-*/VTKConfig.cmake
 perl -e 's@/lib"@/%{_lib}"@g' -pi %{buildroot}%{_libdir}/vtk-*/VTKConfig.cmake
 %endif
@@ -384,7 +359,7 @@ install  -m 644 java/vtk/*.java %{buildroot}%{_libdir}/vtk/java
 
 #install doc
 install -d -m 755 %{buildroot}%{_datadir}/vtk-docs
-cp -a Utilities/Doxygen/doc/html %{buildroot}%{_datadir}/vtk-docs/api
+cp -a build/Utilities/Doxygen/doc/html %{buildroot}%{_datadir}/vtk-docs/api
 
 #install test-suite and examples
 for d in Common Filtering Graphics Hybrid IO Imaging Parallel Rendering VolumeRendering Widgets
@@ -440,10 +415,7 @@ rm -rf %{buildroot}/TclTk
 %if %mdkversion < 200900
 %post -n java-%{name} -p /sbin/ldconfig
 %endif
-
 %endif
-
-
 
 %if %mdkversion < 200900
 %postun -n %{libname} -p /sbin/ldconfig
@@ -498,6 +470,7 @@ rm -rf %{buildroot}/TclTk
 %{_libdir}/vtk-*/CMake
 %{_libdir}/vtk-*/doxygen
 %{_libdir}/vtk-*/hints
+%{_libdir}/libQVTK.so
 %{_libdir}/libvtkCommon.so
 %{_libdir}/libvtkDICOMParser.so
 %{_libdir}/libvtkFiltering.so
@@ -558,7 +531,7 @@ rm -rf %{buildroot}/TclTk
 %attr(0755,root,root) %{_bindir}/qtevents
 %attr(0755,root,root) %{_bindir}/qtimageviewer
 %attr(0755,root,root) %{_bindir}/qtsimpleview
-%attr(0755,root,root) %{_libdir}/libQVTK.so*
+%attr(0755,root,root) %{_libdir}/libQVTK.so.*
 %attr(0755,root,root) %{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
 
 %if %build_java
