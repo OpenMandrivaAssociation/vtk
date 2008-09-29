@@ -109,6 +109,7 @@ Requires:	%{libname} = %{version}
 Group:		Development/C++
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%{name}-devel
+Conflicts:	%{libname}-qt < 5.0.3-4
 
 %description -n %libname_devel
 This provides the VTK header files required to compile C++
@@ -344,12 +345,6 @@ rm -rf %{buildroot}
 
 make install DESTDIR=%{buildroot} -C build
 
-%if 0
-mv -fr  %{buildroot}%{_prefix}/lib/* %{buildroot}%{_libdir}
-perl -e 's@/lib/@/%{_lib}/@g' -pi %{buildroot}%{_libdir}/vtk-*/VTKConfig.cmake
-perl -e 's@/lib"@/%{_lib}"@g' -pi %{buildroot}%{_libdir}/vtk-*/VTKConfig.cmake
-%endif
-
 %if %build_java
 #install java
 install -d -m 755 %{buildroot}%{_libdir}/vtk/java
@@ -380,15 +375,7 @@ rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name CVS -type d`
 rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name "CMake*"`
 
 # install test suite binaries and add each prg path in test-suite-files
-rm -f test-suite-files
-(
-cd build/bin
-for f in `find -type f | grep -v '.so$' | grep -v vtk`; do
-   cp $f %{buildroot}%{_bindir}
-   echo %{_bindir}/$f >> ../test-suite-files
-done
-)
-
+rm -f %buildroot%_bindir/*.so.*
 %multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtkConfigure.h
 %multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtknetcdf/ncconfig.h
 
@@ -451,9 +438,7 @@ rm -rf %{buildroot}/TclTk
 %{_libdir}/libvtkHybrid.so.*
 %{_libdir}/libvtkImaging.so.*
 %{_libdir}/libvtkIO.so.*
-# %{_libdir}/libvtkMPEG2Encode.so.*
 %{_libdir}/libvtkNetCDF.so.*
-# %{_libdir}/libvtkParallel.so.*
 %{_libdir}/libvtkRendering.so.*
 %{_libdir}/libvtkVolumeRendering.so.*
 %{_libdir}/libvtkWidgets.so.*
@@ -479,9 +464,7 @@ rm -rf %{buildroot}/TclTk
 %{_libdir}/libvtkHybrid.so
 %{_libdir}/libvtkImaging.so
 %{_libdir}/libvtkIO.so
-# %{_libdir}/libvtkMPEG2Encode.so
 %{_libdir}/libvtkNetCDF.so
-# %{_libdir}/libvtkParallel.so
 %{_libdir}/libvtkRendering.so
 %{_libdir}/libvtkVolumeRendering.so
 %{_libdir}/libvtkWidgets.so
@@ -491,8 +474,42 @@ rm -rf %{buildroot}/TclTk
 %{_libdir}/libvtkParallel.so
 %doc Utilities/Upgrading/*
 
-%files test-suite -f test-suite-files
+%files test-suite
 %defattr(0755,root,root,0755)
+%{_bindir}/AmbientSpheres
+%{_bindir}/Arrays
+%{_bindir}/CommonCxxTests
+%{_bindir}/Cone
+%{_bindir}/Cone2
+%{_bindir}/Cone3
+%{_bindir}/Cone4
+%{_bindir}/Cone5
+%{_bindir}/Cone6
+%{_bindir}/Cube
+%{_bindir}/Cylinder
+%{_bindir}/DiffuseSpheres
+%{_bindir}/FilteringCxxTests
+%{_bindir}/GenericFilteringCxxTests
+%{_bindir}/GraphicsCxxTests
+%{_bindir}/HierarchicalBoxPipeline
+%{_bindir}/IOCxxTests
+%{_bindir}/ImagingCxxTests
+%{_bindir}/Medical1
+%{_bindir}/Medical2
+%{_bindir}/Medical3
+%{_bindir}/MultiBlock
+%{_bindir}/RGrid
+%{_bindir}/RenderingCxxTests
+%{_bindir}/SGrid
+%{_bindir}/SocketClient
+%{_bindir}/SocketServer
+%{_bindir}/SpecularSpheres
+%{_bindir}/TestCxxFeatures
+%{_bindir}/TestInstantiator
+%{_bindir}/VTKBenchMark
+%{_bindir}/VolumeRenderingCxxTests
+%{_bindir}/WidgetsCxxTests
+%{_bindir}/finance
 
 %files -n tcl-%{name}
 %defattr(0644,root,root,0755)
@@ -528,9 +545,9 @@ rm -rf %{buildroot}/TclTk
 
 %files -n %{libname}-qt
 %defattr(0644,root,root,0755)
-#attr(0755,root,root) %{_bindir}/qtevents
-#attr(0755,root,root) %{_bindir}/qtimageviewer
-#attr(0755,root,root) %{_bindir}/qtsimpleview
+%attr(0755,root,root) %{_bindir}/qtevents
+%attr(0755,root,root) %{_bindir}/qtimageviewer
+%attr(0755,root,root) %{_bindir}/qtsimpleview
 %attr(0755,root,root) %{_libdir}/libQVTK.so.*
 %attr(0755,root,root) %{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
 
