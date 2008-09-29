@@ -375,6 +375,13 @@ rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name CVS -type d`
 rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name "CMake*"`
 
 # install test suite binaries and add each prg path in test-suite-files
+rm -f test-suite-files
+(
+cd build/bin
+for f in `find -type f | grep -v '.so$' | grep -v vtk`; do
+   install -m0755 $f %{buildroot}%{_bindir}
+done
+)
 rm -f %buildroot%_bindir/*.so.*
 %multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtkConfigure.h
 %multiarch_includes  %{buildroot}%{_includedir}/vtk-*/vtknetcdf/ncconfig.h
