@@ -382,7 +382,7 @@ rm -rf `find %{buildroot}%{_datadir}/vtk-examples -name "CMake*"`
 # install test suite binaries and add each prg path in test-suite-files
 rm -f test-suite-files
 (
-cd bin
+cd build/bin
 for f in `find -type f | grep -v '.so$' | grep -v vtk`; do
    cp $f %{buildroot}%{_bindir}
    echo %{_bindir}/$f >> ../test-suite-files
@@ -517,8 +517,8 @@ rm -rf %{buildroot}/TclTk
 %attr(0755,root,root) %{_libdir}/libvtk*Python*.so.*
 %dir %{_libdir}/vtk-*/testing
 %{_libdir}/vtk-*/testing/*.py
-%{py_platsitedir}/vtk
-%{py_platsitedir}/VTK-*.egg-info
+%{python_sitelib}/vtk
+%{python_sitelib}/VTK-*.egg-info
 
 %files -n python-%{name}-devel
 %defattr(0755,root,root,0755)
@@ -528,9 +528,9 @@ rm -rf %{buildroot}/TclTk
 
 %files -n %{libname}-qt
 %defattr(0644,root,root,0755)
-%attr(0755,root,root) %{_bindir}/qtevents
-%attr(0755,root,root) %{_bindir}/qtimageviewer
-%attr(0755,root,root) %{_bindir}/qtsimpleview
+#attr(0755,root,root) %{_bindir}/qtevents
+#attr(0755,root,root) %{_bindir}/qtimageviewer
+#attr(0755,root,root) %{_bindir}/qtsimpleview
 %attr(0755,root,root) %{_libdir}/libQVTK.so.*
 %attr(0755,root,root) %{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
 
