@@ -408,7 +408,7 @@ pushd build/bin
 popd
 rm -f %{buildroot}%{vtkbindir}/*.so.*
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
-%multiarch_includes  %{buildroot}%{vtkincdir}//vtknetcdf/ncconfig.h
+%multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
 
 # move test tcl files to the tcl location
 mkdir -p %{buildroot}%{vtktcldir}/testing
@@ -427,6 +427,10 @@ ln -sf %{vtkbindir}/vtkpython %{buildroot}%{_bindir}/vtkpython
 ln -sf %{_docdir}/%{name} %{buildroot}%{vtkdir}/doc
 
 cp -fa README.html vtkLogo.jpg Copyright.txt Utilities/Upgrading %{buildroot}%{_docdir}/%{name}
+
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_version}.conf
+
 
 %if %mdkversion < 200900
 %post -n %{libname} -p /sbin/ldconfig
@@ -475,7 +479,9 @@ cp -fa README.html vtkLogo.jpg Copyright.txt Utilities/Upgrading %{buildroot}%{_
 
 %files -n %{libname}
 %defattr(0755,root,root,0755)
+%dir %{vtklibdir}
 %{vtklibdir}/lib*.so.*
+%{_sysconfdir}/ld.so.conf/%{name}-%{short_version}.conf
 %exclude %{vtklibdir}/libvtk*TCL*.so.*
 %exclude %{vtklibdir}/libvtk*Python*.so.*
 %exclude %{vtklibdir}/libQVTK.so.*
