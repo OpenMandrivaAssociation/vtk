@@ -1,4 +1,4 @@
-%define build_java	0
+%define build_java	1
 %{?_with_java: %{expand: %%global build_java 1}}
 
 %define name		vtk
@@ -359,7 +359,7 @@ done
 	-DVTK_HAVE_GETSOCKNAME_WITH_SOCKLEN_T:INTERNAL=1 \
 	-DVTK_BUILD_PREFIX=%{_prefix}
 
-%make
+make
 # build docs
 pushd Utilities/Doxygen
     make DoxygenDoc
