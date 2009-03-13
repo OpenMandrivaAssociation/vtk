@@ -352,6 +352,7 @@ done
 	-DVTK_USE_PARALLEL:BOOL=ON \
 	-DVTK_USE_GUISUPPORT:BOOL=ON \
 	-DVTK_USE_QVTK:BOOL=ON \
+	-DVTK_INSTALL_LIB_DIR:PATH=%{vtklibdir} \
 	-DVTK_PYTHON_SETUP_ARGS:STRING="--prefix=%{_prefix} --root=%{buildroot}" \
 	-DVTK_INSTALL_QT_PLUGIN_DIR:STRING=%{qt_designer_plugins_dir} \
 	-DVTK_USE_GL2PS:BOOL=ON	\
