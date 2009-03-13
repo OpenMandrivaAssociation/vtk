@@ -324,7 +324,8 @@ done
 
 %build
 %if %{build_java}
-export JAVA_HOME=%{java_home}
+## FIXME override % java_home rpm macro, that is pointing to the jre directory
+export JAVA_HOME=/usr/lib/jvm/java
 %endif
 
 %cmake \
