@@ -323,19 +323,14 @@ for f in  {vtkLSMReader,vtkExtTIFFReader}.{cxx,h}; do
 done
 
 %build
-%if %{build_java}
-## FIXME override % java_home rpm macro, that is pointing to the jre directory
-export JAVA_HOME=/usr/lib/jvm/java
-%endif
-
 %cmake \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DVTK_DATA_ROOT:PATH=%{vtkdir} \
 	-DVTK_WRAP_PYTHON:BOOL=ON \
 %if %{build_java}
-	-DJAVA_INCLUDE_PATH:PATH=$JAVA_HOME/include \
-	-DJAVA_INCLUDE_PATH2:PATH=$JAVA_HOME/include/linux \
-	-DJAVA_AWT_INCLUDE_PATH:PATH=$JAVA_HOME/include \
+	-DJAVA_INCLUDE_PATH:PATH=%{java_home}/include \
+	-DJAVA_INCLUDE_PATH2:PATH=%{java_home}/include/linux \
+	-DJAVA_AWT_INCLUDE_PATH:PATH=%{java_home}/include \
 	-DVTK_WRAP_JAVA:BOOL=ON \
 %else
 	-DVTK_WRAP_JAVA:BOOL=OFF \
