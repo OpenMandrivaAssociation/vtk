@@ -308,10 +308,6 @@ pushd BioImageXD
 sh bin/install_classes.sh . ..
 popd
 
-%if %{build_java}
-export JAVA_HOME=%{java_home}
-%endif
-
 for f in  {vtkImageAutoThresholdColocalization,vtkIntensityTransferFunction}.{cxx,h}; do
     ln -sf ../BioImageXD/vtkBXD/Processing/$f Filtering
 done
@@ -327,6 +323,10 @@ for f in  {vtkLSMReader,vtkExtTIFFReader}.{cxx,h}; do
 done
 
 %build
+%if %{build_java}
+export JAVA_HOME=%{java_home}
+%endif
+
 %cmake \
 	-DCMAKE_SKIP_RPATH:BOOL=ON \
 	-DVTK_DATA_ROOT:PATH=%{vtkdir} \
