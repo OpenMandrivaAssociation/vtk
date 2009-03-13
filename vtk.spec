@@ -68,6 +68,7 @@ BuildRequires:	tk-devel >= 8.6
 BuildRequires:	tcl-devel >= 8.6
 %if %{build_java}
 BuildRequires:	java-rpmbuild
+BuildRequires:	java-devel > 1.5
 Requires:	java > 1.5
 %endif
 
@@ -298,7 +299,7 @@ This package contains class APIs generated with doxygen.
 %patch4 -p1
 
 # fix data path
-find . -type f | xargs sed -i -e 's|../../../../VTKData|%{vtkdir}/data|g'
+find . -type f | xargs sed -i -e 's|../../../../VTKData|%{vtkdir}|g'
 
 # install extra classes from BioImageXD
 tar xf %{SOURCE2}
