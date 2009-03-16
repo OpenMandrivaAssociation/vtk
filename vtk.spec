@@ -359,7 +359,7 @@ done
 	-DVTK_HAVE_GETSOCKNAME_WITH_SOCKLEN_T:INTERNAL=1 \
 	-DVTK_BUILD_PREFIX=%{_prefix}
 
-make
+%make
 # build docs
 pushd Utilities/Doxygen
     make DoxygenDoc
@@ -410,6 +410,13 @@ popd
 rm -f %{buildroot}%{vtkbindir}/*.so.*
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
+
+# fix some incorret "hardcoded" defaults
+%ifarch x86_64
+pushd  %{buildroot}%{_prefix}/lib
+    for f in `ls`; do mv -f $f %{buildroot}%{vtktcldir}; done
+popd
+%endif
 
 # move test tcl files to the tcl location
 mkdir -p %{buildroot}%{vtktcldir}/testing
