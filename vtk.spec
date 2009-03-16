@@ -423,12 +423,8 @@ rm -rf %{buildroot}/TclTk
 rm -rf %{buildroot}%{vtklibdir}/doc
 if [ -d %{buildroot}%{vtklibdir}/tcl ]; then
     mv -f %{buildroot}%{vtklibdir}/tcl/* %{buildroot}%{vtktcldir}
-fi
-
-# move test tcl files to the tcl location
-if -d [ %{buildroot}%{vtklibdir}/testing ]; then
-    mkdir -p %{buildroot}%{vtktcldir}/testing
-    mv -f %{buildroot}%{vtklibdir}/testing/*.tcl %{buildroot}%{vtktcldir}/testing
+    rmdir %{buildroot}%{vtklibdir}/tcl
+    ln -sf %{vtktcldir} %{buildroot}%{vtklibdir}/tcl
 fi
 
 # install binaries in vtkdir
@@ -492,6 +488,7 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %files -n %{libname}
 %defattr(0755,root,root,0755)
 %dir %{vtklibdir}
+%dir %{vtklibdir}/testing
 %{vtklibdir}/lib*.so.*
 %{_sysconfdir}/ld.so.conf.d/%{name}-%{short_version}.conf
 %exclude %{vtklibdir}/libvtk*TCL*.so.*
@@ -553,8 +550,10 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %{vtkbindir}/WidgetsCxxTests
 %{vtkbindir}/finance
 %{vtkbindir}/CreateTree
+%if %{build_java}
 %{vtkbindir}/Example1
 %{vtkbindir}/Example2
+%endif
 %{vtkbindir}/HelloWorld
 %{vtkbindir}/HybridCxxTests
 %{vtkbindir}/ImageSlicing
@@ -576,6 +575,7 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %defattr(0644,root,root,0755)
 %attr(0755,root,root) %{vtkbindir}/%{name}
 %attr(0755,root,root) %{vtklibdir}/libvtk*TCL*.so.* 
+%{vtklibdir}/testing/*.tcl
 %{vtktcldir}
 %{_bindir}/%{name}
 
@@ -590,7 +590,6 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %defattr(0644,root,root,0755)
 %attr(0755,root,root) %{vtkbindir}/vtkpython
 %attr(0755,root,root) %{vtklibdir}/libvtk*Python*.so.*
-%dir %{vtklibdir}/testing
 %{vtklibdir}/testing/*.py
 %{python_sitelib}/vtk
 %{python_sitelib}/VTK-*.egg-info
