@@ -1,4 +1,4 @@
-%define build_java	1
+%define build_java	0
 %{?_with_java: %{expand: %%global build_java 1}}
 
 %define name		vtk
