@@ -352,7 +352,6 @@ done
 	-DVTK_USE_PARALLEL:BOOL=ON \
 	-DVTK_USE_GUISUPPORT:BOOL=ON \
 	-DVTK_USE_QVTK:BOOL=ON \
-	-DVTK_INSTALL_LIB_DIR:PATH=%{vtklibdir} \
 	-DVTK_PYTHON_SETUP_ARGS:STRING="--prefix=%{_prefix} --root=%{buildroot}" \
 	-DVTK_INSTALL_QT_PLUGIN_DIR:STRING=%{qt_designer_plugins_dir} \
 	-DVTK_USE_GL2PS:BOOL=ON	\
@@ -370,6 +369,8 @@ rm -rf %{buildroot}
 # drop "owner cannot overwrite file" default attributes
 chmod u+w -R .
 make install DESTDIR=%{buildroot} -C build
+
+mkdir -p %{buildroot}%{vtktcldir}
 
 install -d -m 755 %{buildroot}%{vtkdir}
 pushd %{buildroot}%{vtkdir}
@@ -413,19 +414,22 @@ rm -f %{buildroot}%{vtkbindir}/*.so.*
 
 # fix some incorret "hardcoded" defaults
 %ifarch x86_64
-pushd  %{buildroot}%{_prefix}/lib
-    for f in `ls`; do mv -f $f %{buildroot}%{vtktcldir}; done
-popd
+#  This actually creates vtklibdir
+mv -f %{buildroot}%{_prefix}/lib/%{name}* %{buildroot}%{vtklibdir}
 %endif
-
-# move test tcl files to the tcl location
-mkdir -p %{buildroot}%{vtktcldir}/testing
-mv -f %{buildroot}%{vtklibdir}/testing/*.tcl %{buildroot}%{vtktcldir}/testing
 
 # drop files which which shouldn't be there
 rm -rf %{buildroot}/TclTk
 rm -rf %{buildroot}%{vtklibdir}/doc
-mv -f %{buildroot}%{vtklibdir}/tcl/* %{buildroot}%{vtktcldir}
+if [ -d %{buildroot}%{vtklibdir}/tcl ]; then
+    mv -f %{buildroot}%{vtklibdir}/tcl/* %{buildroot}%{vtktcldir}
+fi
+
+# move test tcl files to the tcl location
+if -d [ %{buildroot}%{vtklibdir}/testing ]; then
+    mkdir -p %{buildroot}%{vtktcldir}/testing
+    mv -f %{buildroot}%{vtklibdir}/testing/*.tcl %{buildroot}%{vtktcldir}/testing
+fi
 
 # install binaries in vtkdir
 mv -f %{buildroot}%{_bindir}/* %{buildroot}%{vtkbindir}
@@ -489,11 +493,13 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %defattr(0755,root,root,0755)
 %dir %{vtklibdir}
 %{vtklibdir}/lib*.so.*
-%{_sysconfdir}/ld.so.conf/%{name}-%{short_version}.conf
+%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_version}.conf
 %exclude %{vtklibdir}/libvtk*TCL*.so.*
 %exclude %{vtklibdir}/libvtk*Python*.so.*
 %exclude %{vtklibdir}/libQVTK.so.*
+%if %{build_java}
 %exclude %{vtklibdir}/libvtk*Java.so.*
+%endif
 
 %files -n %{libname_devel}
 %defattr(0644,root,root,0755)
@@ -506,7 +512,9 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %{vtklibdir}/lib*.so
 %exclude %{vtklibdir}/libvtk*TCL*.so
 %exclude %{vtklibdir}/libvtk*Python*.so
+%if %{build_java}
 %exclude %{vtklibdir}/libvtk*Java.so
+%endif
 
 %files test-suite
 %defattr(0755,root,root,0755)
