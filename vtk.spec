@@ -576,6 +576,7 @@ echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_vers
 %attr(0755,root,root) %{vtkbindir}/%{name}
 %attr(0755,root,root) %{vtklibdir}/libvtk*TCL*.so.* 
 %{vtklibdir}/testing/*.tcl
+%{vtklibdir}/tcl
 %{vtktcldir}
 %{_bindir}/%{name}
 
