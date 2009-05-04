@@ -21,7 +21,7 @@
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 Name:		%{name}
 Version:	%{version}
-Release:	%{mkrel 1}
+Release:	%{mkrel 2}
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
@@ -125,6 +125,7 @@ Group:		Development/C++
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%{name}-devel < %{version}-%{release}
 Conflicts:	%{libname}-qt < 5.0.3-4
+Requires:	%{libname}-qt = %{version}-%{release}
 
 %description -n %{libname_devel}
 This provides the VTK header files required to compile C++
