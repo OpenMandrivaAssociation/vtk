@@ -2,7 +2,7 @@
 %{?_with_java: %{expand: %%global build_java 1}}
 
 %define name		vtk
-%define version		5.2.1
+%define version		5.4.2
 %define vtkdir		%{_datadir}/%{name}
 
 %define libname		%mklibname %{name}
@@ -21,7 +21,7 @@
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 Name:		%{name}
 Version:	%{version}
-Release:	%{mkrel 2}
+Release:	%{mkrel 1}
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
@@ -42,7 +42,7 @@ Patch0:		vtk-5.2.1-python-qt.patch
 Patch1:		vtk-5.2.1-vtkLoadPythonTkWidgets.patch
 Patch2:		vtk-5.2.1-tcl8.6.patch
 Patch3:		vtk-5.2.1-fix-underlink.patch
-Patch4:		vtk-5.2.1-Wformat=error.patch
+# Patch4:		vtk-5.2.1-Wformat=error.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -297,7 +297,7 @@ This package contains class APIs generated with doxygen.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
+# %patch4 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%{vtkdir}|g'
