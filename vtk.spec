@@ -21,7 +21,7 @@
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 Name:		%{name}
 Version:	%{version}
-Release:	%{mkrel 1}
+Release:	%{mkrel 2}
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
