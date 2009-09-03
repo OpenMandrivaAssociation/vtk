@@ -15,7 +15,7 @@
 
 Name: vtk
 Version: 5.4.2
-Release: %mkrel 4
+Release: %mkrel 5
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -37,7 +37,6 @@ Patch0:	vtk-5.2.1-python-qt.patch
 Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
 Patch2:	vtk-5.2.1-tcl8.6.patch
 Patch3:	vtk-5.2.1-fix-underlink.patch
-Patch4: vtkdata-5.4.2-install.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -119,8 +118,6 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 
 %files -n %{libname}
 %defattr(0755,root,root,0755)
-%dir %_libdir
-%dir %_libdir/testing
 %_libdir/lib*.so.*
 %exclude %_libdir/libvtk*TCL*.so.*
 %exclude %_libdir/libvtk*Python*.so.*
@@ -149,10 +146,8 @@ programs that use VTK to do 3D visualisation.
 %defattr(0644,root,root,0755)
 %{_includedir}/*
 %dir %_libdir
-%_libdir/*.cmake
-%_libdir/CMake
-%_libdir/doxygen
-%_libdir/hints
+%dir %_libdir/vtk/
+%_libdir/vtk/*
 %_libdir/lib*.so
 %exclude %_libdir/libvtk*TCL*.so
 %exclude %_libdir/libvtk*Python*.so
@@ -189,7 +184,7 @@ This package contains tcl bindings for VTK.
 %defattr(0644,root,root,0755)
 %attr(0755,root,root) %_bindir/%{name}
 %attr(0755,root,root) %_libdir/libvtk*TCL*.so.* 
-%_libdir/testing/*.tcl
+%_libdir/vtk/testing/*.tcl
 %_libdir/tcl
 %{vtktcldir}
 
@@ -249,7 +244,7 @@ This package contains python bindings for VTK.
 %defattr(0644,root,root,0755)
 %_bindir/vtkpython
 %_libdir/libvtk*Python*.so.*
-%_libdir/testing/*.py
+%_libdir/vtk/testing/*.py
 %{python_sitelib}/vtk
 %{python_sitelib}/VTK-*.egg-info
 
@@ -325,10 +320,10 @@ This package contains Java bindings for VTK.
 
 %files -n java-%{name}
 %defattr(0644,root,root,0755)
-%attr(0755,root,root) %_bindir/vtkParseJava
-%attr(0755,root,root) %_bindir/vtkWrapJava
-%attr(0755,root,root) %_bindir/VTKJavaExecutable
-%attr(0755,root,root) %_libdir/libvtk*Java.so*
+%_bindir/vtkParseJava
+%_bindir/vtkWrapJava
+%_bindir/VTKJavaExecutable
+%_libdir/libvtk*Java.so*
 %_libdir/java
 
 %endif
@@ -402,7 +397,6 @@ vtk-examples package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p0 -b .orig
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
@@ -433,8 +427,16 @@ done
 # Remove old cmake files
 rm -f CMake/FindBoost*
 
+# Due to cmake prefix point already for _prefix, we need
+# push only the necessary extra paths
+
 %cmake \
-	-DVTK_DATA_ROOT:PATH=%_datadir/vtk \
+	-DVTK_INSTALL_LIB_DIR=/%_lib \
+	-DVTK_INSTALL_BIN_DIR=/bin \
+	-DVTK_INSTALL_PACKAGE_DIR=/%_lib/vtk \
+	-DVTK_INSTALL_INCLUDE_DIR=/include/vtk \
+	-DVTK_DATA_ROOT=/share/vtk \
+	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
 	-DVTK_WRAP_PYTHON:BOOL=ON \
 %if %with java
 	-DJAVA_INCLUDE_PATH:PATH=%{java_home}/include \
@@ -465,10 +467,6 @@ rm -f CMake/FindBoost*
 	-DVTK_INSTALL_QT_PLUGIN_DIR:STRING=%{qt_designer_plugins_dir} \
 	-DVTK_USE_GL2PS:BOOL=ON	\
 	-DVTK_HAVE_GETSOCKNAME_WITH_SOCKLEN_T:INTERNAL=1 \
-	-DVTK_INSTALL_BIN_DIR=%_bindir \
-	-DVTK_INSTALL_LIB_DIR=%_libdir \
-	-DVTK_INSTALL_INCLUDE_DIR=%vtkincdir \
-	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
 	-DVTK_USE_SYSTEM_LIBXML2:BOOL=ON \
 	-DVTK_USE_QVTK_QTOPENGL:BOOL=ON \
 	-DVTK_USE_BOOST:BOOL=ON 
@@ -504,7 +502,9 @@ pushd %{buildroot}%{vtkdocdir}/examples
 	-o -name Makefile					\
 	-exec rm {} \;
 popd
-rm -rf %buildroot/%_libdir/doc
+# Remove any possible verdict docs
+rm -rf %buildroot/%_libdir/vtk/doc
+rm -rf %buildroot/%{vtkdocdir}/verdict
 
 # install test suite binaries and add each prg path in test-suite-files
 rm -f test-suite-files
