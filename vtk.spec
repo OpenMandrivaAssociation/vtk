@@ -247,12 +247,11 @@ This package contains python bindings for VTK.
 
 %files -n python-%{name}
 %defattr(0644,root,root,0755)
-%attr(0755,root,root) %_bindir/vtkpython
-%attr(0755,root,root) %_libdir/libvtk*Python*.so.*
+%_bindir/vtkpython
+%_libdir/libvtk*Python*.so.*
 %_libdir/testing/*.py
 %{python_sitelib}/vtk
 %{python_sitelib}/VTK-*.egg-info
-%{_bindir}/vtkpython
 
 #------------------------------------------------------------------------------
 
@@ -505,6 +504,7 @@ pushd %{buildroot}%{vtkdocdir}/examples
 	-o -name Makefile					\
 	-exec rm {} \;
 popd
+rm -rf %buildroot/%_libdir/doc
 
 # install test suite binaries and add each prg path in test-suite-files
 rm -f test-suite-files
@@ -514,7 +514,7 @@ pushd build/bin
 	install -m 0755 $f %{buildroot}%_bindir
     done
 popd
-rm -f %{buildroot}%_bindir/*.so.*
+rm -f %buildroot%_bindir/*.so.*
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
 
