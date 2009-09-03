@@ -1,9 +1,5 @@
-%define build_java	0
-%{?_with_java: %{expand: %%global build_java 1}}
-
-%define name		vtk
-%define version		5.4.2
-%define vtkdir		%{_datadir}/%{name}
+# Documentation are download and built by vtk-doc separated package
+%bcond_with java
 
 %define libname		%mklibname %{name}
 %define libname_devel	%mklibname %{name} -d
@@ -11,22 +7,21 @@
 %define bioxd_version	0.20090311
 %define short_version	%(echo %{version} | cut -d. -f1,2)
 
-%define vtkbindir	%{vtkdir}/bin
-%define vtklibdir	%{_libdir}/%{name}-%{short_version}
-%define vtkincdir	%{_includedir}/%{name}-%{short_version}
+%define vtkincdir	%_includedir/vtk
+%define vtkdocdir	%_docdir/vtk
 %define vtktcldir	%{tcl_sitearch}/%{name}-%{short_version}
 
 %define qt_designer_plugins_dir	%{qt4plugins}/designer
 
-Summary:	Toolkit for 3D computer graphics, image processing, and visualization
-Name:		%{name}
-Version:	%{version}
-Release:	%{mkrel 2}
-License:	BSD
-Group:		Graphics
-URL:		http://www.vtk.org/
-Source0:	http://www.vtk.org/files/release/5.2/vtk-%{version}.tar.gz
-Source1:	http://www.vtk.org/files/release/5.2/vtkdata-%{version}.tar.gz
+Name: vtk
+Version: 5.4.2
+Release: %mkrel 4
+Summary: Toolkit for 3D computer graphics, image processing, and visualization
+License: BSD
+Group: Graphics
+URL: http://www.vtk.org/
+Source0: http://www.vtk.org/files/release/5.2/vtk-%{version}.tar.gz
+Source1: http://www.vtk.org/files/release/5.2/vtkdata-%{version}.tar.gz
 
 # BioImageXD contains classes to read lsm files (from zeiss)
 #URL:		http://www.bioimagexd.net
@@ -38,11 +33,11 @@ Source1:	http://www.vtk.org/files/release/5.2/vtkdata-%{version}.tar.gz
 Source2:	BioImageXD-%{bioxd_version}.tar.bz2
 
 # fix qt method calls in python
-Patch0:		vtk-5.2.1-python-qt.patch
-Patch1:		vtk-5.2.1-vtkLoadPythonTkWidgets.patch
-Patch2:		vtk-5.2.1-tcl8.6.patch
-Patch3:		vtk-5.2.1-fix-underlink.patch
-# Patch4:		vtk-5.2.1-Wformat=error.patch
+Patch0:	vtk-5.2.1-python-qt.patch
+Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
+Patch2:	vtk-5.2.1-tcl8.6.patch
+Patch3:	vtk-5.2.1-fix-underlink.patch
+Patch4: vtkdata-5.4.2-install.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -50,7 +45,6 @@ Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
 BuildRoot:	%{_tmppath}/%{name}-root
 
 BuildRequires:	cmake >= 1.8 
-BuildRequires:	python-devel
 BuildRequires:	X11-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	jpeg-devel
@@ -58,6 +52,7 @@ BuildRequires:	png-devel
 BuildRequires:	tiff-devel
 BuildRequires:	zlib-devel
 BuildRequires:	freetype2-devel
+BuildRequires:	GL-devel
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
@@ -66,11 +61,15 @@ BuildRequires:	gnuplot
 BuildRequires:	qt4-devel
 BuildRequires:	tk-devel >= 8.6
 BuildRequires:	tcl-devel >= 8.6
-%if %{build_java}
+BuildRequires:  proj4-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  boost-devel
+BuildRequires:  libopenssl-devel
+%if %with java
 BuildRequires:	java-rpmbuild
 BuildRequires:	java-devel > 1.5
-Requires:	java > 1.5
 %endif
+%py_requires -d
 
 %description
 The Visualization ToolKit (VTK) is an object oriented software system for 3D
@@ -84,8 +83,7 @@ and Delaunay triangulation.  Moreover, dozens of imaging algorithms have been
 integrated into the system. This allows mixing 2D imaging / 3D graphics
 algorithms and data.
 
-%if %{build_java}
-%else
+%if ! %with java
 NOTE: The java wrapper is not included by default.  You may rebuild the srpm
       using "--with java" with JDK installed.
 %endif
@@ -93,6 +91,8 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 NOTE: This package is built with extra classes from the BioImageXD. Keep
       in mind that those classes are not part of the official CTK distribution
       and may change or be removed in the future.
+
+#------------------------------------------------------------------------------
 
 %package -n %{libname}
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
@@ -112,11 +112,25 @@ and Delaunay triangulation.  Moreover, dozens of imaging algorithms have been
 integrated into the system. This allows mixing 2D imaging / 3D graphics
 algorithms and data.
 
-%if %{build_java}
-%else
+%if ! %with java
 NOTE: The java wrapper is not included by default.  You may rebuild the srpm
       using "--with java" with JDK installed.
 %endif
+
+%files -n %{libname}
+%defattr(0755,root,root,0755)
+%dir %_libdir
+%dir %_libdir/testing
+%_libdir/lib*.so.*
+%exclude %_libdir/libvtk*TCL*.so.*
+%exclude %_libdir/libvtk*Python*.so.*
+%exclude %_libdir/libQVTK.so.*
+%exclude %_libdir/libvtkQtChart.so.*
+%if %with java
+%exclude %_libdir/libvtk*Java.so.*
+%endif
+
+#------------------------------------------------------------------------------
 
 %package -n %{libname_devel}
 Summary:	VTK header files for building C++ code
@@ -130,6 +144,25 @@ Requires:	%{libname}-qt = %{version}-%{release}
 %description -n %{libname_devel}
 This provides the VTK header files required to compile C++
 programs that use VTK to do 3D visualisation.
+
+%files -n %{libname_devel}
+%defattr(0644,root,root,0755)
+%{_includedir}/*
+%dir %_libdir
+%_libdir/*.cmake
+%_libdir/CMake
+%_libdir/doxygen
+%_libdir/hints
+%_libdir/lib*.so
+%exclude %_libdir/libvtk*TCL*.so
+%exclude %_libdir/libvtk*Python*.so
+%if %with java
+%exclude %_libdir/libvtk*Java.so
+%endif
+
+
+
+#------------------------------------------------------------------------------
 
 %package -n tcl-%{name}
 Summary:	Tcl bindings for VTK
@@ -152,6 +185,16 @@ algorithms and data.
 
 This package contains tcl bindings for VTK.
 
+%files -n tcl-%{name}
+%defattr(0644,root,root,0755)
+%attr(0755,root,root) %_bindir/%{name}
+%attr(0755,root,root) %_libdir/libvtk*TCL*.so.* 
+%_libdir/testing/*.tcl
+%_libdir/tcl
+%{vtktcldir}
+
+#------------------------------------------------------------------------------
+
 %package -n tcl-%{name}-devel
 Summary:	Tcl bindings for VTK
 Group:		Development/Other
@@ -170,6 +213,15 @@ integrated into the system. This allows mixing 2D imaging / 3D graphics
 algorithms and data.
  
 This package contains tcl bindings for VTK.
+
+%files -n tcl-%{name}-devel
+%defattr(0755,root,root,0755)
+%_bindir/vtkWrapTcl
+%_bindir/vtkWrapTclInit
+%_libdir/*.tcl
+%attr(0755,root,root) %_libdir/libvtk*TCL*.so 
+
+#------------------------------------------------------------------------------
 
 %package -n python-%{name}
 Summary:	Python bindings for VTK
@@ -193,6 +245,17 @@ algorithms and data.
 
 This package contains python bindings for VTK.
 
+%files -n python-%{name}
+%defattr(0644,root,root,0755)
+%attr(0755,root,root) %_bindir/vtkpython
+%attr(0755,root,root) %_libdir/libvtk*Python*.so.*
+%_libdir/testing/*.py
+%{python_sitelib}/vtk
+%{python_sitelib}/VTK-*.egg-info
+%{_bindir}/vtkpython
+
+#------------------------------------------------------------------------------
+
 %package -n python-%{name}-devel
 Summary:	Python bindings for VTK
 Requires:	python-%{name} = %{version}
@@ -212,6 +275,14 @@ algorithms and data.
 
 This package contains python bindings for VTK.
 
+%files -n python-%{name}-devel
+%defattr(0755,root,root,0755)
+%_bindir/vtkWrapPython
+%_bindir/vtkWrapPythonInit
+%_libdir/libvtk*Python*.so
+
+#------------------------------------------------------------------------------
+
 %package -n %{libname}-qt
 Summary:	QT VTK widget
 Requires:	vtk
@@ -220,7 +291,18 @@ Group:		System/Libraries
 %description -n %{libname}-qt
 The vtkQt classes combine VTK and Qt(TM) for X11.
 
-%if %{build_java}
+%files -n %{libname}-qt
+%defattr(0644,root,root,0755)
+%_bindir/qtevents
+%_bindir/qtimageviewer
+%_bindir/qtsimpleview
+%_libdir/libQVTK.so.*
+%_libdir/libvtkQtChart.so.*
+%{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
+
+#------------------------------------------------------------------------------
+
+%if %with java
 %package -n java-%{name}
 Summary:	Java bindings for VTK
 Group:		Development/Java
@@ -241,7 +323,18 @@ integrated into the system. This allows mixing 2D imaging / 3D graphics
 algorithms and data.
 
 This package contains Java bindings for VTK.
+
+%files -n java-%{name}
+%defattr(0644,root,root,0755)
+%attr(0755,root,root) %_bindir/vtkParseJava
+%attr(0755,root,root) %_bindir/vtkWrapJava
+%attr(0755,root,root) %_bindir/VTKJavaExecutable
+%attr(0755,root,root) %_libdir/libvtk*Java.so*
+%_libdir/java
+
 %endif
+
+#------------------------------------------------------------------------------
 
 %package	data
 Summary:	Data and Baseline images for VTK regression testing
@@ -258,6 +351,12 @@ The VTKData/Baseline are the testing images. These are used in testing to
 compare a valid image against a generated image. If a difference between
 the two images is found, then the test is considered to have failed.
 
+%files		data
+%defattr(-,root,root)
+%_datadir/vtk
+
+#------------------------------------------------------------------------------
+
 %package examples
 Summary:	C++, Tcl and Python example programs/scripts for VTK
 Group:		Development/Other
@@ -270,6 +369,13 @@ To compile the C++ examples you will need to install the vtk-devel
 package as well. The Python and Tcl examples can be run with the
 corresponding packages (vtk-python, vtk-tcl).
 
+%files		examples
+%defattr(0644,root,root,0755)
+%dir %{vtkdocdir}/examples
+%{vtkdocdir}/examples/*
+
+#------------------------------------------------------------------------------
+
 %package test-suite
 Summary:	Tests programs for VTK
 Requires:	%{libname} = %{version}
@@ -281,14 +387,14 @@ This package contains all testing programs from the VTK
 source. The source code of these programs can be found in the
 vtk-examples package.
 
-%package doc
-Summary:	Documentation for VTK
-Group:		Development/Other
-Obsoletes:	%{name}-docs < %{version}-%{release}
-Provides:	%{name}-docs = %{version}-%{release}
+%files test-suite
+%defattr(0755,root,root,0755)
+%_bindir/*
+%exclude %_bindir/%{name}
+%exclude %_bindir/vtkWrapTcl
+%exclude %_bindir/vtkWrapTclInit
 
-%description doc
-This package contains class APIs generated with doxygen.
+#------------------------------------------------------------------------------
 
 %prep
 %setup -q -n VTK
@@ -297,10 +403,10 @@ This package contains class APIs generated with doxygen.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-# %patch4 -p1
+%patch4 -p0 -b .orig
 
 # fix data path
-find . -type f | xargs sed -i -e 's|../../../../VTKData|%{vtkdir}|g'
+find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
 
 # install extra classes from BioImageXD
 tar xf %{SOURCE2}
@@ -324,11 +430,14 @@ for f in  {vtkLSMReader,vtkExtTIFFReader}.{cxx,h}; do
 done
 
 %build
+
+# Remove old cmake files
+rm -f CMake/FindBoost*
+
 %cmake \
-	-DCMAKE_SKIP_RPATH:BOOL=ON \
-	-DVTK_DATA_ROOT:PATH=%{vtkdir} \
+	-DVTK_DATA_ROOT:PATH=%_datadir/vtk \
 	-DVTK_WRAP_PYTHON:BOOL=ON \
-%if %{build_java}
+%if %with java
 	-DJAVA_INCLUDE_PATH:PATH=%{java_home}/include \
 	-DJAVA_INCLUDE_PATH2:PATH=%{java_home}/include/linux \
 	-DJAVA_AWT_INCLUDE_PATH:PATH=%{java_home}/include \
@@ -339,7 +448,7 @@ done
 	-DVTK_WRAP_TCL:BOOL=ON \
 	-DVTK_USE_RENDERING:BOOL=ON \
 	-DDESIRED_QT_VERSION=4 \
-	-DBUILD_DOCUMENTATION:BOOL=ON \
+	-DBUILD_DOCUMENTATION:BOOL=OFF \
 	-DBUILD_EXAMPLES:BOOL=ON \
 	-DBUILD_SHARED_LIBS:BOOL=ON \
 	-DBUILD_TESTING:BOOL=ON \
@@ -357,43 +466,39 @@ done
 	-DVTK_INSTALL_QT_PLUGIN_DIR:STRING=%{qt_designer_plugins_dir} \
 	-DVTK_USE_GL2PS:BOOL=ON	\
 	-DVTK_HAVE_GETSOCKNAME_WITH_SOCKLEN_T:INTERNAL=1 \
-	-DVTK_BUILD_PREFIX=%{_prefix}
+	-DVTK_INSTALL_BIN_DIR=%_bindir \
+	-DVTK_INSTALL_LIB_DIR=%_libdir \
+	-DVTK_INSTALL_INCLUDE_DIR=%vtkincdir \
+	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
+	-DVTK_USE_SYSTEM_LIBXML2:BOOL=ON \
+	-DVTK_USE_QVTK_QTOPENGL:BOOL=ON \
+	-DVTK_USE_BOOST:BOOL=ON 
 
 %make
-# build docs
-pushd Utilities/Doxygen
-    make DoxygenDoc
-popd
 
 %install
 rm -rf %{buildroot}
-# drop "owner cannot overwrite file" default attributes
-chmod u+w -R .
-make install DESTDIR=%{buildroot} -C build
+%makeinstall_std -C build
 
 mkdir -p %{buildroot}%{vtktcldir}
 
-install -d -m 755 %{buildroot}%{vtkdir}
-pushd %{buildroot}%{vtkdir}
+install -d -m 755 %{buildroot}/%_datadir/vtk
+pushd %{buildroot}/%_datadir/vtk
     tar zxf %{SOURCE1}
     mv VTKData/{Baseline,Data} .
     rm -fr VTKData
 popd
 
-#install doc
-install -d -m 755 %{buildroot}%{_docdir}/%{name}
-cp -a build/Utilities/Doxygen/doc/html %{buildroot}%{_docdir}/%{name}/api
-
 #install test-suite and examples
 for d in Common Filtering Graphics Hybrid IO Imaging Parallel Rendering VolumeRendering Widgets
 do
-	mkdir -p %{buildroot}%{vtkdir}/examples/Testing/$d
-	cp -a $d/Testing/* %{buildroot}%{vtkdir}/examples/Testing/$d
+	mkdir -p %{buildroot}%{vtkdocdir}/examples/Testing/$d
+	cp -a $d/Testing/* %{buildroot}%{vtkdocdir}/examples/Testing/$d
 done
-cp -a Examples %{buildroot}%{vtkdir}/examples
+cp -a Examples %{buildroot}%{vtkdocdir}/examples
 
 # get rid of unwanted files
-pushd %{buildroot}%{vtkdir}/examples
+pushd %{buildroot}%{vtkdocdir}/examples
   rm -f `find . -type d -name CVS`
   find . -name "*.o" -o -name "CMake*" -o -name "cmake.*"	\
 	-o -name .NoDartCoverage -o -name .NoDartCoverage	\
@@ -403,237 +508,15 @@ popd
 
 # install test suite binaries and add each prg path in test-suite-files
 rm -f test-suite-files
-mkdir -p %{buildroot}%{vtkbindir}
+mkdir -p %{buildroot}%_bindir
 pushd build/bin
     for f in `find . -type f | grep -v '.so$' | grep -v vtk`; do
-	install -m 0755 $f %{buildroot}%{vtkbindir}
+	install -m 0755 $f %{buildroot}%_bindir
     done
 popd
-rm -f %{buildroot}%{vtkbindir}/*.so.*
+rm -f %{buildroot}%_bindir/*.so.*
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
-
-# fix some incorret "hardcoded" defaults
-%ifarch x86_64
-#  This actually creates vtklibdir
-mv -f %{buildroot}%{_prefix}/lib/%{name}* %{buildroot}%{vtklibdir}
-%endif
-
-# drop files which which shouldn't be there
-rm -rf %{buildroot}/TclTk
-rm -rf %{buildroot}%{vtklibdir}/doc
-if [ -d %{buildroot}%{vtklibdir}/tcl ]; then
-    mv -f %{buildroot}%{vtklibdir}/tcl/* %{buildroot}%{vtktcldir}
-    rmdir %{buildroot}%{vtklibdir}/tcl
-    ln -sf %{vtktcldir} %{buildroot}%{vtklibdir}/tcl
-fi
-
-# install binaries in vtkdir
-mv -f %{buildroot}%{_bindir}/* %{buildroot}%{vtkbindir}
-# add some useful links
-ln -sf %{vtkbindir}/%{name} %{buildroot}%{_bindir}/%{name}
-ln -sf %{vtkbindir}/vtkpython %{buildroot}%{_bindir}/vtkpython
-ln -sf %{_docdir}/%{name} %{buildroot}%{vtkdir}/doc
-
-cp -fa README.html vtkLogo.jpg Copyright.txt Utilities/Upgrading %{buildroot}%{_docdir}/%{name}
-
-mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_version}.conf
-
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%post -n tcl-%{name} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%post -n python-%{name} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%post -n %{libname}-qt -p /sbin/ldconfig
-%endif
-
-%if %{build_java}
-%if %mdkversion < 200900
-%post -n java-%{name} -p /sbin/ldconfig
-%endif
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n tcl-%{name} -p /sbin/ldconfig
-%endif
-
-%if %mdkversion < 200900
-%postun -n python-%{name} -p /sbin/ldconfig 
-%endif
-
-%if %mdkversion < 200900
-%postun -n %{libname}-qt -p /sbin/ldconfig
-%endif
-
-%if %{build_java}
-%if %mdkversion < 200900
-%postun -n java-%{name} -p /sbin/ldconfig
-%endif
-
-%endif
-
-%files -n %{libname}
-%defattr(0755,root,root,0755)
-%dir %{vtklibdir}
-%dir %{vtklibdir}/testing
-%{vtklibdir}/lib*.so.*
-%{_sysconfdir}/ld.so.conf.d/%{name}-%{short_version}.conf
-%exclude %{vtklibdir}/libvtk*TCL*.so.*
-%exclude %{vtklibdir}/libvtk*Python*.so.*
-%exclude %{vtklibdir}/libQVTK.so.*
-%if %{build_java}
-%exclude %{vtklibdir}/libvtk*Java.so.*
-%endif
-
-%files -n %{libname_devel}
-%defattr(0644,root,root,0755)
-%{_includedir}/*
-%dir %{vtklibdir}
-%{vtklibdir}/*.cmake
-%{vtklibdir}/CMake
-%{vtklibdir}/doxygen
-%{vtklibdir}/hints
-%{vtklibdir}/lib*.so
-%exclude %{vtklibdir}/libvtk*TCL*.so
-%exclude %{vtklibdir}/libvtk*Python*.so
-%if %{build_java}
-%exclude %{vtklibdir}/libvtk*Java.so
-%endif
-
-%files test-suite
-%defattr(0755,root,root,0755)
-%{vtkbindir}/AmbientSpheres
-%{vtkbindir}/Arrays
-%{vtkbindir}/CommonCxxTests
-%{vtkbindir}/Cone
-%{vtkbindir}/Cone2
-%{vtkbindir}/Cone3
-%{vtkbindir}/Cone4
-%{vtkbindir}/Cone5
-%{vtkbindir}/Cone6
-%{vtkbindir}/Cube
-%{vtkbindir}/Cylinder
-%{vtkbindir}/DiffuseSpheres
-%{vtkbindir}/FilteringCxxTests
-%{vtkbindir}/GenericFilteringCxxTests
-%{vtkbindir}/GraphicsCxxTests
-%{vtkbindir}/HierarchicalBoxPipeline
-%{vtkbindir}/IOCxxTests
-%{vtkbindir}/ImagingCxxTests
-%{vtkbindir}/Medical1
-%{vtkbindir}/Medical2
-%{vtkbindir}/Medical3
-%{vtkbindir}/MultiBlock
-%{vtkbindir}/RGrid
-%{vtkbindir}/RenderingCxxTests
-%{vtkbindir}/SGrid
-%{vtkbindir}/SocketClient
-%{vtkbindir}/SocketServer
-%{vtkbindir}/SpecularSpheres
-%{vtkbindir}/TestCxxFeatures
-%{vtkbindir}/TestInstantiator
-%{vtkbindir}/VTKBenchMark
-%{vtkbindir}/VolumeRenderingCxxTests
-%{vtkbindir}/WidgetsCxxTests
-%{vtkbindir}/finance
-%{vtkbindir}/CreateTree
-%if %{build_java}
-%{vtkbindir}/Example1
-%{vtkbindir}/Example2
-%endif
-%{vtkbindir}/HelloWorld
-%{vtkbindir}/HybridCxxTests
-%{vtkbindir}/ImageSlicing
-%{vtkbindir}/InfovisCxxTests
-%{vtkbindir}/MaterialObjects
-%{vtkbindir}/MultiView
-%{vtkbindir}/ParallelCxxTests
-%{vtkbindir}/ProcessShader
-%{vtkbindir}/ProcessShader-real
-%{vtkbindir}/QVTKCxxTests
-%{vtkbindir}/TestFBOImplementation
-%{vtkbindir}/Theme
-%{vtkbindir}/TimeRenderer
-%{vtkbindir}/TimeRenderer2
-%{vtkbindir}/TreeLayout
-%{vtkbindir}/ViewsCxxTests
-
-%files -n tcl-%{name}
-%defattr(0644,root,root,0755)
-%attr(0755,root,root) %{vtkbindir}/%{name}
-%attr(0755,root,root) %{vtklibdir}/libvtk*TCL*.so.* 
-%{vtklibdir}/testing/*.tcl
-%{vtklibdir}/tcl
-%{vtktcldir}
-%{_bindir}/%{name}
-
-%files -n tcl-%{name}-devel
-%defattr(0755,root,root,0755)
-%{vtkbindir}/vtkWrapTcl
-%{vtkbindir}/vtkWrapTclInit
-%{vtklibdir}/*.tcl
-%attr(0755,root,root) %{vtklibdir}/libvtk*TCL*.so 
-
-%files -n python-%{name}
-%defattr(0644,root,root,0755)
-%attr(0755,root,root) %{vtkbindir}/vtkpython
-%attr(0755,root,root) %{vtklibdir}/libvtk*Python*.so.*
-%{vtklibdir}/testing/*.py
-%{python_sitelib}/vtk
-%{python_sitelib}/VTK-*.egg-info
-%{_bindir}/vtkpython
-
-%files -n python-%{name}-devel
-%defattr(0755,root,root,0755)
-%{vtkbindir}/vtkWrapPython
-%{vtkbindir}/vtkWrapPythonInit
-%{vtklibdir}/libvtk*Python*.so
-
-%files -n %{libname}-qt
-%defattr(0644,root,root,0755)
-%attr(0755,root,root) %{vtkbindir}/qtevents
-%attr(0755,root,root) %{vtkbindir}/qtimageviewer
-%attr(0755,root,root) %{vtkbindir}/qtsimpleview
-%attr(0755,root,root) %{vtklibdir}/libQVTK.so.*
-%attr(0755,root,root) %{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
-
-%if %{build_java}
-%files -n java-%{name}
-%defattr(0644,root,root,0755)
-%attr(0755,root,root) %{vtkbindir}/vtkParseJava
-%attr(0755,root,root) %{vtkbindir}/vtkWrapJava
-%attr(0755,root,root) %{vtkbindir}/VTKJavaExecutable
-%attr(0755,root,root) %{vtklibdir}/libvtk*Java.so*
-%{vtklibdir}/java
-%endif
-
-%files		examples
-%defattr(0644,root,root,0755)
-%dir %{vtkdir}/examples
-%{vtkdir}/examples/*
-
-%files		doc
-%defattr(0644,root,root,0755)
-%dir %{_docdir}/%{name}
-%{_docdir}/%{name}/*
-
-%files		data
-%defattr(-,root,root)
-%{vtkdir}/*
 
 %clean 
 rm -rf %{buildroot}
