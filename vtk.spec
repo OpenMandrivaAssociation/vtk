@@ -64,6 +64,7 @@ BuildRequires:  proj-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
 BuildRequires:  libopenssl-devel
+BuildRequires:  python
 %if %with java
 BuildRequires:	java-rpmbuild
 BuildRequires:	java-devel > 1.5
