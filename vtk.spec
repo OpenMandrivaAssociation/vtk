@@ -60,7 +60,7 @@ BuildRequires:	gnuplot
 BuildRequires:	qt4-devel
 BuildRequires:	tk-devel >= 8.6
 BuildRequires:	tcl-devel >= 8.6
-BuildRequires:  proj4-devel
+BuildRequires:  proj-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
 BuildRequires:  libopenssl-devel
@@ -436,7 +436,7 @@ rm -f CMake/FindBoost*
 	-DVTK_INSTALL_PACKAGE_DIR=/%_lib/vtk \
 	-DVTK_INSTALL_INCLUDE_DIR=/include/vtk \
 	-DVTK_DATA_ROOT=/share/vtk \
-	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
+	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=ON \
 	-DVTK_WRAP_PYTHON:BOOL=ON \
 %if %with java
 	-DJAVA_INCLUDE_PATH:PATH=%{java_home}/include \
