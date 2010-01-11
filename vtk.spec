@@ -15,7 +15,7 @@
 
 Name: vtk
 Version: 5.4.2
-Release: %mkrel 5
+Release: %mkrel 6
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
