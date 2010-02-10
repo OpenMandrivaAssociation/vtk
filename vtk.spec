@@ -15,7 +15,7 @@
 
 Name: vtk
 Version: 5.4.2
-Release: %mkrel 6
+Release: %mkrel 7
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -37,6 +37,7 @@ Patch0:	vtk-5.2.1-python-qt.patch
 Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
 Patch2:	vtk-5.2.1-tcl8.6.patch
 Patch3:	vtk-5.2.1-fix-underlink.patch
+Patch4:	vtk-5.2.1-boost-1.42.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -397,6 +398,7 @@ vtk-examples package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
@@ -409,17 +411,21 @@ sh bin/install_classes.sh . ..
 popd
 
 for f in  {vtkImageAutoThresholdColocalization,vtkIntensityTransferFunction}.{cxx,h}; do
-    ln -sf ../BioImageXD/vtkBXD/Processing/$f Filtering
+    mv -f BioImageXD/vtkBXD/Processing/$f Filtering
+    ln -sf Filtering/$f BioImageXD/vtkBXD/Processing
 done
-ln -sf ../BioImageXD/vtkBXD/Processing/vtkBXDProcessingWin32Header.h Filtering
+mv -f BioImageXD/vtkBXD/Processing/vtkBXDProcessingWin32Header.h Filtering
+ln -sf Filtering/vtkBXDProcessingWin32Header.h BioImageXD/vtkBXD/Processing
 sed -e 's|cmakedefine|define|' BioImageXD/vtkBXD/VTKBXDConfigure.h.in > Filtering/VTKBXDConfigure.h
 
 for f in  {vtkImageLabelAverage,vtkImageSolitaryFilter,vtkImageSimpleMIP,vtkImageMapToIntensities,vtkImageColocalizationTest,vtkImageColocalizationFilter,vtkImageAlphaFilter,vtkImageColorMerge}.{cxx,h}; do
-    ln -sf ../BioImageXD/vtkBXD/Processing/$f Imaging
+    mv -f BioImageXD/vtkBXD/Processing/$f Imaging
+    ln -sf Imaging/$f BioImageXD/vtkBXD/Processing
 done
 
 for f in  {vtkLSMReader,vtkExtTIFFReader}.{cxx,h}; do
-    ln -sf ../BioImageXD/vtkBXD/Processing/$f IO
+    mv -f BioImageXD/vtkBXD/Processing/$f IO
+    ln -sf IO/$f BioImageXD/vtkBXD/Processing
 done
 
 %build
