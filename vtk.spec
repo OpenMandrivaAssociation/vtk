@@ -4,7 +4,7 @@
 %define libname		%mklibname %{name}
 %define libname_devel	%mklibname %{name} -d
 
-%define bioxd_version	0.20090311
+%define bioxd_version	0.20100714
 %define short_version	%(echo %{version} | cut -d. -f1,2)
 
 %define vtkincdir	%_includedir/vtk
@@ -14,14 +14,14 @@
 %define qt_designer_plugins_dir	%{qt4plugins}/designer
 
 Name: vtk
-Version: 5.4.2
-Release: %mkrel 7
+Version: 5.6.0
+Release: %mkrel 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
 URL: http://www.vtk.org/
-Source0: http://www.vtk.org/files/release/5.2/vtk-%{version}.tar.gz
-Source1: http://www.vtk.org/files/release/5.2/vtkdata-%{version}.tar.gz
+Source0: http://www.vtk.org/files/release/%{short_version}/vtk-%{version}.tar.gz
+Source1: http://www.vtk.org/files/release/%{short_version}/vtkdata-%{version}.tar.gz
 
 # BioImageXD contains classes to read lsm files (from zeiss)
 #URL:		http://www.bioimagexd.net
@@ -29,6 +29,7 @@ Source1: http://www.vtk.org/files/release/5.2/vtkdata-%{version}.tar.gz
 # cd BioImageXD
 # rm -fr `find . -type d -name .svn`
 # rm -f bin/ffmpeg.exe bin/ffmpeg.osx bin/*.bat bin/*.dll bin/*.manifest bin/*.iss
+# cd ..
 # tar jcvf BioImageXD-0.`date +%\Y%\m%\d`.tar.bz2 BioImageXD
 Source2:	BioImageXD-%{bioxd_version}.tar.bz2
 
@@ -36,8 +37,7 @@ Source2:	BioImageXD-%{bioxd_version}.tar.bz2
 Patch0:	vtk-5.2.1-python-qt.patch
 Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
 Patch2:	vtk-5.2.1-tcl8.6.patch
-Patch3:	vtk-5.2.1-fix-underlink.patch
-Patch4:	vtk-5.2.1-boost-1.42.patch
+Patch3:	vtk-5.6.0-fix-underlink.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -398,7 +398,6 @@ vtk-examples package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
