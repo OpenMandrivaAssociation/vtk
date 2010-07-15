@@ -291,7 +291,6 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %defattr(0644,root,root,0755)
 %_bindir/qtevents
 %_bindir/qtimageviewer
-%_bindir/qtsimpleview
 %_libdir/libQVTK.so.*
 %_libdir/libvtkQtChart.so.*
 %{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
