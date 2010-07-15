@@ -38,6 +38,7 @@ Patch0:	vtk-5.2.1-python-qt.patch
 Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
 Patch2:	vtk-5.2.1-tcl8.6.patch
 Patch3:	vtk-5.6.0-fix-underlink.patch
+Patch4:	vtk-5.6.0-BioImageXD-visibility.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -409,6 +410,8 @@ pushd BioImageXD
 sh bin/install_classes.sh . ..
 popd
 
+%patch4 -p1
+
 for f in  {vtkImageAutoThresholdColocalization,vtkIntensityTransferFunction}.{cxx,h}; do
     mv -f BioImageXD/vtkBXD/Processing/$f Filtering
     ln -sf Filtering/$f BioImageXD/vtkBXD/Processing
@@ -454,6 +457,7 @@ rm -f CMake/FindBoost*
 	-DVTK_WRAP_TCL:BOOL=ON \
 	-DVTK_USE_RENDERING:BOOL=ON \
 	-DDESIRED_QT_VERSION=4 \
+	-DVTK_USE_QT:BOOL=ON \
 	-DBUILD_DOCUMENTATION:BOOL=OFF \
 	-DBUILD_EXAMPLES:BOOL=ON \
 	-DBUILD_SHARED_LIBS:BOOL=ON \
