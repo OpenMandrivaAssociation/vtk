@@ -1,3 +1,5 @@
+%define _requires_exceptions    libCosmo\\|libVPIC
+
 # Documentation are download and built by vtk-doc separated package
 %bcond_with java
 
@@ -121,6 +123,8 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %files -n %{libname}
 %defattr(0755,root,root,0755)
 %_libdir/lib*.so.*
+%_libdir/libCosmo.so
+%_libdir/libVPIC.so
 %exclude %_libdir/libvtk*TCL*.so.*
 %exclude %_libdir/libvtk*Python*.so.*
 %exclude %_libdir/libQVTK.so.*
@@ -151,6 +155,8 @@ programs that use VTK to do 3D visualisation.
 %dir %_libdir/vtk/
 %_libdir/vtk/*
 %_libdir/lib*.so
+%exclude %_libdir/libCosmo.so
+%exclude %_libdir/libVPIC.so
 %exclude %_libdir/libvtk*TCL*.so
 %exclude %_libdir/libvtk*Python*.so
 %if %with java
