@@ -17,7 +17,7 @@
 
 Name: vtk
 Version: 5.6.0
-Release: %mkrel 1
+Release: %mkrel 2
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -41,6 +41,7 @@ Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
 Patch2:	vtk-5.2.1-tcl8.6.patch
 Patch3:	vtk-5.6.0-fix-underlink.patch
 Patch4:	vtk-5.6.0-BioImageXD-visibility.patch
+Patch5:	vtk-5.6.0-wx-vtk.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -404,6 +405,7 @@ vtk-examples package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch5 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
