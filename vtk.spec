@@ -42,6 +42,7 @@ Patch2:	vtk-5.2.1-tcl8.6.patch
 Patch3:	vtk-5.6.0-fix-underlink.patch
 Patch4:	vtk-5.6.0-BioImageXD-visibility.patch
 Patch5:	vtk-5.6.0-wx-vtk.patch
+Patch6: vtk-5.6.0-python27.patch
 
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
@@ -406,6 +407,7 @@ vtk-examples package.
 %patch2 -p1
 %patch3 -p1
 %patch5 -p1
+%patch6 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
