@@ -50,7 +50,6 @@ Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
 BuildRoot:	%{_tmppath}/%{name}-root
 
 BuildRequires:	cmake >= 1.8 
-BuildRequires:	X11-devel
 BuildRequires:	expat-devel >= 2.0.1
 BuildRequires:	jpeg-devel
 BuildRequires:	png-devel
@@ -58,6 +57,8 @@ BuildRequires:	tiff-devel
 BuildRequires:	zlib-devel
 BuildRequires:	freetype2-devel
 BuildRequires:	GL-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxt-devel
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
@@ -67,14 +68,12 @@ BuildRequires:	qt4-devel
 BuildRequires:	tk-devel >= 8.6
 BuildRequires:	tcl-devel >= 8.6
 BuildRequires:  libxml2-devel
-BuildRequires:  boost-devel
-BuildRequires:  libopenssl-devel
-BuildRequires:  python
+BuildRequires:	boost-devel
+BuildRequires:  python-devel
 %if %with java
 BuildRequires:	java-rpmbuild
 BuildRequires:	java-devel > 1.5
 %endif
-%py_requires -d
 
 %description
 The Visualization ToolKit (VTK) is an object oriented software system for 3D
@@ -231,7 +230,6 @@ This package contains tcl bindings for VTK.
 %package -n python-%{name}
 Summary:	Python bindings for VTK
 Requires:	%{libname} = %{version}
-Requires(pre):	%{libname} = %{version}
 Group:		Development/Python
 Obsoletes:	%{name}-python
 Provides:	%{name}-python
