@@ -16,8 +16,8 @@
 %define qt_designer_plugins_dir	%{qt4plugins}/designer
 
 Name: vtk
-Version: 5.6.0
-Release: %mkrel 5
+Version: 5.6.1
+Release: 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -43,7 +43,8 @@ Patch3:	vtk-5.6.0-fix-underlink.patch
 Patch4:	vtk-5.6.0-BioImageXD-visibility.patch
 Patch5:	vtk-5.6.0-wx-vtk.patch
 Patch6: vtk-5.6.0-python27.patch
-
+Patch7: vtk-5.6.1-gcc46.patch
+Patch9: vtk-5.6.1-soversion.patch
 # do not install widgets
 Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
 
@@ -406,6 +407,8 @@ vtk-examples package.
 %patch3 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
+%patch9 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
