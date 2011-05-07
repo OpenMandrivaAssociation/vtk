@@ -535,6 +535,7 @@ pushd build/bin
 popd
 rm -f %buildroot%_bindir/*.so.*
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
+
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
 
 %clean 
