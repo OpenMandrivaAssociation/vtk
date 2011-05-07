@@ -17,7 +17,7 @@
 
 Name: vtk
 Version: 5.6.1
-Release: 1
+Release: 2
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -125,8 +125,6 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %files -n %{libname}
 %defattr(0755,root,root,0755)
 %_libdir/lib*.so.*
-%_libdir/libCosmo.so
-%_libdir/libVPIC.so
 %exclude %_libdir/libvtk*TCL*.so.*
 %exclude %_libdir/libvtk*Python*.so.*
 %exclude %_libdir/libQVTK.so.*
@@ -144,6 +142,7 @@ Group:		Development/C++
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%{name}-devel < %{version}-%{release}
 Conflicts:	%{libname}-qt < 5.0.3-4
+Conflicts:	%{libname} < 5.6.1-2
 Requires:	%{libname}-qt = %{version}-%{release}
 
 %description -n %{libname_devel}
@@ -157,8 +156,6 @@ programs that use VTK to do 3D visualisation.
 %dir %_libdir/vtk/
 %_libdir/vtk/*
 %_libdir/lib*.so
-%exclude %_libdir/libCosmo.so
-%exclude %_libdir/libVPIC.so
 %exclude %_libdir/libvtk*TCL*.so
 %exclude %_libdir/libvtk*Python*.so
 %if %with java
