@@ -1,5 +1,3 @@
-%define _requires_exceptions    libCosmo\\|libVPIC
-
 # Documentation are download and built by vtk-doc separated package
 %bcond_with java
 
@@ -17,7 +15,7 @@
 
 Name: vtk
 Version: 5.6.1
-Release: 2
+Release: 3
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
