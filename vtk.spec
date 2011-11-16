@@ -4,7 +4,7 @@
 %define libname		%mklibname %{name}
 %define libname_devel	%mklibname %{name} -d
 
-%define bioxd_version	0.20100714
+%define bioxd_version	0.20111111
 %define short_version	%(echo %{version} | cut -d. -f1,2)
 
 %define vtkincdir	%_includedir/vtk
@@ -14,8 +14,8 @@
 %define qt_designer_plugins_dir	%{qt4plugins}/designer
 
 Name: vtk
-Version: 5.6.1
-Release: 4
+Version: 5.8.0
+Release: 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -34,17 +34,14 @@ Source1: http://www.vtk.org/files/release/%{short_version}/vtkdata-%{version}.ta
 Source2:	BioImageXD-%{bioxd_version}.tar.bz2
 
 # fix qt method calls in python
-Patch0:	vtk-5.2.1-python-qt.patch
-Patch1:	vtk-5.2.1-vtkLoadPythonTkWidgets.patch
-Patch2:	vtk-5.2.1-tcl8.6.patch
-Patch3:	vtk-5.6.0-fix-underlink.patch
-Patch4:	vtk-5.6.0-BioImageXD-visibility.patch
-Patch5:	vtk-5.6.0-wx-vtk.patch
-Patch6: vtk-5.6.0-python27.patch
-Patch7: vtk-5.6.1-gcc46.patch
-Patch9: vtk-5.6.1-soversion.patch
-# do not install widgets
-Patch8:		vtk-BioImageXD-0.20090311-widgets.patch
+Patch0:	vtk-5.8.0-python-qt.patch
+Patch1:	vtk-5.8.0-vtkLoadPythonTkWidgets.patch
+Patch2:	vtk-5.8.0-tcl8.6.patch
+Patch3:	vtk-5.8.0-fix-underlink.patch
+Patch4:	vtk-5.8.0-soversion.patch
+
+Patch5:	vtk-BioImageXD-0.20111111-widgets.patch
+Patch6:	vtk-5.8.0-BioImageXD-visibility.patch
 
 BuildRoot:	%{_tmppath}/%{name}-root
 
@@ -126,7 +123,6 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %exclude %_libdir/libvtk*TCL*.so.*
 %exclude %_libdir/libvtk*Python*.so.*
 %exclude %_libdir/libQVTK.so.*
-%exclude %_libdir/libvtkQtChart.so.*
 %if %with java
 %exclude %_libdir/libvtk*Java.so.*
 %endif
@@ -150,12 +146,16 @@ programs that use VTK to do 3D visualisation.
 %files -n %{libname_devel}
 %defattr(0644,root,root,0755)
 %{_includedir}/*
-%dir %_libdir
 %dir %_libdir/vtk/
+# FIXME install these as is due to how it resolves some cmake macros based on
+# location of these files
+%_libdir/*.cmake
 %_libdir/vtk/*
 %_libdir/lib*.so
 %exclude %_libdir/libvtk*TCL*.so
+%exclude %_libdir/vtk/testing/*.tcl
 %exclude %_libdir/libvtk*Python*.so
+%exclude %_libdir/vtk/testing/*.py
 %if %with java
 %exclude %_libdir/libvtk*Java.so
 %endif
@@ -294,7 +294,6 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %_bindir/qtevents
 %_bindir/qtimageviewer
 %_libdir/libQVTK.so.*
-%_libdir/libvtkQtChart.so.*
 %{qt_designer_plugins_dir}/libQVTKWidgetPlugin.so
 
 #------------------------------------------------------------------------------
@@ -390,6 +389,11 @@ vtk-examples package.
 %exclude %_bindir/%{name}
 %exclude %_bindir/vtkWrapTcl
 %exclude %_bindir/vtkWrapTclInit
+%exclude %_bindir/vtkpython
+%exclude %_bindir/vtkWrapPython
+%exclude %_bindir/vtkWrapPythonInit
+%exclude %_bindir/qtevents
+%exclude %_bindir/qtimageviewer
 
 #------------------------------------------------------------------------------
 
@@ -400,10 +404,7 @@ vtk-examples package.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch9 -p1
+%patch4 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
@@ -411,11 +412,11 @@ find . -type f | xargs sed -i -e 's|../../../../VTKData|%_datadir/vtk|g'
 # install extra classes from BioImageXD
 tar xf %{SOURCE2}
 pushd BioImageXD
-%patch8
+%patch5 -p0
 sh bin/install_classes.sh . ..
 popd
 
-%patch4 -p1
+%patch6 -p1
 
 for f in  {vtkImageAutoThresholdColocalization,vtkIntensityTransferFunction}.{cxx,h}; do
     mv -f BioImageXD/vtkBXD/Processing/$f Filtering
