@@ -15,7 +15,7 @@
 
 Name: vtk
 Version: 5.8.0
-Release: 2
+Release: 3
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -42,6 +42,9 @@ Patch4:	vtk-5.8.0-soversion.patch
 
 Patch5:	vtk-BioImageXD-0.20111111-widgets.patch
 Patch6:	vtk-5.8.0-BioImageXD-visibility.patch
+
+# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sci-libs/vtk/files/vtk-5.8.0-boost.patch
+Patch7: vtk-5.8.0-boost.patch
 
 BuildRoot:	%{_tmppath}/%{name}-root
 
@@ -417,6 +420,7 @@ sh bin/install_classes.sh . ..
 popd
 
 %patch6 -p1
+%patch7 -p1
 
 for f in  {vtkImageAutoThresholdColocalization,vtkIntensityTransferFunction}.{cxx,h}; do
     mv -f BioImageXD/vtkBXD/Processing/$f Filtering
