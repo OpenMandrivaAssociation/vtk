@@ -1,0 +1,13 @@
+Index: bin/install_classes.sh
+===================================================================
+--- bin/install_classes.sh	(revision 742)
++++ bin/install_classes.sh	(working copy)
+@@ -4,7 +4,7 @@
+ exit
+ fi
+ 
+-INSTALL="IO Imaging Filtering Widgets"
++INSTALL="IO Imaging Filtering"
+ CP_CMD="cp"
+ 
+ CPPDIR=$1/C++

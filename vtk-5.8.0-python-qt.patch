@@ -1,0 +1,24 @@
+--- VTK/Wrapping/Python/vtk/qt/QVTKRenderWidget.py.orig	2011-11-11 16:36:06.361945502 -0200
++++ VTK/Wrapping/Python/vtk/qt/QVTKRenderWidget.py	2011-11-11 16:36:29.700046286 -0200
+@@ -103,7 +103,7 @@ class QVTKRenderWidget(QWidget):
+             del kw['rw']
+ 
+         # create qt-level widget
+-        apply(QWidget.__init__, (self,parent,name) + args, kw)
++        apply(QWidget.__init__, (self,parent,name) + args)
+ 
+         if rw: # user-supplied render window
+             self._RenderWindow = rw
+@@ -115,9 +115,9 @@ class QVTKRenderWidget(QWidget):
+             self._RenderWindow.SetStereoTypeToCrystalEyes()
+ 
+         # do all the necessary qt setup
+-        self.setBackgroundMode(2) # NoBackground
+-        self.setMouseTracking(1) # get all mouse events
+-        self.setFocusPolicy(2) # ClickFocus
++        self.setBackgroundMode(QWidget.NoBackground) # NoBackground
++        self.setMouseTracking(True) # get all mouse events
++        self.setFocusPolicy(QWidget.ClickFocus) # ClickFocus
+         if parent == None:
+             self.show()
+ 

@@ -1,0 +1,11 @@
+--- VTK/BioImageXD/vtkBXD/Processing/vtkBXDProcessingWin32Header.h.orig	2011-11-11 16:56:14.939186916 -0200
++++ VTK/BioImageXD/vtkBXD/Processing/vtkBXDProcessingWin32Header.h	2011-11-11 16:56:21.490215845 -0200
+@@ -29,7 +29,7 @@
+ #define VTK_BXD_PROCESSING_EXPORT __declspec( dllimport )
+ #endif
+ #else
+-#define VTK_BXD_PROCESSING_EXPORT
++#define VTK_BXD_PROCESSING_EXPORT	VTK_ABI_EXPORT
+ #endif
+ 
+ #endif

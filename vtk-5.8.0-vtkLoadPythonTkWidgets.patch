@@ -1,0 +1,14 @@
+--- VTK/Wrapping/Python/vtk/tk/vtkLoadPythonTkWidgets.py.orig	2011-11-11 16:39:41.166872387 -0200
++++ VTK/Wrapping/Python/vtk/tk/vtkLoadPythonTkWidgets.py	2011-11-11 16:39:51.284915997 -0200
+@@ -22,7 +22,10 @@ def vtkLoadPythonTkWidgets(interp):
+     elif os.name == 'posix':
+         prefix = 'lib'
+     extension = interp.call('info', 'sharedlibextension')
+-    filename = prefix+name+extension
++    # append vtk version to be able to load the file even if the .so
++    # file is not there - it is packaged in the devel package
++    from vtk import vtkVersion
++    filename = prefix+name+extension+"."+vtkVersion.GetVTKVersion()
+ 
+     # create an extensive list of paths to search
+     pathlist = sys.path
