@@ -1,8 +1,7 @@
-diff --git a/Infovis/vtkBoostBreadthFirstSearchTree.cxx b/Infovis/vtkBoostBreadthFirstSearchTree.cxx
-index c789f6b..13e7cb6 100644
---- a/Infovis/vtkBoostBreadthFirstSearchTree.cxx
-+++ b/Infovis/vtkBoostBreadthFirstSearchTree.cxx
-@@ -47,6 +47,17 @@ using namespace boost;
+diff -urN VTK/Infovis/vtkBoostBreadthFirstSearchTree.cxx VTK-patched/Infovis/vtkBoostBreadthFirstSearchTree.cxx
+--- VTK/Infovis/vtkBoostBreadthFirstSearchTree.cxx	2011-08-25 00:37:10.000000000 +1100
++++ VTK-patched/Infovis/vtkBoostBreadthFirstSearchTree.cxx	2012-09-06 03:02:14.704184786 +1100
+@@ -47,6 +47,21 @@
  vtkStandardNewMacro(vtkBoostBreadthFirstSearchTree);
  
  
@@ -12,7 +11,11 @@ index c789f6b..13e7cb6 100644
 +    return e.Id;
 +  }
 +  vtkIdType unwrap_edge_id(boost::detail::reverse_graph_edge_descriptor<vtkEdgeType> const &e) {
++# if BOOST_VERSION == 104800
 +    return e.underlying_desc.Id;
++# else
++    return e.underlying_descx.Id;
++# endif
 +  }
 +}
 +#endif
@@ -20,7 +23,7 @@ index c789f6b..13e7cb6 100644
  // Redefine the bfs visitor, the only visitor we
  // are using is the tree_edge visitor.
  template <typename IdMap>
-@@ -95,7 +106,12 @@ public:
+@@ -95,7 +110,12 @@
  
      // Copy the vertex and edge data from the graph to the tree.
      tree->GetVertexData()->CopyData(graph->GetVertexData(), v, tree_v);
