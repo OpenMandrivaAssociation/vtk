@@ -32,6 +32,7 @@ Source1:	http://www.vtk.org/files/release/%{short_version}/vtkdata-%{version}.ta
 # cd ..
 # tar jcvf BioImageXD-0.`date +%\Y%\m%\d`.tar.bz2 BioImageXD
 Source2:	BioImageXD-%{bioxd_version}.tar.bz2
+Source100:	vtk.rpmlintrc
 
 # fix qt method calls in python
 Patch0:		vtk-5.8.0-python-qt.patch
