@@ -14,8 +14,8 @@
 %define qt_designer_plugins_dir	%{qt4plugins}/designer
 
 Name:		vtk
-Version:	5.8.0
-Release:	4
+Version:	5.10.1
+Release:	1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -37,14 +37,12 @@ Source2:	BioImageXD-%{bioxd_version}.tar.bz2
 Patch0:		vtk-5.8.0-python-qt.patch
 Patch1:		vtk-5.8.0-vtkLoadPythonTkWidgets.patch
 Patch2:		vtk-5.8.0-tcl8.6.patch
-Patch3:		vtk-5.8.0-fix-underlink.patch
-Patch4:		vtk-5.8.0-soversion.patch
+Patch3:		vtk-5.10.1-fix-underlink.patch
+Patch4:		vtk-5.10.1-soversion.patch
 
 Patch5:		vtk-BioImageXD-0.20111111-widgets.patch
 Patch6:		vtk-5.8.0-BioImageXD-visibility.patch
-
-# From upstream, fixes build with Boost 1.48+ (including 1.50)
-Patch7:		vtk-5.8.0-boost.patch
+Patch7:		vtk-5.10.1-share-dir.patch
 
 BuildRequires:	cmake >= 1.8
 BuildRequires:	expat-devel >= 2.0.1
@@ -407,6 +405,7 @@ vtk-examples package.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch7 -p1
 
 # fix data path
 find . -type f | xargs sed -i -e 's|../../../../VTKData|%{_datadir}/vtk|g'
@@ -419,7 +418,6 @@ sh bin/install_classes.sh . ..
 popd
 
 %patch6 -p1
-%patch7 -p1
 
 for f in  {vtkImageAutoThresholdColocalization,vtkIntensityTransferFunction}.{cxx,h}; do
     mv -f BioImageXD/vtkBXD/Processing/$f Filtering

@@ -7,4 +7,4 @@
 +  SET_TARGET_PROPERTIES(vtkNetCDF_cxx PROPERTIES ${VTK_LIBRARY_PROPERTIES})
  ENDIF(VTK_LIBRARY_PROPERTIES)
  
- IF(NOT VTK_INSTALL_NO_LIBRARIES)
+ #-----------------------------------------------------------------------------
