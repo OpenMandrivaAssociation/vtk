@@ -498,8 +498,8 @@ mkdir -p %{buildroot}%{vtktcldir}
 install -d -m 755 %{buildroot}/%{_datadir}/vtk
 pushd %{buildroot}/%{_datadir}/vtk
     tar zxf %{SOURCE1}
-    mv VTKData/{Baseline,Data} .
-    rm -fr VTKData
+    mv VTKData%{version}/{Baseline,Data} .
+    rm -fr VTKData%{version}
 popd
 
 #install test-suite and examples
@@ -535,7 +535,7 @@ rm -f %{buildroot}%{_bindir}/*.so.*
 
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
 
-%multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
+#%multiarch_includes  %{buildroot}%{vtkincdir}/vtknetcdf/ncconfig.h
 
 %changelog
 * Wed Mar 14 2012 Paulo Andrade <pcpa@mandriva.com.br> 5.8.0-3
