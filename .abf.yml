@@ -1,5 +1,3 @@
 sources:
   VTK-6.1.0.tar.gz: 91d1303558c7276f031f8ffeb47b4233f2fd2cd9
   VTKData-6.1.0.tar.gz: 3fb62599dc3ff209f9dea3f3ff9ff53343a79058
-  vtk-5.10.1.tar.gz: deb834f46b3f7fc3e122ddff45e2354d69d2adc3
-  vtkdata-5.10.1.tar.gz: 9fb9b3324dc5960813fbffd4111562f7b717a483
