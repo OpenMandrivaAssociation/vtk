@@ -18,7 +18,7 @@ Version: 6.1.0
 Release: 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
-Group: Graphics/3D
+Group: Graphics
 URL: http://www.vtk.org/
 Source0: http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
