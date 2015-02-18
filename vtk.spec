@@ -57,6 +57,7 @@ BuildRequires: python-qt4
 BuildRequires: python-sip
 BuildRequires: hdf5-devel
 BuildRequires: qt4-devel
+BuildRequires:	pkgconfig(QtWebKit)
 %if %with java
 BuildRequires:  java-rpmbuild
 BuildRequires:  java-devel > 1.5
