@@ -14,20 +14,14 @@
 %define qt_designer_plugins_dir %{qt4plugins}/designer
 
 Name: vtk
-Version: 6.1.0
-Release: 3
+Version: 8.0.0
+Release: 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
 URL: http://www.vtk.org/
 Source0: http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
-
-#Patch0: vtk-6.0.0-system.patch
-#Patch1: vtk-install.patch
-#Patch2: vtk-vtkpython.patch
-Patch3: vtk-6.0.0-mesagl-10.3.patch
-Patch4: vtk-type.patch
 
 BuildRequires:  cmake >= 1.8 
 BuildRequires:  expat-devel >= 2.0.1
@@ -44,20 +38,15 @@ BuildRequires:  pkgconfig(theora)
 BuildRequires:  perl
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-BuildRequires:  cvs
 BuildRequires:  gnuplot
-BuildRequires:  qt4-devel
 BuildRequires:  tk-devel >= 8.5
 BuildRequires:  tcl-devel >= 8.5
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
 BuildRequires:  python2-devel
 BuildRequires:	R
-BuildRequires: python-qt4
-BuildRequires: python-sip
-BuildRequires: hdf5-devel
-BuildRequires: qt4-devel
-BuildRequires:	pkgconfig(QtWebKit)
+BuildRequires:	python-sip
+BuildRequires:	hdf5-devel
 %if %with java
 BuildRequires:  java-rpmbuild
 BuildRequires:  java-devel > 1.5
@@ -378,6 +367,7 @@ rm -f CMake/FindBoost*
         -DVTK_INSTALL_PACKAGE_DIR=%_lib/vtk \
         -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python2_sitearch} \
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
+	-DVTK_QT_VERSION=5 \
         -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
         -DVTK_INSTALL_PACKAGE_DIR:PATH=%{_lib}/cmake/vtk \
         -DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt4/plugins/designer \
