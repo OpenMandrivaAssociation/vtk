@@ -57,7 +57,6 @@ BuildRequires:  tcl-devel >= 8.5
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
 BuildRequires:  python2-devel
-BuildRequires:	R
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 %if %with java
