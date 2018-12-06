@@ -343,7 +343,6 @@ vtk-examples package.
 %exclude %_bindir/vtkWrapPythonInit
 %exclude %_bindir/vtkEncodeString
 %exclude %_bindir/vtkHashSource
-%exclude %_bindir/vtkParseOGLExt
 %exclude %_bindir/vtkWrapHierarchy
 
 #------------------------------------------------------------------------------
