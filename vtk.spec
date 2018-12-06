@@ -29,6 +29,14 @@ BuildRequires:  jpeg-devel
 BuildRequires:  png-devel
 BuildRequires:  tiff-devel
 BuildRequires:  zlib-devel
+BuildRequires:	pkgconfig(Qt5Core)
+BuildRequires:	pkgconfig(Qt5Gui)
+BuildRequires:	pkgconfig(Qt5Widgets)
+BuildRequires:	pkgconfig(Qt5X11Extras)
+BuildRequires:	pkgconfig(Qt5OpenGL)
+BuildRequires:	pkgconfig(Qt5Sql)
+BuildRequires:	pkgconfig(Qt5WebKitWidgets)
+BuildRequires:	cmake(ECM)
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:  pkgconfig(gl)
