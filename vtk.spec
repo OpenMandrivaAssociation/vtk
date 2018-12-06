@@ -11,7 +11,7 @@
 %define vtkdocdir       %_docdir/vtk
 %define vtktcldir       %{tcl_sitearch}/%{name}-%{short_version}
 
-%define qt_designer_plugins_dir %{qt4plugins}/designer
+%define qt_designer_plugins_dir %{_libdir}/qt5/plugins/designer
 
 Name: vtk
 Version: 6.1.0
@@ -46,18 +46,17 @@ BuildRequires:  doxygen
 BuildRequires:  graphviz
 BuildRequires:  cvs
 BuildRequires:  gnuplot
-BuildRequires:  qt4-devel
+BuildRequires:  qt5-devel
 BuildRequires:  tk-devel >= 8.5
 BuildRequires:  tcl-devel >= 8.5
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
 BuildRequires:  python2-devel
 BuildRequires:	R
-BuildRequires: python-qt4
+BuildRequires: python-qt5
 BuildRequires: python-sip
 BuildRequires: hdf5-devel
-BuildRequires: qt4-devel
-BuildRequires:	pkgconfig(QtWebKit)
+BuildRequires:	pkgconfig(Qt5WebKitWidgets)
 %if %with java
 BuildRequires:  java-rpmbuild
 BuildRequires:  java-devel > 1.5
@@ -226,7 +225,7 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %{_libdir}/vtk/lib*Qt*.so.*
 %exclude %{_libdir}/vtk/*TCL.so.*
 %exclude %{_libdir}/vtk/*Python27D.so.*
-%{_libdir}/qt4/plugins/designer/libQVTKWidgetPlugin.so
+%{_libdir}/qt5/plugins/designer/libQVTKWidgetPlugin.so
 
 %package -n python-vtk-qt
 Summary: Qt Python bindings for VTK
@@ -361,6 +360,7 @@ grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
 %build
 export CFLAGS="%{optflags} -D_UNICODE"
 export CXXFLAGS="%{optflags} -D_UNICODE"
+export CXX="%__cxx -std=gnu++11"
 %if %{with java}
 export JAVA_HOME=/usr/lib/jvm/java
 %endif
@@ -380,7 +380,7 @@ rm -f CMake/FindBoost*
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
         -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
         -DVTK_INSTALL_PACKAGE_DIR:PATH=%{_lib}/cmake/vtk \
-        -DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt4/plugins/designer \
+        -DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt5/plugins/designer \
         -DVTK_INSTALL_TCL_DIR:PATH=share/tcl%{tcl_version}/vtk \
         -DTK_INTERNAL_PATH:PATH=/usr/include/tk-private/generic \
 %if %{with OSMesa}
@@ -408,7 +408,7 @@ rm -f CMake/FindBoost*
  -DModule_vtkTestingCore:BOOL=ON \
  -DModule_vtkTestingRendering:BOOL=ON \
         -DVTK_USE_RENDERING:BOOL=ON \
-        -DDESIRED_QT_VERSION=4 \
+        -DVTK_QT_VERSION=5 \
         -DVTK_USE_QT:BOOL=ON \
         -DBUILD_DOCUMENTATION:BOOL=OFF \
         -DBUILD_EXAMPLES:BOOL=ON \
