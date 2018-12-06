@@ -30,11 +30,15 @@ BuildRequires:  png-devel
 BuildRequires:  tiff-devel
 BuildRequires:  zlib-devel
 BuildRequires:  pkgconfig(freetype2)
+BuildRequires:	pkgconfig(egl)
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  chrpath
+BuildRequires:	pkgconfig(liblz4)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(theora)
+BuildRequires:	pkgconfig(netcdf)
+BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:  perl
 BuildRequires:  doxygen
 BuildRequires:  graphviz
@@ -422,6 +426,8 @@ rm -f CMake/FindBoost*
         -DVTK_USE_QVTK_QTOPENGL:BOOL=ON \
         -DVTK_USE_OGGTHEORA_ENCODER=ON \
         -DVTK_USE_SYSTEM_LIBRARIES=ON \
+        -DVTK_USE_SYSTEM_NETCDFCPP=OFF \
+	-DVTK_USE_SYSTEM_GL2PS=OFF \
         -DVTK_USE_BOOST:BOOL=ON
 %make
 # Remove executable bits from sources (some of which are generated)
