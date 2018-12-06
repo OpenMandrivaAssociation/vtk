@@ -548,7 +548,9 @@ pushd build/bin
     done
 popd
 rm -f %buildroot%_bindir/*.so.*
+%if %mdvver <= 3000000
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
+%endif
 
 #multiarch_includes  {buildroot}{vtkincdir}/vtknetcdf/ncconfig.h
 
