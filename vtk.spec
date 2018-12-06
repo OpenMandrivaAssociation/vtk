@@ -51,7 +51,6 @@ BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:  perl
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-BuildRequires:  gnuplot
 BuildRequires:  tk-devel >= 8.5
 BuildRequires:  tcl-devel >= 8.5
 BuildRequires:  libxml2-devel
