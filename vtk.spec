@@ -113,9 +113,8 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %endif
 
 %files -n %{libname} -f build/main.list
-%doc Copyright.txt README.html vtkLogo.jpg vtkBanner.gif _docs/Wrapping
+%doc Copyright.txt vtkLogo.jpg vtkBanner.gif _docs/Wrapping
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
-%{_datadir}/vtk-6.1
 %dir %{_libdir}/vtk
 
 #------------------------------------------------------------------------------
@@ -143,7 +142,7 @@ programs that use VTK to do 3D visualisation.
 %{_libdir}/vtk/libvtkWrappingTools.a
 %{_libdir}/cmake/vtk/
 %{_bindir}/vtkParseOGLExt*
-%{_docdir}/vtk-6.1/
+%{_docdir}/vtk-8.1/
 %{tcl_sitelib}/vtk/vtktcl.c
 
 
