@@ -14,8 +14,8 @@
 %define qt_designer_plugins_dir %{_libdir}/qt5/plugins/designer
 
 Name: vtk
-Version: 6.1.0
-Release: 2
+Version: 8.1.2
+Release: 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -23,40 +23,41 @@ URL: http://www.vtk.org/
 Source0: http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
 
-#Patch0: vtk-6.0.0-system.patch
-#Patch1: vtk-install.patch
-#Patch2: vtk-vtkpython.patch
-Patch3: vtk-6.0.0-mesagl-10.3.patch
-Patch4: vtk-type.patch
-
 BuildRequires:  cmake >= 1.8 
 BuildRequires:  expat-devel >= 2.0.1
 BuildRequires:  jpeg-devel
 BuildRequires:  png-devel
 BuildRequires:  tiff-devel
 BuildRequires:  zlib-devel
+BuildRequires:	pkgconfig(Qt5Core)
+BuildRequires:	pkgconfig(Qt5Gui)
+BuildRequires:	pkgconfig(Qt5Widgets)
+BuildRequires:	pkgconfig(Qt5X11Extras)
+BuildRequires:	pkgconfig(Qt5OpenGL)
+BuildRequires:	pkgconfig(Qt5Sql)
+BuildRequires:	pkgconfig(Qt5WebKitWidgets)
+BuildRequires:	pkgconfig(Qt5UiTools)
+BuildRequires:	cmake(ECM)
 BuildRequires:  pkgconfig(freetype2)
+BuildRequires:	pkgconfig(egl)
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  chrpath
+BuildRequires:	pkgconfig(liblz4)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(theora)
+BuildRequires:	pkgconfig(netcdf)
+BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:  perl
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-BuildRequires:  cvs
-BuildRequires:  gnuplot
-BuildRequires:  qt5-devel
 BuildRequires:  tk-devel >= 8.5
 BuildRequires:  tcl-devel >= 8.5
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
 BuildRequires:  python2-devel
-BuildRequires:	R
-BuildRequires: python-qt5
-BuildRequires: python-sip
-BuildRequires: hdf5-devel
-BuildRequires:	pkgconfig(Qt5WebKitWidgets)
+BuildRequires:	python-sip
+BuildRequires:	hdf5-devel
 %if %with java
 BuildRequires:  java-rpmbuild
 BuildRequires:  java-devel > 1.5
@@ -111,9 +112,8 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %endif
 
 %files -n %{libname} -f build/main.list
-%doc Copyright.txt README.html vtkLogo.jpg vtkBanner.gif _docs/Wrapping
+%doc Copyright.txt vtkLogo.jpg vtkBanner.gif _docs/Wrapping
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
-%{_datadir}/vtk-6.1
 %dir %{_libdir}/vtk
 
 #------------------------------------------------------------------------------
@@ -140,8 +140,7 @@ programs that use VTK to do 3D visualisation.
 %{_libdir}/vtk/*.so
 %{_libdir}/vtk/libvtkWrappingTools.a
 %{_libdir}/cmake/vtk/
-%{_bindir}/vtkParseOGLExt*
-%{_docdir}/vtk-6.1/
+%{_docdir}/vtk-8.1/
 %{tcl_sitelib}/vtk/vtktcl.c
 
 
@@ -343,7 +342,6 @@ vtk-examples package.
 %exclude %_bindir/vtkWrapPythonInit
 %exclude %_bindir/vtkEncodeString
 %exclude %_bindir/vtkHashSource
-%exclude %_bindir/vtkParseOGLExt
 %exclude %_bindir/vtkWrapHierarchy
 
 #------------------------------------------------------------------------------
@@ -378,6 +376,7 @@ rm -f CMake/FindBoost*
         -DVTK_INSTALL_PACKAGE_DIR=%_lib/vtk \
         -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python2_sitearch} \
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
+	-DVTK_QT_VERSION=5 \
         -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
         -DVTK_INSTALL_PACKAGE_DIR:PATH=%{_lib}/cmake/vtk \
         -DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt5/plugins/designer \
@@ -408,7 +407,6 @@ rm -f CMake/FindBoost*
  -DModule_vtkTestingCore:BOOL=ON \
  -DModule_vtkTestingRendering:BOOL=ON \
         -DVTK_USE_RENDERING:BOOL=ON \
-        -DVTK_QT_VERSION=5 \
         -DVTK_USE_QT:BOOL=ON \
         -DBUILD_DOCUMENTATION:BOOL=OFF \
         -DBUILD_EXAMPLES:BOOL=ON \
@@ -420,6 +418,7 @@ rm -f CMake/FindBoost*
         -DVTK_USE_SYSTEM_TIFF:BOOL=ON \
         -DVTK_USE_SYSTEM_ZLIB:BOOL=ON \
         -DVTK_USE_SYSTEM_FREETYPE:BOOL=ON \
+        -DVTK_USE_SYSTEM_LIBHARU=OFF \
         -DVTK_USE_ANSI_STDLIB:BOOL=ON \
         -DVTK_USE_PARALLEL:BOOL=ON \
         -DVTK_USE_GUISUPPORT:BOOL=ON \
@@ -432,6 +431,8 @@ rm -f CMake/FindBoost*
         -DVTK_USE_QVTK_QTOPENGL:BOOL=ON \
         -DVTK_USE_OGGTHEORA_ENCODER=ON \
         -DVTK_USE_SYSTEM_LIBRARIES=ON \
+        -DVTK_USE_SYSTEM_NETCDFCPP=OFF \
+	-DVTK_USE_SYSTEM_GL2PS=OFF \
         -DVTK_USE_BOOST:BOOL=ON
 %make
 # Remove executable bits from sources (some of which are generated)
@@ -543,7 +544,9 @@ pushd build/bin
     done
 popd
 rm -f %buildroot%_bindir/*.so.*
+%if %mdvver <= 3000000
 %multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
+%endif
 
 #multiarch_includes  {buildroot}{vtkincdir}/vtknetcdf/ncconfig.h
 
