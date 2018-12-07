@@ -55,7 +55,7 @@ BuildRequires:  tk-devel >= 8.5
 BuildRequires:  tcl-devel >= 8.5
 BuildRequires:  libxml2-devel
 BuildRequires:  boost-devel
-BuildRequires:  python2-devel
+BuildRequires:  python3-devel
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 %if %with java
@@ -65,8 +65,8 @@ BuildRequires:  java-devel > 1.5
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 
-# Do not check .so files in the python2_sitearch directory
-%global __provides_exclude_from ^%{python2_sitearch}/.*\\.so$
+# Do not check .so files in the python_sitearch directory
+%global __provides_exclude_from ^%{python_sitearch}/.*\\.so$
 
 %description
 The Visualization ToolKit (VTK) is an object oriented software system for 3D
@@ -202,7 +202,7 @@ algorithms and data.
 This package contains python bindings for VTK.
 
 %files -n python-%{name}
-%{python2_sitearch}/*
+%{python_sitearch}/*
 %{_libdir}/vtk/*Python27D.so.*
 %exclude %{_libdir}/vtk/*QtPython27D.so.*
 %{_bindir}/vtkpython
@@ -372,7 +372,8 @@ rm -f CMake/FindBoost*
         -DVTK_INSTALL_ARCHIVE_DIR=%_lib/vtk \
         -DVTK_INSTALL_BIN_DIR=/bin \
         -DVTK_INSTALL_PACKAGE_DIR=%_lib/vtk \
-        -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python2_sitearch} \
+        -DVTK_PYTHON_VERSION=3 \
+        -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python_sitearch} \
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
 	-DVTK_QT_VERSION=5 \
         -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
@@ -510,7 +511,7 @@ for file in `cat examples.list`; do
 done
 
 # http://vtk.org/Bug/view.php?id=14125
-chrpath -d  %{buildroot}%{python2_sitearch}/vtk/*.so
+chrpath -d  %{buildroot}%{python_sitearch}/vtk/*.so
 
 # Main package contains utils and core libs
 cat libs.list utils.list > main.list
