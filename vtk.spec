@@ -203,8 +203,8 @@ This package contains python bindings for VTK.
 
 %files -n python-%{name}
 %{python_sitearch}/*
-%{_libdir}/vtk/*Python27D.so.*
-%exclude %{_libdir}/vtk/*QtPython27D.so.*
+%{_libdir}/vtk/*Python37D.so.*
+%exclude %{_libdir}/vtk/*QtPython37D.so.*
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
@@ -222,7 +222,7 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %files -n %{libname}-qt
 %{_libdir}/vtk/lib*Qt*.so.*
 %exclude %{_libdir}/vtk/*TCL.so.*
-%exclude %{_libdir}/vtk/*Python27D.so.*
+%exclude %{_libdir}/vtk/*Python37D.so.*
 %{_libdir}/qt5/plugins/designer/libQVTKWidgetPlugin.so
 
 %package -n python-vtk-qt
@@ -234,7 +234,7 @@ Group: System/Libraries
 Qt Python bindings for VTK
 
 %files -n python-vtk-qt
-%{_libdir}/vtk/*QtPython27D.so.*
+%{_libdir}/vtk/*QtPython37D.so.*
 
 %package -n tcl-vtk-qt
 Summary: Qt TCL bindings for VTK
@@ -462,7 +462,7 @@ echo %{_libdir}/R/lib >> %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.co
 
 # Gather list of non-python/tcl libraries
 ls %{buildroot}%{_libdir}/vtk/*.so.* \
-  | grep -Ev '(Java|Qt|Python27D|TCL)' | sed -e's,^%{buildroot},,' > libs.list
+  | grep -Ev '(Java|Qt|Python37D|TCL)' | sed -e's,^%{buildroot},,' > libs.list
 
 # List of executable utilities
 cat > utils.list << EOF
