@@ -92,7 +92,6 @@ Summary:        Toolkit for 3D computer graphics, image processing, and visualiz
 Group:          System/Libraries
 Provides:       %{name} = %{version}-%{release}
 Obsoletes:      %{name} < %{version}-%{release}
-Requires: R-base
 
 %description -n %{libname}
 The Visualization ToolKit (VTK) is an object oriented software system for 3D
