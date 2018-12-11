@@ -15,13 +15,16 @@
 
 Name: vtk
 Version: 8.1.2
-Release: 1
+Release: 2
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
 URL: http://www.vtk.org/
 Source0: http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
+# dont build/install wrapper tools for wrappers which are not
+# built
+Patch1:	vtk-8.1.2-wrap.patch
 
 BuildRequires:  cmake >= 1.8 
 BuildRequires:  expat-devel >= 2.0.1

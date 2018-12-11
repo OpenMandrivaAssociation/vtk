@@ -1,0 +1,34 @@
+--- VTK-8.1.2/Wrapping/Tools/CMakeLists.txt.orig	2018-12-11 13:26:37.143989143 +0000
++++ VTK-8.1.2/Wrapping/Tools/CMakeLists.txt	2018-12-11 13:31:41.592407064 +0000
+@@ -66,12 +66,15 @@
+   target_link_libraries(vtkWrapHierarchy vtkWrappingTools)
+   vtk_compile_tools_target(vtkWrapHierarchy)
+ 
++  if(VTK_WRAP_TCL)
+   add_executable(vtkWrapTcl vtkWrapTcl.c)
+   target_link_libraries(vtkWrapTcl vtkWrappingTools)
+   add_executable(vtkWrapTclInit vtkWrapTclInit.c)
+   vtk_compile_tools_target(vtkWrapTcl)
+   vtk_compile_tools_target(vtkWrapTclInit)
++  endif()
+ 
++  if(VTK_WRAP_PYTHON)
+   add_executable(vtkWrapPython
+     vtkWrapPython.c
+     vtkWrapPythonClass.c
+@@ -88,12 +91,15 @@
+   add_executable(vtkWrapPythonInit vtkWrapPythonInit.c)
+   vtk_compile_tools_target(vtkWrapPython)
+   vtk_compile_tools_target(vtkWrapPythonInit)
++  endif()
+ 
++  if(VTK_WRAP_JAVA)
+   add_executable(vtkParseJava vtkParseJava.c)
+   target_link_libraries(vtkParseJava vtkWrappingTools)
+   add_executable(vtkWrapJava vtkWrapJava.c)
+   target_link_libraries(vtkWrapJava vtkWrappingTools)
+   vtk_compile_tools_target(vtkParseJava)
+   vtk_compile_tools_target(vtkWrapJava)
++  endif()
+ 
+ endif()
