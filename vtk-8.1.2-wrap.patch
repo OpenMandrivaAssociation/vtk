@@ -12,7 +12,7 @@
    vtk_compile_tools_target(vtkWrapTclInit)
 +  endif()
  
-+  if(VTL_WRAP_PYTHON)
++  if(VTK_WRAP_PYTHON)
    add_executable(vtkWrapPython
      vtkWrapPython.c
      vtkWrapPythonClass.c
