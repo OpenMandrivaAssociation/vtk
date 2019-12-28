@@ -125,7 +125,7 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %endif
 
 %files -n %{libname} -f build/main.list
-%doc Copyright.txt vtkLogo.jpg vtkBanner.gif _docs/Wrapping
+%doc Copyright.txt vtkBanner.gif _docs/Wrapping
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
 %dir %{_libdir}/vtk
 
@@ -353,7 +353,6 @@ vtk-examples package.
 %exclude %_bindir/vtkpython
 %exclude %_bindir/vtkWrapPython
 %exclude %_bindir/vtkWrapPythonInit
-%exclude %_bindir/vtkEncodeString
 %exclude %_bindir/vtkHashSource
 %exclude %_bindir/vtkWrapHierarchy
 
