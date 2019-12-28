@@ -479,9 +479,9 @@ ls %{buildroot}%{_libdir}/vtk/*.so.* \
   | grep -Ev '(Java|Qt|Python37D|TCL)' | sed -e's,^%{buildroot},,' > libs.list
 
 # List of executable utilities
-cat > utils.list << EOF
-vtkEncodeString
-EOF
+#cat > utils.list << EOF
+#vtkEncodeString
+#EOF
 
 # List of executable examples
 cat > examples.list << EOF
