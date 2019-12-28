@@ -28,7 +28,8 @@ Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.ta
 # dont build/install wrapper tools for wrappers which are not
 # built
 #Patch1:	vtk-8.1.2-wrap.patch
-Patch0:  https://gitlab.kitware.com/vtk/vtk/merge_requests/5883.patch
+#https://gitlab.kitware.com/vtk/vtk/merge_requests/5883.patch
+Patch0:		5883.patch
 
 BuildRequires:  cmake >= 1.8 
 BuildRequires:  double-conversion-devel
