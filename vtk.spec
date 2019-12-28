@@ -263,7 +263,7 @@ compare a valid image against a generated image. If a difference between
 the two images is found, then the test is considered to have failed.
 
 %files          data
-%_datadir/vtk
+#_datadir/vtk
 
 #------------------------------------------------------------------------------
 
