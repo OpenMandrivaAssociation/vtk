@@ -14,8 +14,8 @@
 %define qt_designer_plugins_dir %{_libdir}/qt5/plugins/designer
 
 Name: vtk
-Version: 8.1.2
-Release: 4
+Version: 8.2.0
+Release: 1
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -350,7 +350,7 @@ vtk-examples package.
 
 %prep
 %setup -q -n VTK-%{version}
-%apply_patches
+%auto[atch -p1
 
 # Replace relative path ../../../VTKData with %{_datadir}/vtkdata-%{version}
 # otherwise it will break on symlinks.
