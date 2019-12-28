@@ -528,8 +528,8 @@ done
 #chrpath -d  %{buildroot}%{python_sitearch}/vtk/*.so
 
 # Main package contains utils and core libs
-cat libs.list utils.list > main.list
-popd
+#cat libs.list utils.list > main.list
+#popd
 
 #install test-suite and examples
 mkdir -p %{buildroot}%{vtkdocdir}/examples/Testing
