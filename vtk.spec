@@ -526,7 +526,7 @@ for file in `cat examples.list`; do
 done
 
 # http://vtk.org/Bug/view.php?id=14125
-chrpath -d  %{buildroot}%{python_sitearch}/vtk/*.so
+#chrpath -d  %{buildroot}%{python_sitearch}/vtk/*.so
 
 # Main package contains utils and core libs
 cat libs.list utils.list > main.list
