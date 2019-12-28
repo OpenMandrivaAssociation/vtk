@@ -54,6 +54,7 @@ BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(theora)
 BuildRequires:	pkgconfig(netcdf)
 BuildRequires:	pkgconfig(jsoncpp)
+BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  perl
 BuildRequires:  doxygen
 BuildRequires:  graphviz
