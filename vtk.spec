@@ -27,6 +27,7 @@ Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.ta
 #Patch1:	vtk-8.1.2-wrap.patch
 
 BuildRequires:  cmake >= 1.8 
+BuildRequires:  double-conversion-devel
 BuildRequires:  expat-devel >= 2.0.1
 BuildRequires:  jpeg-devel
 BuildRequires:  png-devel
