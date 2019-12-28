@@ -446,12 +446,13 @@ rm -f CMake/FindBoost*
         -DVTK_USE_SYSTEM_LIBRARIES=ON \
         -DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=OFF \
-        -DVTK_USE_BOOST:BOOL=ON
-%cmake_build
+        -DVTK_USE_BOOST:BOOL=ON \
+	-G Ninja
+%ninja_build
 
 
 %install
-%cmake_install
+%ninja_install -C build
 
 
 # ld config
