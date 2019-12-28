@@ -124,7 +124,7 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
       using "--with java" with JDK installed.
 %endif
 
-%files -n %{libname} -f build/main.list
+%files -n %{libname}
 %doc Copyright.txt vtkBanner.gif _docs/Wrapping
 %config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
 %dir %{_libdir}/vtk
