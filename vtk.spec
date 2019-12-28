@@ -454,18 +454,6 @@ rm -f CMake/FindBoost*
 %install
 %ninja_install -C build
 
-
-# ld config
-%__mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk.conf
-echo %{_libdir}/R/lib >> %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk.conf
-#echo %{vtktcldir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/tclvtk.conf
-
-#clean java files
-#__rm -f %{buildroot}%{_bindir}/vtkParseJava*
-#__rm -f %{buildroot}%{_bindir}/vtkWrapJava*
-
-
 #remove la files
 find %{buildroot}%{_libdir} -name *.la -delete
 
