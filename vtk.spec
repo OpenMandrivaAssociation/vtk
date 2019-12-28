@@ -280,8 +280,8 @@ package as well. The Python and Tcl examples can be run with the
 corresponding packages (vtk-python, vtk-tcl).
 
 %files          examples
-%dir %{vtkdocdir}/examples
-%{vtkdocdir}/examples/*
+#dir %{vtkdocdir}/examples
+#{vtkdocdir}/examples/*
 
 #------------------------------------------------------------------------------
 
