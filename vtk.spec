@@ -350,7 +350,7 @@ vtk-examples package.
 
 %prep
 %setup -q -n VTK-%{version}
-%auto[atch -p1
+%autopatch -p1
 
 # Replace relative path ../../../VTKData with %{_datadir}/vtkdata-%{version}
 # otherwise it will break on symlinks.
