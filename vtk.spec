@@ -447,127 +447,24 @@ rm -f CMake/FindBoost*
         -DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=OFF \
         -DVTK_USE_BOOST:BOOL=ON
-%make
-# Remove executable bits from sources (some of which are generated)
-find . -name \*.c -or -name \*.cxx -or -name \*.h -or -name \*.hxx -or \
-       -name \*.gif | xargs chmod -x
+%cmake_build
+
 
 %install
-%makeinstall_std -C build
-mkdir -p %{buildroot}%{vtktcldir}
-install -d -m 755 %{buildroot}/%_datadir/vtk
-pushd %{buildroot}/%_datadir/vtk
-tar zxf %{SOURCE1}
-mv VTK-%{version}/.ExternalData .
-rm -fr VTK-%{version}
-popd
+%cmake_install
 
-pushd build
-# Move python libraries into the proper location
-if [ "%{_lib}" != lib -a "`ls %{buildroot}%{_prefix}/lib/*`" != "" ]; then
-  mkdir -p %{buildroot}%{_libdir}
-  mv %{buildroot}%{_prefix}/lib/python* %{buildroot}%{_libdir}/
-fi
 
 # ld config
-mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-echo %{_libdir}/vtk > %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
-echo %{_libdir}/R/lib >> %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
+%__mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+echo %{vtklibdir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk.conf
+echo %{_libdir}/R/lib >> %{buildroot}%{_sysconfdir}/ld.so.conf.d/vtk.conf
+#echo %{vtktcldir} > %{buildroot}%{_sysconfdir}/ld.so.conf.d/tclvtk.conf
 
-# Gather list of non-python/tcl libraries
-ls %{buildroot}%{_libdir}/vtk/*.so.* \
-  | grep -Ev '(Java|Qt|Python37D|TCL)' | sed -e's,^%{buildroot},,' > libs.list
+#clean java files
+#__rm -f %{buildroot}%{_bindir}/vtkParseJava*
+#__rm -f %{buildroot}%{_bindir}/vtkWrapJava*
 
-# List of executable utilities
-#cat > utils.list << EOF
-#vtkEncodeString
-#EOF
 
-# List of executable examples
-cat > examples.list << EOF
-HierarchicalBoxPipeline
-MultiBlock
-Arrays
-Cube
-RGrid
-SGrid
-Medical1
-Medical2
-Medical3
-finance
-AmbientSpheres
-Cylinder
-DiffuseSpheres
-SpecularSpheres
-Cone
-Cone2
-Cone3
-Cone4
-Cone5
-Cone6
-EOF
-
-# Install examples too
-for filelist in examples.list; do
-  for file in `cat $filelist`; do
-    install -p bin/$file %{buildroot}%{_bindir}
-  done
-done
-
-# Fix up filelist paths
-for filelist in utils.list examples.list; do
-  perl -pi -e's,^,%{_bindir}/,' $filelist
-done
-
-# Remove any remnants of rpaths on files we install
-for file in `cat examples.list`; do
-  chrpath -d %{buildroot}$file
-done
-
-# http://vtk.org/Bug/view.php?id=14125
-#chrpath -d  %{buildroot}%{python_sitearch}/vtk/*.so
-
-# Main package contains utils and core libs
-#cat libs.list utils.list > main.list
-#popd
-
-#install test-suite and examples
-mkdir -p %{buildroot}%{vtkdocdir}/examples/Testing
-cp -a Testing/* %{buildroot}%{vtkdocdir}/examples/Testing
-cp -a Examples %{buildroot}%{vtkdocdir}/examples
-
-# get rid of unwanted files
-pushd %{buildroot}%{vtkdocdir}/examples
-  rm -f `find . -type d -name CVS`
-  find . -name "*.o" -o -name "CMake*" -o -name "cmake.*"       \
-        -o -name .NoDartCoverage -o -name .NoDartCoverage       \
-        -o -name Makefile                                       \
-        -exec rm {} \;
-popd
-# Remove any possible verdict docs
-rm -rf %buildroot/%_libdir/vtk/doc
-rm -rf %buildroot/%{vtkdocdir}/verdict
-
-# install test suite binaries and add each prg path in test-suite-files
-rm -f test-suite-files
-mkdir -p %{buildroot}%_bindir
-pushd build/bin
-    for f in `find . -type f | grep -v '.so$' | grep -v vtk`; do
-        install -m 0755 $f %{buildroot}%_bindir
-    done
-popd
-rm -f %buildroot%_bindir/*.so.*
-%if %mdvver <= 3000000
-%multiarch_includes  %{buildroot}%{vtkincdir}/vtkConfigure.h
-%endif
-
-#multiarch_includes  {buildroot}{vtkincdir}/vtknetcdf/ncconfig.h
-
-# Setup Wrapping docs tree
-mkdir -p _docs
-cp -pr --parents Wrapping/*/README* _docs/ 
-rm -f %{libdir}/vtk/*.a
-
-export LD_LIBRARY_PATH=%{buildroot}%{libdir}/vtk
-
+#remove la files
+find %{buildroot}%{_libdir} -name *.la -delete
 
