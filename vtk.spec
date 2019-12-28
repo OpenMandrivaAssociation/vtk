@@ -153,7 +153,7 @@ programs that use VTK to do 3D visualisation.
 %{_libdir}/vtk/*.so
 %{_libdir}/vtk/libvtkWrappingTools.a
 %{_libdir}/cmake/vtk/
-%{_docdir}/vtk-8.1/
+%{_docdir}/vtk-8.2/
 %{tcl_sitelib}/vtk/vtktcl.c
 
 
