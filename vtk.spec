@@ -60,7 +60,7 @@ BuildRequires:  pkgconfig(theora)
 BuildRequires:	pkgconfig(netcdf)
 BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:  pkgconfig(sqlite3)
-BuildRequires:  pkgconfig(proj)
+#BuildRequires:  pkgconfig(proj)
 BuildRequires:  perl
 BuildRequires:  doxygen
 BuildRequires:  graphviz
