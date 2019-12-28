@@ -400,6 +400,7 @@ rm -f CMake/FindBoost*
 %endif
         -DVTK_DATA_ROOT=/share/vtk \
         -DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
+	-DVTK_USE_SYSTEM_LIBPROJ:BOOL=OFF \
         -DVTK_WRAP_PYTHON:BOOL=ON \
 %if %with java
         -DJAVA_INCLUDE_PATH:PATH=%{java_home}/include \
