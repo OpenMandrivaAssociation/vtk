@@ -125,8 +125,8 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %endif
 
 %files -n %{libname}
-%doc Copyright.txt vtkBanner.gif _docs/Wrapping
-%config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
+%doc Copyright.txt vtkBanner.gif
+#config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
 %dir %{_libdir}/vtk
 
 #------------------------------------------------------------------------------
