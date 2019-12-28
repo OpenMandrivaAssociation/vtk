@@ -147,49 +147,12 @@ programs that use VTK to do 3D visualisation.
 
 %files -n %{libname_devel}
 %doc Utilities/Upgrading
-%{_bindir}/vtkHashSource*
 %{_bindir}/vtkWrapHierarchy*
 %{_includedir}/*
 %{_libdir}/vtk/*.so
 %{_libdir}/vtk/libvtkWrappingTools.a
 %{_libdir}/cmake/vtk/
 %{_docdir}/vtk-8.2/
-%{tcl_sitelib}/vtk/vtktcl.c
-
-
-
-#------------------------------------------------------------------------------
-
-%package -n tcl-%{name}
-Summary:        Tcl bindings for VTK
-Group:          Development/Other
-Requires:       %{libname} = %{version}
-Obsoletes:      %{name}-tcl < %{version}
-Obsoletes:      tcl-%{name}-devel < %{version}
-Provides:       %{name}-tcl = %{version}
-
-%description -n tcl-%{name}
-The Visualization ToolKit (VTK) is an object oriented software system for 3D
-computer graphics, image processing, and visualization. VTK includes a
-textbook, a C++ class library, and several interpreted interface layers
-including Tcl/Tk, Java, and Python. VTK supports a wide variety of
-visualization algorithms including scalar, vector, tensor, texture, and
-volumetric methods. It also supports advanced modeling techniques like
-implicit modeling, polygon reduction, mesh smoothing, cutting, contouring,
-and Delaunay triangulation.  Moreover, dozens of imaging algorithms have been
-integrated into the system. This allows mixing 2D imaging / 3D graphics
-algorithms and data.
-
-This package contains tcl bindings for VTK.
-
-%files -n tcl-%{name}
-%{_libdir}/vtk/*TCL*.so.*
-%exclude %{_libdir}/vtk/*QtTCL*.so.*
-%{_bindir}/vtk
-%{_bindir}/vtkWrapTcl
-%{_bindir}/vtkWrapTclInit
-%{tcl_sitelib}/vtk/
-%exclude %{tcl_sitelib}/vtk/vtktcl.c
 
 #------------------------------------------------------------------------------
 
