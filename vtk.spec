@@ -66,6 +66,7 @@ BuildRequires:  boost-devel
 BuildRequires:  python3-devel
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
+BuildRequires:  pugixml-devel
 %if %with java
 BuildRequires:  java-rpmbuild
 BuildRequires:  java-devel > 1.5
