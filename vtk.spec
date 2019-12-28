@@ -179,9 +179,9 @@ algorithms and data.
 This package contains python bindings for VTK.
 
 %files -n python-%{name}
-%{python_sitearch}/*
-%{_libdir}/vtk/*Python37D.so.*
-%exclude %{_libdir}/vtk/*QtPython37D.so.*
+#{python_sitearch}/*
+%{_libdir}/vtk/*Python38D.so.*
+%exclude %{_libdir}/vtk/*QtPython38D.so.*
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
@@ -199,7 +199,7 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %files -n %{libname}-qt
 %{_libdir}/vtk/lib*Qt*.so.*
 %exclude %{_libdir}/vtk/*TCL.so.*
-%exclude %{_libdir}/vtk/*Python37D.so.*
+%exclude %{_libdir}/vtk/*Python38D.so.*
 %{_libdir}/qt5/plugins/designer/libQVTKWidgetPlugin.so
 
 %package -n python-vtk-qt
@@ -211,7 +211,7 @@ Group: System/Libraries
 Qt Python bindings for VTK
 
 %files -n python-vtk-qt
-%{_libdir}/vtk/*QtPython37D.so.*
+%{_libdir}/vtk/*QtPython38D.so.*
 
 %package -n tcl-vtk-qt
 Summary: Qt TCL bindings for VTK
