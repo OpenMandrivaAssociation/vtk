@@ -1,3 +1,6 @@
+%define _disable_ld_no_undefined 1
+%define _disable_lto 1
+
 %bcond_with OSMesa
 # Documentation are download and built by vtk-doc separated package
 %bcond_with java
