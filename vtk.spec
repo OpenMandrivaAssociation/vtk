@@ -45,6 +45,7 @@ BuildRequires:	cmake(ECM)
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glew)
 BuildRequires:  pkgconfig(eigen3)
 BuildRequires:  chrpath
 BuildRequires:	pkgconfig(liblz4)
