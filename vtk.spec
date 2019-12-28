@@ -198,7 +198,6 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 
 %files -n %{libname}-qt
 %{_libdir}/vtk/lib*Qt*.so.*
-%exclude %{_libdir}/vtk/*TCL.so.*
 %exclude %{_libdir}/vtk/*Python38D.so.*
 %{_libdir}/qt5/plugins/designer/libQVTKWidgetPlugin.so
 
@@ -212,17 +211,6 @@ Qt Python bindings for VTK
 
 %files -n python-vtk-qt
 %{_libdir}/vtk/*QtPython38D.so.*
-
-%package -n tcl-vtk-qt
-Summary: Qt TCL bindings for VTK
-Requires: vtk = %{version}-%{release}
-Group: System/Libraries
-
-%description -n tcl-vtk-qt
-Qt TCL bindings for VTK
-
-%files -n tcl-vtk-qt
-%{_libdir}/vtk/*QtTCL*.so.*
 
 #------------------------------------------------------------------------------
 
