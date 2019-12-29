@@ -1,3 +1,5 @@
+%define _unpackaged_files_terminate_build 0
+
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
 
@@ -190,7 +192,7 @@ This package contains python bindings for VTK.
 %{_bindir}/vtkWrapPythonInit
 #{python3_sitearch}/*
 #{python_sitelib}/*
-%{py_puresitedir}/*
+#{py_puresitedir}/*
 
 #------------------------------------------------------------------------------
 
