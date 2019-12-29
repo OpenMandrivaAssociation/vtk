@@ -195,6 +195,7 @@ This package contains python bindings for VTK.
 #{py_puresitedir}/*
 #{python_sitearch}
 #/usr/lib64/vtk/python3.8/site-packages/vtkmodules/*
+%{_libdir}/%{name}/%{python_sitearch}
 
 #------------------------------------------------------------------------------
 
@@ -303,10 +304,10 @@ rm -f CMake/FindBoost*
 # push only the necessary extra paths
 
 %cmake \
-        -DVTK_INSTALL_LIBRARY_DIR=%_lib \
-        -DVTK_INSTALL_ARCHIVE_DIR=%_lib \
+        -DVTK_INSTALL_LIBRARY_DIR=%_lib/vtk \
+        -DVTK_INSTALL_ARCHIVE_DIR=%_lib/vtk \
         -DVTK_INSTALL_BIN_DIR=/bin \
-        -DVTK_INSTALL_PACKAGE_DIR=%_lib \
+        -DVTK_INSTALL_PACKAGE_DIR=%_lib/vtk \
         -DVTK_PYTHON_VERSION=3 \
         -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python_sitearch} \
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
