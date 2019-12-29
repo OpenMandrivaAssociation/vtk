@@ -1,4 +1,4 @@
-%define _unpackaged_files_terminate_build 0
+#define _unpackaged_files_terminate_build 0
 
 %define _disable_ld_no_undefined 1
 %define _disable_lto 1
@@ -190,9 +190,11 @@ This package contains python bindings for VTK.
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
-#{python3_sitearch}/*
+%{python_sitearch}/*
 #{python_sitelib}/*
 #{py_puresitedir}/*
+#{python_sitearch}
+#/usr/lib64/vtk/python3.8/site-packages/vtkmodules/*
 
 #------------------------------------------------------------------------------
 
@@ -301,10 +303,10 @@ rm -f CMake/FindBoost*
 # push only the necessary extra paths
 
 %cmake \
-        -DVTK_INSTALL_LIBRARY_DIR=%_lib/vtk \
-        -DVTK_INSTALL_ARCHIVE_DIR=%_lib/vtk \
+        -DVTK_INSTALL_LIBRARY_DIR=%_lib \
+        -DVTK_INSTALL_ARCHIVE_DIR=%_lib \
         -DVTK_INSTALL_BIN_DIR=/bin \
-        -DVTK_INSTALL_PACKAGE_DIR=%_lib/vtk \
+        -DVTK_INSTALL_PACKAGE_DIR=%_lib \
         -DVTK_PYTHON_VERSION=3 \
         -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python_sitearch} \
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
