@@ -79,6 +79,11 @@ BuildRequires:  java-devel > 1.5
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
 
+Obsoletes:      vtk-data < 8.2.0
+Obsoletes:      vtk-examples < 8.2.0
+Obsoletes:      vtk-test-suite < 8.2.0
+Obsoletes:      %{name}-tcl < 8.2.0
+
 # Do not check .so files in the python_sitearch directory
 %global __provides_exclude_from ^%{python_sitearch}/.*\\.so$
 
@@ -126,8 +131,8 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 
 %files -n %{libname}
 %doc Copyright.txt vtkBanner.gif
-#config(noreplace) %{_sysconfdir}/ld.so.conf.d/vtk-%{_arch}.conf
 %dir %{_libdir}/vtk
+%{_libdir}/vtk/libvtk*
 
 #------------------------------------------------------------------------------
 
@@ -179,12 +184,12 @@ algorithms and data.
 This package contains python bindings for VTK.
 
 %files -n python-%{name}
-#{python_sitearch}/*
 %{_libdir}/vtk/*Python38D.so.*
 %exclude %{_libdir}/vtk/*QtPython38D.so.*
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
+%{python_sitearch}/*
 
 #------------------------------------------------------------------------------
 
@@ -244,45 +249,6 @@ This package contains Java bindings for VTK.
 %_libdir/java
 
 %endif
-
-#------------------------------------------------------------------------------
-
-%package        data
-Summary:        Data and Baseline images for VTK regression testing
-Group:          Development/Other
-
-%description    data
-Data and Baseline images for VTK regression testing and other VTK examples.
-
-The VTKData/Data directory are data files of various types. This includes
-polygonal data, images, volumes, structured grids, rectilinear grids,
-and multi-variate data.
-
-The VTKData/Baseline are the testing images. These are used in testing to
-compare a valid image against a generated image. If a difference between
-the two images is found, then the test is considered to have failed.
-
-%files          data
-#_datadir/vtk
-
-#------------------------------------------------------------------------------
-
-%package examples
-Summary:        C++, Tcl and Python example programs/scripts for VTK
-Group:          Development/Other
-Requires:       %{name}-data = %{version}
-Requires:       %{libname} = %{version}
-
-%description examples
-This package contains all the examples from the VTK source.
-To compile the C++ examples you will need to install the vtk-devel
-package as well. The Python and Tcl examples can be run with the
-corresponding packages (vtk-python, vtk-tcl).
-
-%files          examples
-#dir %{vtkdocdir}/examples
-#{vtkdocdir}/examples/*
-
 #------------------------------------------------------------------------------
 
 %package test-suite
