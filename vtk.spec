@@ -194,8 +194,8 @@ This package contains python bindings for VTK.
 #{python_sitelib}/*
 #{py_puresitedir}/*
 #{python_sitearch}
-#/usr/lib64/vtk/python3.8/site-packages/vtkmodules/*
-%{_libdir}/%{name}/%{python_sitearch}
+/usr/lib64/vtk/python3.8/site-packages/vtkmodules/*
+#{_libdir}/%{name}/%{python_sitearch}
 
 #------------------------------------------------------------------------------
 
