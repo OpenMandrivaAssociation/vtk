@@ -188,7 +188,7 @@ This package contains python bindings for VTK.
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
-#{python_sitearch}/*
+%{python3_sitearch}/*
 #{python_sitelib}/*
 
 #------------------------------------------------------------------------------
