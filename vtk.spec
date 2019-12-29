@@ -81,7 +81,6 @@ BuildRequires:  lapack-devel
 
 Obsoletes:      vtk-data < 8.2.0
 Obsoletes:      vtk-examples < 8.2.0
-Obsoletes:      vtk-test-suite < 8.2.0
 Obsoletes:      %{name}-tcl < 8.2.0
 
 # Do not check .so files in the python_sitearch directory
