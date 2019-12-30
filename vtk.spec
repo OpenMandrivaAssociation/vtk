@@ -77,6 +77,7 @@ BuildRequires:	hdf5-devel
 BuildRequires:  pugixml-devel
 %if %with java
 BuildRequires:	jdk-current
+BuildRequires:	java-gui-current
 %endif
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
