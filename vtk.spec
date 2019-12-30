@@ -1,11 +1,11 @@
 #define _unpackaged_files_terminate_build 0
 
-%define _disable_ld_no_undefined 1
-%define _disable_lto 1
+#define _disable_ld_no_undefined 1
+#define _disable_lto 1
 
 %bcond_with OSMesa
 # Documentation are download and built by vtk-doc separated package
-%bcond_with java
+%bcond_without java
 
 %define libname         %mklibname %{name}
 %define libname_devel   %mklibname %{name} -d
@@ -32,6 +32,7 @@ Source1: http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.ta
 #Patch1:	vtk-8.1.2-wrap.patch
 #https://gitlab.kitware.com/vtk/vtk/merge_requests/5883.patch
 Patch0:		5883.patch
+Patch1:		vtk-8.2.0-compile.patch
 
 BuildRequires:  cmake >= 1.8 
 BuildRequires:  double-conversion-devel
@@ -75,8 +76,7 @@ BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 BuildRequires:  pugixml-devel
 %if %with java
-BuildRequires:  java-rpmbuild
-BuildRequires:  java-devel > 1.5
+BuildRequires:	jdk-current
 %endif
 BuildRequires:  blas-devel
 BuildRequires:  lapack-devel
@@ -190,12 +190,9 @@ This package contains python bindings for VTK.
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
-%{python_sitearch}/*
-#{python_sitelib}/*
-#{py_puresitedir}/*
-#{python_sitearch}
-/usr/lib64/vtk/python3.8/site-packages/vtkmodules/*
-#{_libdir}/%{name}/%{python_sitearch}
+%optional %{python_sitearch}/__pycache__/*
+%{python_sitearch}/vtkmodules
+%{python_sitearch}/vtk.py
 
 #------------------------------------------------------------------------------
 
@@ -250,10 +247,7 @@ This package contains Java bindings for VTK.
 %files -n java-%{name}
 %_bindir/vtkParseJava
 %_bindir/vtkWrapJava
-%_bindir/VTKJavaExecutable
-%_libdir/libvtk*Java.so*
-%_libdir/java
-
+%_libdir/vtk/vtk.jar
 %endif
 #------------------------------------------------------------------------------
 
@@ -270,20 +264,15 @@ vtk-examples package.
 
 %files test-suite
 %_bindir/*
-%exclude %_bindir/%{name}
-%exclude %_bindir/vtkWrapTcl
-%exclude %_bindir/vtkWrapTclInit
 %exclude %_bindir/vtkpython
 %exclude %_bindir/vtkWrapPython
 %exclude %_bindir/vtkWrapPythonInit
-%exclude %_bindir/vtkHashSource
 %exclude %_bindir/vtkWrapHierarchy
 
 #------------------------------------------------------------------------------
 
 %prep
-%setup -q -n VTK-%{version}
-%autopatch -p1
+%autosetup -p1 -n VTK-%{version}
 
 # Replace relative path ../../../VTKData with %{_datadir}/vtkdata-%{version}
 # otherwise it will break on symlinks.
@@ -294,7 +283,7 @@ grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
 export CFLAGS="%{optflags} -D_UNICODE"
 export CXXFLAGS="%{optflags} -D_UNICODE"
 %if %{with java}
-export JAVA_HOME=/usr/lib/jvm/java
+. %{_sysconfdir}/profile.d/90java.sh
 %endif
 
 # Remove old cmake files
@@ -309,7 +298,7 @@ rm -f CMake/FindBoost*
         -DVTK_INSTALL_BIN_DIR=/bin \
         -DVTK_INSTALL_PACKAGE_DIR=%_lib/vtk \
         -DVTK_PYTHON_VERSION=3 \
-        -DVTK_INSTALL_PYTHON_MODULE_DIR:PATH=%{python_sitearch} \
+        -DVTK_INSTALL_PYTHON_MODULES_DIR:PATH=%{python_sitearch} \
         -DVTK_INSTALL_INCLUDE_DIR=include/vtk \
 	-DVTK_QT_VERSION=5 \
         -DVTK_CUSTOM_LIBRARY_SUFFIX="" \
@@ -318,30 +307,30 @@ rm -f CMake/FindBoost*
         -DVTK_INSTALL_TCL_DIR:PATH=share/tcl%{tcl_version}/vtk \
         -DTK_INTERNAL_PATH:PATH=/usr/include/tk-private/generic \
 %if %{with OSMesa}
- -DVTK_OPENGL_HAS_OSMESA:BOOL=ON \
+	-DVTK_OPENGL_HAS_OSMESA:BOOL=ON \
 %endif
         -DVTK_DATA_ROOT=/share/vtk \
         -DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
 	-DVTK_USE_SYSTEM_LIBPROJ:BOOL=OFF \
         -DVTK_WRAP_PYTHON:BOOL=ON \
 %if %with java
-        -DJAVA_INCLUDE_PATH:PATH=%{java_home}/include \
-        -DJAVA_INCLUDE_PATH2:PATH=%{java_home}/include/linux \
-        -DJAVA_AWT_INCLUDE_PATH:PATH=%{java_home}/include \
+        -DJAVA_INCLUDE_PATH:PATH=$JAVA_HOME/include \
+        -DJAVA_INCLUDE_PATH2:PATH=$JAVA_HOME/include/linux \
+        -DJAVA_AWT_INCLUDE_PATH:PATH=$JAVA_HOME/include \
         -DVTK_WRAP_JAVA:BOOL=ON \
 %else
         -DVTK_WRAP_JAVA:BOOL=OFF \
 %endif
         -DVTK_WRAP_TCL:BOOL=ON \
- -DVTK_Group_Imaging:BOOL=ON \
- -DVTK_Group_Qt:BOOL=ON \
- -DVTK_Group_Rendering:BOOL=ON \
- -DVTK_Group_StandAlone:BOOL=ON \
- -DVTK_Group_Tk:BOOL=ON \
- -DVTK_Group_Views:BOOL=ON \
- -DModule_vtkFiltersStatisticsGnuR:BOOL=ON \
- -DModule_vtkTestingCore:BOOL=ON \
- -DModule_vtkTestingRendering:BOOL=ON \
+	-DVTK_Group_Imaging:BOOL=ON \
+	-DVTK_Group_Qt:BOOL=ON \
+	-DVTK_Group_Rendering:BOOL=ON \
+	-DVTK_Group_StandAlone:BOOL=ON \
+	-DVTK_Group_Tk:BOOL=ON \
+	-DVTK_Group_Views:BOOL=ON \
+	-DModule_vtkFiltersStatisticsGnuR:BOOL=ON \
+	-DModule_vtkTestingCore:BOOL=ON \
+	-DModule_vtkTestingRendering:BOOL=ON \
         -DVTK_USE_RENDERING:BOOL=ON \
         -DVTK_USE_QT:BOOL=ON \
         -DBUILD_DOCUMENTATION:BOOL=OFF \
@@ -379,4 +368,3 @@ rm -f CMake/FindBoost*
 
 #remove la files
 find %{buildroot}%{_libdir} -name *.la -delete
-
