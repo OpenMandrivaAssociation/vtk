@@ -20,7 +20,7 @@
 
 Name: vtk
 Version: 8.2.0
-Release: 1
+Release: 2
 Summary: Toolkit for 3D computer graphics, image processing, and visualization
 License: BSD
 Group: Graphics
@@ -255,7 +255,6 @@ This package contains Java bindings for VTK.
 %package test-suite
 Summary:        Tests programs for VTK
 Requires:       %{libname} = %{version}
-Requires:       %{name}-data = %{version}
 Group:          Development/Other
 
 %description test-suite
