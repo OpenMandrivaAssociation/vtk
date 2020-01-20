@@ -147,9 +147,9 @@ Obsoletes:	%{name}-devel < %{EVRD}
 Conflicts:	%{libname}-qt < 5.0.3-4
 Conflicts:	%{libname} < 5.6.1-2
 Requires:	%{libname}-qt = %{version}-%{release}
-Requires:	python-%{name} %{EVRD}
+Requires:	python-%{name} >= %{EVRD}
 %if %{with java}
-Requires:	java-%{name} %{EVRD}
+Requires:	java-%{name} >= %{EVRD}
 %endif
 
 %description -n %{libname_devel}
