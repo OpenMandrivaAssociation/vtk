@@ -20,7 +20,7 @@
 
 Name:		vtk
 Version:	8.2.0
-Release:	4
+Release:	5
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -71,7 +71,7 @@ BuildRequires:	tk-devel >= 8.5
 BuildRequires:	tcl-devel >= 8.5
 BuildRequires:	libxml2-devel
 BuildRequires:	boost-devel
-BuildRequires:	python3-devel
+BuildRequires:	python-devel
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 BuildRequires:	pugixml-devel
