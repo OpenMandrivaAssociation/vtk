@@ -18,21 +18,23 @@
 
 %define qt_designer_plugins_dir %{_libdir}/qt5/plugins/designer
 
+# Workaround for the dependency generator not being able to
+# expand all cmake variables
+# Avoids dependency on
+# (cmake("python${vtk_python_version}") or cmake("Python${VTK_PYTHON_VERSION}"))
+%global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
+
 Name:		vtk
-Version:	8.2.0
-Release:	5
+Version:	9.0.0
+Release:	1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
 Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
-# dont build/install wrapper tools for wrappers which are not
-# built
-#Patch1:	vtk-8.1.2-wrap.patch
-#https://gitlab.kitware.com/vtk/vtk/merge_requests/5883.patch
-Patch0:		5883.patch
-Patch1:		vtk-8.2.0-compile.patch
+Patch0:		VTK-9.0.0-no-underlinking.patch
+Patch1:		vtk-9.0.0-qt-5.15.patch
 
 BuildRequires:	cmake >= 1.8 
 BuildRequires:	double-conversion-devel
@@ -133,8 +135,19 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 
 %files -n %{libname}
 %doc Copyright.txt vtkBanner.gif
-%dir %{_libdir}/vtk
-%{_libdir}/vtk/libvtk*
+%{_libdir}/libvtk*.so.*
+# Qt is a separate package
+%exclude %{_libdir}/libvtkGUISupportQt.so.*
+%exclude %{_libdir}/libvtkGUISupportQtSQL.so.*
+%exclude %{_libdir}/libvtkRenderingQt.so.*
+%exclude %{_libdir}/libvtkViewsQt.so.*
+# Python is a separate package
+%exclude %{_libdir}/libvtkCommonPython.so.*
+%exclude %{_libdir}/libvtkFiltersPython.so.*
+%exclude %{_libdir}/libvtkPythonContext2D.so.*
+%exclude %{_libdir}/libvtkPythonInterpreter.so.*
+%exclude %{_libdir}/libvtkWrappingPythonCore.so.*
+%{_libdir}/vtk
 
 #------------------------------------------------------------------------------
 
@@ -158,12 +171,12 @@ programs that use VTK to do 3D visualisation.
 
 %files -n %{libname_devel}
 %doc Utilities/Upgrading
+%doc %{_datadir}/licenses/VTK
+%doc %{_docdir}/VTK
 %{_bindir}/vtkWrapHierarchy*
 %{_includedir}/*
-%{_libdir}/vtk/*.so
-%{_libdir}/vtk/libvtkWrappingTools.a
-%{_libdir}/cmake/vtk/
-%{_docdir}/vtk-8.2/
+%{_libdir}/*.so
+%{_libdir}/cmake/vtk-9.0
 
 #------------------------------------------------------------------------------
 
@@ -190,11 +203,14 @@ algorithms and data.
 This package contains python bindings for VTK.
 
 %files -n python-%{name}
-%{_libdir}/vtk/*Python38D.so.*
-%exclude %{_libdir}/vtk/*QtPython38D.so.*
 %{_bindir}/vtkpython
 %{_bindir}/vtkWrapPython
 %{_bindir}/vtkWrapPythonInit
+%{_libdir}/libvtkCommonPython.so.*
+%{_libdir}/libvtkFiltersPython.so.*
+%{_libdir}/libvtkPythonContext2D.so.*
+%{_libdir}/libvtkPythonInterpreter.so.*
+%{_libdir}/libvtkWrappingPythonCore.so.*
 %optional %{python_sitearch}/__pycache__/*
 %{python_sitearch}/vtkmodules
 %{python_sitearch}/vtk.py
@@ -210,9 +226,10 @@ Group:		System/Libraries
 The vtkQt classes combine VTK and Qt(TM) for X11.
 
 %files -n %{libname}-qt
-%{_libdir}/vtk/lib*Qt*.so.*
-%exclude %{_libdir}/vtk/*Python38D.so.*
-%{_libdir}/qt5/plugins/designer/libQVTKWidgetPlugin.so
+%{_libdir}/libvtkGUISupportQt.so.*
+%{_libdir}/libvtkGUISupportQtSQL.so.*
+%{_libdir}/libvtkRenderingQt.so.*
+%{_libdir}/libvtkViewsQt.so.*
 
 %package -n python-vtk-qt
 Summary:	Qt Python bindings for VTK
@@ -223,7 +240,6 @@ Group:		System/Libraries
 Qt Python bindings for VTK.
 
 %files -n python-vtk-qt
-%{_libdir}/vtk/*QtPython38D.so.*
 
 #------------------------------------------------------------------------------
 
@@ -252,7 +268,8 @@ This package contains Java bindings for VTK.
 %files -n java-%{name}
 %_bindir/vtkParseJava
 %_bindir/vtkWrapJava
-%_libdir/vtk/vtk.jar
+%_libdir/java/vtk.jar
+%{_libdir}/java/vtk-*
 %endif
 #------------------------------------------------------------------------------
 
@@ -304,6 +321,10 @@ rm -f CMake/FindBoost*
 	-DVTK_PYTHON_VERSION=3 \
 	-DVTK_INSTALL_PYTHON_MODULES_DIR:PATH=%{python_sitearch} \
 	-DVTK_INSTALL_INCLUDE_DIR=include/vtk \
+	-DVTK_GROUP_ENABLE_Qt=YES \
+	-DVTK_GROUP_ENABLE_Web=YES \
+	-DVTK_GROUP_ENABLE_Views=YES \
+	-DVTK_GROUP_ENABLE_Imaging=YES \
 	-DVTK_QT_VERSION=5 \
 	-DVTK_CUSTOM_LIBRARY_SUFFIX="" \
 	-DVTK_INSTALL_PACKAGE_DIR:PATH=%{_lib}/cmake/vtk \
@@ -363,7 +384,9 @@ rm -f CMake/FindBoost*
 	-DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=OFF \
 	-DVTK_USE_BOOST:BOOL=ON \
+	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
 	-G Ninja
+export LD_LIBRARY_PATH="$(pwd)/%{_lib}"
 %ninja_build
 
 

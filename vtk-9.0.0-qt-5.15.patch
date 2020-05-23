@@ -1,0 +1,22 @@
+diff -up VTK-9.0.0/Rendering/Qt/vtkQtLabelRenderStrategy.cxx.omv~ VTK-9.0.0/Rendering/Qt/vtkQtLabelRenderStrategy.cxx
+--- VTK-9.0.0/Rendering/Qt/vtkQtLabelRenderStrategy.cxx.omv~	2020-05-22 14:47:48.515539939 +0200
++++ VTK-9.0.0/Rendering/Qt/vtkQtLabelRenderStrategy.cxx	2020-05-22 14:47:57.022629318 +0200
+@@ -41,6 +41,7 @@
+ #include <QImage>
+ #include <QMap>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QPair>
+ #include <QPixmap>
+ #include <QTextDocument>
+diff -up VTK-9.0.0/Rendering/Qt/vtkQtStringToImage.cxx.omv~ VTK-9.0.0/Rendering/Qt/vtkQtStringToImage.cxx
+--- VTK-9.0.0/Rendering/Qt/vtkQtStringToImage.cxx.omv~	2020-05-22 14:48:16.922838330 +0200
++++ VTK-9.0.0/Rendering/Qt/vtkQtStringToImage.cxx	2020-05-22 14:48:23.628908730 +0200
+@@ -30,6 +30,7 @@
+ #include <QFontMetrics>
+ #include <QImage>
+ #include <QPainter>
++#include <QPainterPath>
+ #include <QPixmap>
+ #include <QString>
+ #include <QTextDocument>
