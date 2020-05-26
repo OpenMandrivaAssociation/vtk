@@ -26,7 +26,7 @@
 
 Name:		vtk
 Version:	9.0.0
-Release:	1
+Release:	2
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -37,12 +37,12 @@ Patch0:		VTK-9.0.0-no-underlinking.patch
 Patch1:		vtk-9.0.0-qt-5.15.patch
 
 BuildRequires:	cmake >= 1.8 
-BuildRequires:	double-conversion-devel
-BuildRequires:	expat-devel >= 2.0.1
-BuildRequires:	jpeg-devel
-BuildRequires:	png-devel
-BuildRequires:	tiff-devel
-BuildRequires:	zlib-devel
+BuildRequires:	cmake(double-conversion)
+BuildRequires:	pkgconfig(expat) >= 2.0.1
+BuildRequires:	pkgconfig(libjpeg)
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(libtiff-4)
+BuildRequires:	pkgconfig(zlib
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Widgets)
@@ -69,11 +69,11 @@ BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
-BuildRequires:	tk-devel >= 8.5
-BuildRequires:	tcl-devel >= 8.5
-BuildRequires:	libxml2-devel
+BuildRequires:	pkgconfig(tk) >= 8.5
+BuildRequires:	pkgconfig(tcl) >= 8.5
+BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	boost-devel
-BuildRequires:	python-devel
+BuildRequires:	pkgconfig(python)
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 BuildRequires:	pugixml-devel
@@ -81,8 +81,8 @@ BuildRequires:	pugixml-devel
 BuildRequires:	jdk-current
 BuildRequires:	java-gui-current
 %endif
-BuildRequires:	blas-devel
-BuildRequires:	lapack-devel
+BuildRequires:	pkgconfig(blas)
+BuildRequires:	pkgconfig(lapack)
 
 Obsoletes:	vtk-data < 8.2.0
 Obsoletes:	vtk-examples < 8.2.0
@@ -161,6 +161,7 @@ Conflicts:	%{libname}-qt < 5.0.3-4
 Conflicts:	%{libname} < 5.6.1-2
 Requires:	%{libname}-qt = %{version}-%{release}
 Requires:	python-%{name} >= %{EVRD}
+Requires:	%{name}-test-suite >= %{EVRD}
 %if %{with java}
 Requires:	java-%{name} >= %{EVRD}
 %endif
