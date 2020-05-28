@@ -1,0 +1,12 @@
+diff -Naur VTK-9.0.0/ThirdParty/libharu/CMakeLists.txt VTK-9.0.0.tpg/ThirdParty/libharu/CMakeLists.txt
+--- VTK-9.0.0/ThirdParty/libharu/CMakeLists.txt	2020-05-01 19:29:00.000000000 +0000
++++ VTK-9.0.0.tpg/ThirdParty/libharu/CMakeLists.txt	2020-05-28 19:30:29.016159973 +0000
+@@ -1,7 +1,7 @@
+ vtk_module_third_party(
+   INTERNAL
+     LICENSE_FILES "vtklibharu/LICENCE"
+-    VERSION       "2.4.0"
++    VERSION       "2.3.0"
+     STANDARD_INCLUDE_DIRS
+   EXTERNAL
+     PACKAGE LibHaru
