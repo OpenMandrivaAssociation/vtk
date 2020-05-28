@@ -70,6 +70,7 @@ BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:	utf8cpp-devel >= 3.1.1
 BuildRequires:	pegtl-devel
 BuildRequires:	gl2ps-devel
+BuildRequires:	pkgconfig(proj)
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
