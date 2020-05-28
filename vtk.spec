@@ -310,6 +310,9 @@ do
   rm -r ThirdParty/*/${x}
 done
 
+# Remove unused KWSys items
+find Utilities/KWSys/vtksys/ -name \*.[ch]\* | grep -vE '^Utilities/KWSys/vtksys/([a-z].*|Configure|SharedForward|String\.hxx|Base64|CommandLineArguments|Directory|DynamicLoader|Encoding|FStream|FundamentalType|Glob|MD5|Process|RegularExpression|System|SystemInformation|SystemTools)(C|CXX|UNIX)?\.' | xargs rm
+
 %build
 export CFLAGS="%{optflags} -D_UNICODE"
 export CXXFLAGS="%{optflags} -D_UNICODE"
