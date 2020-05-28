@@ -1,6 +1,8 @@
 #define _unpackaged_files_terminate_build 0
 
-#define _disable_ld_no_undefined 1
+# /CMakeFiles/exodusII.dir/src/ex_update.c.o ThirdParty/exodusII/vtkexodusII/CMakeFiles/exodusII.dir/src/ex_utils.c.o  -lpthread  /usr/lib64/libnetcdf.so && :
+# ld: error: undefined symbol: H5get_libversion
+%define _disable_ld_no_undefined 1
 #define _disable_lto 1
 
 %bcond_with OSMesa
