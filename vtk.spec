@@ -402,7 +402,7 @@ rm -f CMake/FindBoost*
 	-DVTK_USE_EXTERNAL=ON \
 	-DVTK_USE_SYSTEM_LIBRARIES=ON \
 	-DVTK_USE_SYSTEM_NETCDFCPP=OFF \
-	-DVTK_USE_SYSTEM_GL2PS=OFF \
+	-DVTK_USE_SYSTEM_GL2PS=ON \
 	-DVTK_USE_BOOST:BOOL=ON \
 	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
 	-DVTK_JAVA_SOURCE_VERSION=14 \
@@ -417,3 +417,6 @@ export LD_LIBRARY_PATH="$(pwd)/%{_lib}"
 
 #remove la files
 find %{buildroot}%{_libdir} -name *.la -delete
+
+# (tpg) get rid of that duplicated find definitions
+find %{buildroot}%{_libdir}/cmake -type -f -name "Find*.cmake" -delete
