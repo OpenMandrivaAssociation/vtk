@@ -78,6 +78,7 @@ BuildRequires:	pkgconfig(python)
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 BuildRequires:	pugixml-devel
+BuildRequires:	libharu-devel
 %if %{with java}
 BuildRequires:	jdk-current
 BuildRequires:	java-gui-current
