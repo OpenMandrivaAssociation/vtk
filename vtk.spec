@@ -26,7 +26,7 @@
 
 Name:		vtk
 Version:	9.0.0
-Release:	2
+Release:	3
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -300,6 +300,12 @@ vtk-examples package.
 # otherwise it will break on symlinks.
 grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
   perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
+
+# (tpg) remove 3rd party software
+for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,glew,hdf5,jpeg,jsoncpp,kissfft,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zfp,zlib}
+do
+  rm -r ThirdParty/*/${x}
+done
 
 %build
 export CFLAGS="%{optflags} -D_UNICODE"
