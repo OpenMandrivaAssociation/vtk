@@ -37,7 +37,7 @@ Patch0:		VTK-9.0.0-no-underlinking.patch
 Patch1:		vtk-9.0.0-qt-5.15.patch
 
 BuildRequires:	cmake >= 1.8 
-BuildRequires:	cmake(double-conversion)
+BuildRequires:	cmake(double-conversion) >= 3.1.5
 BuildRequires:	pkgconfig(expat) >= 2.0.1
 BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(libpng)
@@ -66,7 +66,7 @@ BuildRequires:	pkgconfig(netcdf)
 BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:	pkgconfig(sqlite3)
 #BuildRequires:  pkgconfig(proj)
-BuildRequires:	cmake(utf8cpp)
+BuildRequires:	cmake(utf8cpp) >= 3.1.1
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
