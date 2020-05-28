@@ -66,6 +66,7 @@ BuildRequires:	pkgconfig(netcdf)
 BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:	pkgconfig(sqlite3)
 #BuildRequires:  pkgconfig(proj)
+BuildRequires:	cmake(utf8cpp)
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
