@@ -177,7 +177,7 @@ programs that use VTK to do 3D visualisation.
 %{_bindir}/vtkWrapHierarchy*
 %{_includedir}/*
 %{_libdir}/*.so
-%{_libdir}/cmake/vtk-9.0
+%{_libdir}/cmake/%{name}
 
 #------------------------------------------------------------------------------
 
@@ -328,6 +328,7 @@ rm -f CMake/FindBoost*
 	-DVTK_PYTHON_VERSION=3 \
 	-DVTK_INSTALL_PYTHON_MODULES_DIR:PATH=%{python_sitearch} \
 	-DVTK_INSTALL_INCLUDE_DIR=include/vtk \
+	-DVTK_VERSIONED_INSTALL:BOOL=OFF \
 	-DVTK_GROUP_ENABLE_Qt=YES \
 	-DVTK_GROUP_ENABLE_Web=YES \
 	-DVTK_GROUP_ENABLE_Views=YES \
@@ -387,6 +388,7 @@ rm -f CMake/FindBoost*
 	-DVTK_USE_SYSTEM_LIBXML2:BOOL=ON \
 	-DVTK_USE_QVTK_QTOPENGL:BOOL=ON \
 	-DVTK_USE_OGGTHEORA_ENCODER=ON \
+	-DVTK_USE_EXTERNAL=ON \
 	-DVTK_USE_SYSTEM_LIBRARIES=ON \
 	-DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=OFF \
