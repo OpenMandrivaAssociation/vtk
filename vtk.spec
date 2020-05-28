@@ -68,6 +68,7 @@ BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:	pkgconfig(sqlite3)
 #BuildRequires:  pkgconfig(proj)
 BuildRequires:	utf8cpp-devel >= 3.1.1
+BuildRequires:	pegtl-devel
 BuildRequires:	perl
 BuildRequires:	doxygen
 BuildRequires:	graphviz
