@@ -419,4 +419,4 @@ export LD_LIBRARY_PATH="$(pwd)/%{_lib}"
 find %{buildroot}%{_libdir} -name *.la -delete
 
 # (tpg) get rid of that duplicated find definitions
-find %{buildroot}%{_libdir}/cmake -type -f -name "Find*.cmake" -delete
+find %{buildroot}%{_libdir}/cmake -type f -name "Find*.cmake" -delete
