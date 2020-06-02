@@ -5,6 +5,7 @@
 %define _disable_ld_no_undefined 1
 #define _disable_lto 1
 
+# (tpg) either you have X11 or OSMesa, you can not have both
 %bcond_with OSMesa
 # Documentation are download and built by vtk-doc separated package
 %bcond_without java
@@ -28,7 +29,7 @@
 
 Name:		vtk
 Version:	9.0.0
-Release:	3
+Release:	4
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -39,7 +40,6 @@ Patch0:		VTK-9.0.0-no-underlinking.patch
 Patch1:		vtk-9.0.0-qt-5.15.patch
 # (tpg) our libharu is good
 Patch2:		VTK-9.0.0-fix-libharu-version.patch
-BuildRequires:	cmake >= 1.8 
 BuildRequires:	double-conversion-devel >= 3.1.5
 BuildRequires:	pkgconfig(expat) >= 2.0.1
 BuildRequires:	pkgconfig(libjpeg)
@@ -173,6 +173,50 @@ Requires:	%{name}-test-suite >= %{EVRD}
 %if %{with java}
 Requires:	java-%{name} >= %{EVRD}
 %endif
+
+Requires:	double-conversion-devel >= 3.1.5
+Requires:	pkgconfig(expat) >= 2.0.1
+Requires:	pkgconfig(libjpeg)
+Requires:	pkgconfig(libpng)
+Requires:	pkgconfig(libtiff-4)
+Requires:	pkgconfig(zlib)
+Requires:	pkgconfig(Qt5Core)
+Requires:	pkgconfig(Qt5Gui)
+Requires:	pkgconfig(Qt5Widgets)
+Requires:	pkgconfig(Qt5X11Extras)
+Requires:	pkgconfig(Qt5OpenGL)
+Requires:	pkgconfig(Qt5Sql)
+Requires:	pkgconfig(Qt5WebKitWidgets)
+Requires:	pkgconfig(Qt5UiTools)
+Requires:	cmake(ECM)
+Requires:	pkgconfig(freetype2)
+Requires:	pkgconfig(egl)
+Requires:	pkgconfig(gl)
+Requires:	pkgconfig(glew)
+Requires:	pkgconfig(eigen3)
+Requires:	pkgconfig(liblz4)
+Requires:	pkgconfig(x11)
+Requires:	pkgconfig(xt)
+Requires:	pkgconfig(theora)
+Requires:	pkgconfig(netcdf)
+Requires:	pkgconfig(jsoncpp)
+Requires:	pkgconfig(sqlite3)
+Requires:	utf8cpp-devel >= 3.1.1
+Requires:	pegtl-devel
+Requires:	gl2ps-devel
+Requires:	pkgconfig(proj)
+Requires:	graphviz
+Requires:	pkgconfig(tk) >= 8.5
+Requires:	pkgconfig(tcl) >= 8.5
+Requires:	pkgconfig(libxml-2.0)
+Requires:	boost-devel
+Requires:	pkgconfig(python)
+Requires:	python-sip
+Requires:	hdf5-devel
+Requires:	pugixml-devel
+Requires:	libharu-devel
+Requires:	pkgconfig(blas)
+Requires:	pkgconfig(lapack)
 
 %description -n %{libname_devel}
 This provides the VTK header files required to compile C++
