@@ -5,6 +5,9 @@
 %define _disable_ld_no_undefined 1
 #define _disable_lto 1
 
+# (tpg) get rid of weird cmake provides, also doubled with system wide ones
+%global __provides_exclude ^cmake\\(.*)$
+
 # (tpg) either you have X11 or OSMesa, you can not have both
 %bcond_with OSMesa
 # Documentation are download and built by vtk-doc separated package
@@ -462,5 +465,3 @@ export LD_LIBRARY_PATH="$(pwd)/%{_lib}"
 #remove la files
 find %{buildroot}%{_libdir} -name *.la -delete
 
-# (tpg) get rid of that duplicated find definitions
-find %{buildroot}%{_libdir}/cmake -type f -name "Find*.cmake" -delete
