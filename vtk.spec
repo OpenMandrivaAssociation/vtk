@@ -3,7 +3,7 @@
 # /CMakeFiles/exodusII.dir/src/ex_update.c.o ThirdParty/exodusII/vtkexodusII/CMakeFiles/exodusII.dir/src/ex_utils.c.o  -lpthread  /usr/lib64/libnetcdf.so && :
 # ld: error: undefined symbol: H5get_libversion
 %define _disable_ld_no_undefined 1
-#define _disable_lto 1
+%define _disable_lto 1
 
 # (tpg) get rid of weird cmake provides, also doubled with system wide ones
 %global __provides_exclude ^cmake\\(.*)$
