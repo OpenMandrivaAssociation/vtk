@@ -7,7 +7,6 @@
 
 # (tpg) get rid of weird cmake provides, also doubled with system wide ones
 %global __provides_exclude ^cmake\\(.*)$
-%global __requires_exclude cmake\\(ogg\\)\\|cmake\\(OGG\\)
 
 # (tpg) either you have X11 or OSMesa, you can not have both
 %bcond_with OSMesa
@@ -33,7 +32,7 @@
 
 Name:		vtk
 Version:	9.0.0
-Release:	4
+Release:	5
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
