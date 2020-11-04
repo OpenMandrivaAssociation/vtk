@@ -39,7 +39,7 @@ URL:		http://www.vtk.org/
 Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
 #Patch0:		VTK-9.0.0-no-underlinking.patch
-Patch1:		vtk-9.0.0-qt-5.15.patch
+#Patch1:		vtk-9.0.0-qt-5.15.patch
 # (tpg) our libharu is good
 Patch2:		VTK-9.0.0-fix-libharu-version.patch
 BuildRequires:	double-conversion-devel >= 3.1.5
