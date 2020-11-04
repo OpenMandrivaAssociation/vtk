@@ -42,6 +42,8 @@ Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.ta
 #Patch1:		vtk-9.0.0-qt-5.15.patch
 # (tpg) our libharu is good
 Patch2:		VTK-9.0.0-fix-libharu-version.patch
+# Fix for error: unknown type name 'FT_CALLBACK_DEF' (angry)
+Patch3:		vtk-freetype-2.10.3-provide-FT_CALLBACK_DEF.patch
 BuildRequires:	double-conversion-devel >= 3.1.5
 BuildRequires:	pkgconfig(expat) >= 2.0.1
 BuildRequires:	pkgconfig(libjpeg)
