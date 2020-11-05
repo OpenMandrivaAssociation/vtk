@@ -229,7 +229,6 @@ programs that use VTK to do 3D visualisation.
 %files -n %{libname_devel}
 %doc Utilities/Upgrading
 %doc %{_datadir}/licenses/VTK
-%doc %{_docdir}/VTK
 %{_bindir}/vtkWrapHierarchy*
 %{_includedir}/*
 %{_libdir}/*.so
