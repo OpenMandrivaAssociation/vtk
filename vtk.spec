@@ -30,18 +30,20 @@
 %global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
 
 Name:		vtk
-Version:	9.0.0
-Release:	6
+Version:	9.0.1
+Release:	1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
 Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
-Patch0:		VTK-9.0.0-no-underlinking.patch
-Patch1:		vtk-9.0.0-qt-5.15.patch
+#Patch0:		VTK-9.0.0-no-underlinking.patch
+#Patch1:		vtk-9.0.0-qt-5.15.patch
 # (tpg) our libharu is good
 Patch2:		VTK-9.0.0-fix-libharu-version.patch
+# Fix for error: unknown type name 'FT_CALLBACK_DEF' (angry)
+Patch3:		vtk-freetype-2.10.3-replace-FT_CALLBACK_DEF.patch
 BuildRequires:	double-conversion-devel >= 3.1.5
 BuildRequires:	pkgconfig(expat) >= 2.0.1
 BuildRequires:	pkgconfig(libjpeg)
@@ -227,7 +229,6 @@ programs that use VTK to do 3D visualisation.
 %files -n %{libname_devel}
 %doc Utilities/Upgrading
 %doc %{_datadir}/licenses/VTK
-%doc %{_docdir}/VTK
 %{_bindir}/vtkWrapHierarchy*
 %{_includedir}/*
 %{_libdir}/*.so
