@@ -56,31 +56,31 @@ Patch3:		vtk-freetype-2.10.3-replace-FT_CALLBACK_DEF.patch
 
 %if %{with gles}
 # PATCH-FIX-UPSTREAM
-Patch3:         0001-clean-up-some-old-opengl-es-stuff.patch
+Patch4:         0001-clean-up-some-old-opengl-es-stuff.patch
 # PATCH-FIX-UPSTREAM
-Patch4:         0001-expose-1d-texture-options.patch
+Patch5:         0001-expose-1d-texture-options.patch
 # PATCH-FIX-UPSTREAM -- prep for GLES patch, VTK issue #17113 stefan.bruens@rwth-aachen.de
-Patch5:         0001-Remove-duplicate-check-for-QOpenGLFunctions_3_2_Core.patch
+Patch6:         0001-Remove-duplicate-check-for-QOpenGLFunctions_3_2_Core.patch
 # PATCH-FIX-UPSTREAM 0001-Allow-compilation-on-GLES-platforms.patch VTK issue #17113 stefan.bruens@rwth-aachen.de -- Fix building with Qt GLES builds
-Patch6:         0001-Allow-compilation-on-GLES-platforms.patch
+Patch7:         0001-Allow-compilation-on-GLES-platforms.patch
 # PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
-Patch7:         0001-Replace-last-glDrawBuffer-call-with-glDrawBuffers-1.patch
+Patch8:         0001-Replace-last-glDrawBuffer-call-with-glDrawBuffers-1.patch
 # PATCH-FIX-OPENSUSE -- Fix building with Qt GLES builds
-Patch8:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
+Patch9:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
 # PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
-Patch9:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
+Patch10:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
 # PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
-Patch10:         0002-Use-GL_DRAW_BUFFER0-instead-of-GL_DRAW_BUFFER-for-GL.patch
+Patch11:         0002-Use-GL_DRAW_BUFFER0-instead-of-GL_DRAW_BUFFER-for-GL.patch
 # PATCH-FIX-UPSTREAM
-Patch11:        0001-GL_POINT_SPRITE-is-only-available-for-Compatibility-.patch
+Patch12:        0001-GL_POINT_SPRITE-is-only-available-for-Compatibility-.patch
 # PATCH-FIX-OPENSUSE -- GLES - Does no longer apply to upstream code
-Patch12:        0002-Guard-GL_LINE_SMOOTH-for-GLES.patch
+Patch13:        0002-Guard-GL_LINE_SMOOTH-for-GLES.patch
 # PATCH-FIX-UPSTREAM
-Patch13:        0001-Guard-glPointSize-with-GL_ES_VERSION_3_0.patch
+Patch14:        0001-Guard-glPointSize-with-GL_ES_VERSION_3_0.patch
 # PATCH-FIX-UPSTREAM -- https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7098
-Patch14:        0001-Fix-PyVTKAddFile_-function-signature-mismatch.patch
+Patch15:        0001-Fix-PyVTKAddFile_-function-signature-mismatch.patch
 # PATCH-FIX-UPSTREAM -- https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7115
-Patch15:        0001-Replace-invalid-GL_LINE-with-GL_LINES-for-glDrawArra.patch
+Patch16:        0001-Replace-invalid-GL_LINE-with-GL_LINES-for-glDrawArra.patch
 %endif
 
 BuildRequires:	double-conversion-devel >= 3.1.5
