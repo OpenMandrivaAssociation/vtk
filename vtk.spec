@@ -12,6 +12,12 @@
 # Documentation are download and built by vtk-doc separated package
 %bcond_without java
 
+%ifarch %aarch64
+%bcond_without gles
+%else
+%bcond_with    gles
+%endif
+
 %define libname %mklibname %{name}
 %define libname_devel %mklibname %{name} -d
 
@@ -44,6 +50,39 @@ Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.ta
 Patch2:		VTK-9.0.0-fix-libharu-version.patch
 # Fix for error: unknown type name 'FT_CALLBACK_DEF' (angry)
 Patch3:		vtk-freetype-2.10.3-replace-FT_CALLBACK_DEF.patch
+
+# Patches for aarch64 to fix build in current OMV env. Cooker in aarch64 switch from destop OpenGL to OpenGL ES and thats why 
+# some packages like VTK or Shotcut need to be fixed on aarch64 to use ES. (angry)
+
+%if %{with gles}
+# PATCH-FIX-UPSTREAM
+Patch4:         0001-clean-up-some-old-opengl-es-stuff.patch
+# PATCH-FIX-UPSTREAM
+Patch5:         0001-expose-1d-texture-options.patch
+# PATCH-FIX-UPSTREAM -- prep for GLES patch, VTK issue #17113 stefan.bruens@rwth-aachen.de
+Patch6:         0001-Remove-duplicate-check-for-QOpenGLFunctions_3_2_Core.patch
+# PATCH-FIX-UPSTREAM 0001-Allow-compilation-on-GLES-platforms.patch VTK issue #17113 stefan.bruens@rwth-aachen.de -- Fix building with Qt GLES builds
+Patch7:         0001-Allow-compilation-on-GLES-platforms.patch
+# PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
+Patch8:         0001-Replace-last-glDrawBuffer-call-with-glDrawBuffers-1.patch
+# PATCH-FIX-OPENSUSE -- Fix building with Qt GLES builds
+Patch9:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
+# PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
+Patch10:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
+# PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
+Patch11:         0002-Use-GL_DRAW_BUFFER0-instead-of-GL_DRAW_BUFFER-for-GL.patch
+# PATCH-FIX-UPSTREAM
+Patch12:        0001-GL_POINT_SPRITE-is-only-available-for-Compatibility-.patch
+# PATCH-FIX-OPENSUSE -- GLES - Does no longer apply to upstream code
+Patch13:        0002-Guard-GL_LINE_SMOOTH-for-GLES.patch
+# PATCH-FIX-UPSTREAM
+Patch14:        0001-Guard-glPointSize-with-GL_ES_VERSION_3_0.patch
+# PATCH-FIX-UPSTREAM -- https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7098
+Patch15:        0001-Fix-PyVTKAddFile_-function-signature-mismatch.patch
+# PATCH-FIX-UPSTREAM -- https://gitlab.kitware.com/vtk/vtk/-/merge_requests/7115
+Patch16:        0001-Replace-invalid-GL_LINE-with-GL_LINES-for-glDrawArra.patch
+%endif
+
 BuildRequires:	double-conversion-devel >= 3.1.5
 BuildRequires:	pkgconfig(expat) >= 2.0.1
 BuildRequires:	pkgconfig(libjpeg)
@@ -400,6 +439,7 @@ rm -f CMake/FindBoost*
 %if %{with OSMesa}
 	-DVTK_OPENGL_HAS_OSMESA:BOOL=ON \
 %endif
+	-DVTK_OPENGL_USE_GLES:BOOL=%{?with_gles:ON}%{!?with_gles:OFF} \
 	-DVTK_DATA_ROOT=/share/vtk \
 	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
 	-DVTK_USE_SYSTEM_LIBPROJ:BOOL=OFF \
