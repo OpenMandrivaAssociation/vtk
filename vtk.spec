@@ -12,7 +12,7 @@
 # Documentation are download and built by vtk-doc separated package
 %bcond_without java
 
-%ifarch %aarch64
+%ifarch %aarch64 %x86
 %bcond_without gles
 %else
 %bcond_with    gles
