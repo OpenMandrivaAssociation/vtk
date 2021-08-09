@@ -1,0 +1,44 @@
+diff -up VTK-9.0.3/Common/Core/vtkGenericDataArrayLookupHelper.h.1~ VTK-9.0.3/Common/Core/vtkGenericDataArrayLookupHelper.h
+--- VTK-9.0.3/Common/Core/vtkGenericDataArrayLookupHelper.h.1~	2021-07-02 17:31:21.000000000 +0200
++++ VTK-9.0.3/Common/Core/vtkGenericDataArrayLookupHelper.h	2021-08-09 05:02:52.033010456 +0200
+@@ -27,6 +27,7 @@
+ #include <cmath>
+ #include <unordered_map>
+ #include <vector>
++#include <limits>
+ 
+ namespace detail
+ {
+diff -up VTK-9.0.3/Common/DataModel/vtkPiecewiseFunction.cxx.1~ VTK-9.0.3/Common/DataModel/vtkPiecewiseFunction.cxx
+--- VTK-9.0.3/Common/DataModel/vtkPiecewiseFunction.cxx.1~	2021-07-02 17:31:21.000000000 +0200
++++ VTK-9.0.3/Common/DataModel/vtkPiecewiseFunction.cxx	2021-08-09 05:02:52.034010461 +0200
+@@ -24,6 +24,7 @@
+ #include <iterator>
+ #include <set>
+ #include <vector>
++#include <limits>
+ 
+ vtkStandardNewMacro(vtkPiecewiseFunction);
+ 
+diff -up VTK-9.0.3/Filters/HyperTree/vtkHyperTreeGridThreshold.cxx.1~ VTK-9.0.3/Filters/HyperTree/vtkHyperTreeGridThreshold.cxx
+--- VTK-9.0.3/Filters/HyperTree/vtkHyperTreeGridThreshold.cxx.1~	2021-07-02 17:31:21.000000000 +0200
++++ VTK-9.0.3/Filters/HyperTree/vtkHyperTreeGridThreshold.cxx	2021-08-09 05:02:52.035010467 +0200
+@@ -28,6 +28,7 @@
+ #include "vtkHyperTreeGridNonOrientedCursor.h"
+ 
+ #include <cmath>
++#include <limits>
+ 
+ vtkStandardNewMacro(vtkHyperTreeGridThreshold);
+ 
+diff -up VTK-9.0.3/Rendering/Core/vtkColorTransferFunction.cxx.omv~ VTK-9.0.3/Rendering/Core/vtkColorTransferFunction.cxx
+--- VTK-9.0.3/Rendering/Core/vtkColorTransferFunction.cxx.omv~	2021-08-09 17:22:30.142013348 +0200
++++ VTK-9.0.3/Rendering/Core/vtkColorTransferFunction.cxx	2021-08-09 17:22:36.833050809 +0200
+@@ -23,6 +23,7 @@
+ #include <iterator>
+ #include <set>
+ #include <vector>
++#include <limits>
+ 
+ vtkStandardNewMacro(vtkColorTransferFunction);
+ 
