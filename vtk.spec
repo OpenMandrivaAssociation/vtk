@@ -37,7 +37,7 @@
 
 Name:		vtk
 Version:	9.0.3
-Release:	1
+Release:	2
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
