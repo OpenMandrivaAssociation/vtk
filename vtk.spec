@@ -111,7 +111,8 @@ BuildRequires:	pkgconfig(theora)
 BuildRequires:	pkgconfig(netcdf)
 BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:	pkgconfig(sqlite3)
-#BuildRequires:  pkgconfig(proj)
+BuildRequires:  pkgconfig(proj)
+BuildRequires:	pkgconfig(fmt)
 BuildRequires:	utf8cpp-devel >= 3.1.1
 BuildRequires:	pegtl-devel
 BuildRequires:	gl2ps-devel
