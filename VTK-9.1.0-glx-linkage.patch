@@ -1,0 +1,12 @@
+diff -up VTK-9.1.0/Rendering/OpenGL2/CMakeLists.txt.omv~ VTK-9.1.0/Rendering/OpenGL2/CMakeLists.txt
+--- VTK-9.1.0/Rendering/OpenGL2/CMakeLists.txt.omv~	2022-03-20 12:57:19.427888631 +0100
++++ VTK-9.1.0/Rendering/OpenGL2/CMakeLists.txt	2022-03-20 12:58:02.513962226 +0100
+@@ -390,7 +390,7 @@ if (NOT ANDROID AND
+     vtkProbeOpenGLVersion.cxx)
+   target_link_libraries(vtkProbeOpenGLVersion
+     PRIVATE
+-      VTK::RenderingOpenGL2)
++      VTK::RenderingOpenGL2 GLX)
+   vtk_module_autoinit(
+     TARGETS vtkProbeOpenGLVersion
+     MODULES VTK::RenderingOpenGL2)

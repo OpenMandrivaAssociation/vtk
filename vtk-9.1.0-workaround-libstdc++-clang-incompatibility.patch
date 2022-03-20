@@ -1,0 +1,16 @@
+diff -up VTK-9.1.0/Filters/General/vtkDateToNumeric.cxx.omv~ VTK-9.1.0/Filters/General/vtkDateToNumeric.cxx
+--- VTK-9.1.0/Filters/General/vtkDateToNumeric.cxx.omv~	2022-03-20 12:07:21.174493430 +0100
++++ VTK-9.1.0/Filters/General/vtkDateToNumeric.cxx	2022-03-20 12:07:55.710752962 +0100
+@@ -29,8 +29,11 @@
+ 
+ // old versions of gcc are missing some pices of c++11 such as std::get_time
+ // so use
++// Also std::get_time from libstdc++ 12 doesn't work with clang++ 14
++// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104990
++// https://github.com/llvm/llvm-project/issues/54463
+ 
+-#if (defined(__GNUC__) && (__GNUC__ < 5)) || defined(ANDROID)
++#if (defined(__GNUC__) && (__GNUC__ < 5)) || defined(ANDROID) || defined(__clang__)
+ #define USE_STRPTIME
+ #include "time.h"
+ #endif

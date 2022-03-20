@@ -36,19 +36,20 @@
 %global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
 
 Name:		vtk
-Version:	9.0.3
-Release:	2
+Version:	9.1.0
+Release:	1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
 Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
-#Patch0:		vtk-9.0.3-compile.patch
-Patch0:		https://gitlab.kitware.com/vtk/vtk/-/commit/0325638832e35c8c8c6fc96e2c1d887aeea3dd43.patch
-Patch1:		vtk-9.0.3-compile.patch
+# Header-only library, not presently used by anything else...
+Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
 # (tpg) our libharu is good
 Patch2:		VTK-9.0.0-fix-libharu-version.patch
+Patch3:		vtk-9.1.0-workaround-libstdc++-clang-incompatibility.patch
+Patch4:		VTK-9.1.0-glx-linkage.patch
 
 # Patches for aarch64 to fix build in current OMV env. Cooker in aarch64 switch from destop OpenGL to OpenGL ES and thats why 
 # some packages like VTK or Shotcut need to be fixed on aarch64 to use ES. (angry)
@@ -196,7 +197,6 @@ NOTE: The java wrapper is not included by default.  You may rebuild the srpm
 %exclude %{_libdir}/libvtkFiltersPython.so.*
 %exclude %{_libdir}/libvtkPythonContext2D.so.*
 %exclude %{_libdir}/libvtkPythonInterpreter.so.*
-%exclude %{_libdir}/libvtkWrappingPythonCore.so.*
 %{_libdir}/vtk
 
 #------------------------------------------------------------------------------
@@ -304,8 +304,6 @@ This package contains python bindings for VTK.
 %{_libdir}/libvtkFiltersPython.so.*
 %{_libdir}/libvtkPythonContext2D.so.*
 %{_libdir}/libvtkPythonInterpreter.so.*
-%{_libdir}/libvtkWrappingPythonCore.so.*
-%optional %{python_sitearch}/__pycache__/*
 %{python_sitearch}/vtkmodules
 %{python_sitearch}/vtk.py
 
@@ -324,6 +322,7 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %{_libdir}/libvtkGUISupportQtSQL.so.*
 %{_libdir}/libvtkRenderingQt.so.*
 %{_libdir}/libvtkViewsQt.so.*
+%{_libdir}/qml/VTK.*
 
 %package -n python-vtk-qt
 Summary:	Qt Python bindings for VTK
@@ -395,13 +394,10 @@ grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
   perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
 
 # (tpg) remove 3rd party software
-for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,glew,hdf5,jpeg,jsoncpp,kissfft,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zfp,zlib}
+for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,glew,hdf5,jpeg,jsoncpp,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zfp,zlib}
 do
   rm -r ThirdParty/*/${x}
 done
-
-# Remove unused KWSys items
-find Utilities/KWSys/vtksys/ -name \*.[ch]\* | grep -vE '^Utilities/KWSys/vtksys/([a-z].*|Configure|SharedForward|String\.hxx|Base64|CommandLineArguments|Directory|DynamicLoader|Encoding|FStream|FundamentalType|Glob|MD5|Process|RegularExpression|System|SystemInformation|SystemTools)(C|CXX|UNIX)?\.' | xargs rm
 
 %build
 export CFLAGS="%{optflags} -D_UNICODE"
@@ -415,7 +411,6 @@ rm -f CMake/FindBoost*
 
 # Due to cmake prefix point already for _prefix, we need
 # push only the necessary extra paths
-
 %cmake \
 	-DVTK_INSTALL_LIBRARY_DIR=%{_lib}/vtk \
 	-DVTK_INSTALL_ARCHIVE_DIR=%{_lib}/vtk \
@@ -435,13 +430,15 @@ rm -f CMake/FindBoost*
 	-DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt5/plugins/designer \
 	-DVTK_INSTALL_TCL_DIR:PATH=share/tcl%{tcl_version}/vtk \
 	-DTK_INTERNAL_PATH:PATH=/usr/include/tk-private/generic \
+	-DExprTk_INCLUDE_DIR=${RPM_SOURCE_DIR} \
+	-DQMLPLUGINDUMP_EXECUTABLE=%{_libdir}/qt5/bin/qmlplugindump \
 %if %{with OSMesa}
 	-DVTK_OPENGL_HAS_OSMESA:BOOL=ON \
 %endif
 	-DVTK_OPENGL_USE_GLES:BOOL=%{?with_gles:ON}%{!?with_gles:OFF} \
 	-DVTK_DATA_ROOT=/share/vtk \
-	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=OFF \
-	-DVTK_USE_SYSTEM_LIBPROJ:BOOL=OFF \
+	-DVTK_USE_SYSTEM_LIBPROJ4:BOOL=ON \
+	-DVTK_USE_SYSTEM_LIBPROJ:BOOL=ON \
 	-DVTK_WRAP_PYTHON:BOOL=ON \
 %if %{with java}
 	-DJAVA_INCLUDE_PATH:PATH=$JAVA_HOME/include \
@@ -487,14 +484,18 @@ rm -f CMake/FindBoost*
 	-DVTK_USE_OGGTHEORA_ENCODER=ON \
 	-DVTK_USE_EXTERNAL=ON \
 	-DVTK_USE_SYSTEM_LIBRARIES=ON \
+	-DVTK_MODULE_USE_EXTERNAL_VTK_cgns=OFF \
+	-DVTK_MODULE_USE_EXTERNAL_VTK_ioss=OFF \
 	-DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=ON \
 	-DVTK_USE_BOOST:BOOL=ON \
 	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
-	-DVTK_JAVA_SOURCE_VERSION=14 \
-	-DVTK_JAVA_TARGET_VERSION=14 \
+	-DVTK_JAVA_SOURCE_VERSION=17 \
+	-DVTK_JAVA_TARGET_VERSION=17 \
+	-DVTK_FORBID_DOWNLOADS=ON \
 	-G Ninja
 export LD_LIBRARY_PATH="$(pwd)/%{_lib}"
+export QT_QPA_PLATFORM=offscreen
 %ninja_build
 
 
