@@ -51,6 +51,13 @@ Patch2:		VTK-9.0.0-fix-libharu-version.patch
 Patch3:		vtk-9.1.0-workaround-libstdc++-clang-incompatibility.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
+%if %{with gles}
+Patch100:	0001-GLES-no-stereo-rendering.patch
+Patch101:	0002-GLES-GL_BACK_LEFT-mapping.patch
+Patch102:	0003-GLES-GL_DRAW_BUFFERS0.patch
+Patch103:	0004-GLES-no-GL_POINT_SPRITE.patch
+%endif
+
 BuildRequires:	double-conversion-devel >= 3.1.5
 BuildRequires:	pkgconfig(expat) >= 2.0.1
 BuildRequires:	pkgconfig(libjpeg)
