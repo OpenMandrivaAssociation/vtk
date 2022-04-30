@@ -52,6 +52,7 @@ Patch3:		vtk-9.1.0-workaround-libstdc++-clang-incompatibility.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
+# Patches for gles/aarch64 imported from ŁopenSUSE
 Patch7:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
 # PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
 Patch8:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
