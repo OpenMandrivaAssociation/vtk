@@ -52,10 +52,13 @@ Patch3:		vtk-9.1.0-workaround-libstdc++-clang-incompatibility.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
-Patch100:	0001-GLES-no-stereo-rendering.patch
-Patch101:	0002-GLES-GL_BACK_LEFT-mapping.patch
-Patch102:	0003-GLES-GL_DRAW_BUFFERS0.patch
-Patch103:	0004-GLES-no-GL_POINT_SPRITE.patch
+Patch7:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
+# PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
+Patch8:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
+# PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
+Patch9:         0002-Use-GL_DRAW_BUFFER0-instead-of-GL_DRAW_BUFFER-for-GL.patch
+# PATCH-FIX-UPSTREAM
+Patch10:        0001-GL_POINT_SPRITE-is-only-available-for-Compatibility-.patch
 %endif
 
 BuildRequires:	double-conversion-devel >= 3.1.5
