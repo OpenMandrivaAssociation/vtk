@@ -37,7 +37,7 @@
 
 Name:		vtk
 Version:	9.1.0
-Release:	3
+Release:	4
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -227,6 +227,7 @@ Requires:	utf8cpp-devel >= 3.1.1
 Requires:	pegtl-devel
 Requires:	gl2ps-devel
 Requires:	pkgconfig(proj)
+Requires:	pkgconfig(fmt)
 Requires:	graphviz
 Requires:	pkgconfig(tk) >= 8.5
 Requires:	pkgconfig(tcl) >= 8.5
