@@ -36,8 +36,8 @@
 %global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
 
 Name:		vtk
-Version:	9.1.0
-Release:	4
+Version:	9.2.2
+Release:	1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -46,9 +46,6 @@ Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
 # Header-only library, not presently used by anything else...
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
-# (tpg) our libharu is good
-Patch2:		VTK-9.0.0-fix-libharu-version.patch
-Patch3:		vtk-9.1.0-workaround-libstdc++-clang-incompatibility.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
@@ -88,6 +85,7 @@ BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(xt)
 BuildRequires:	pkgconfig(theora)
 BuildRequires:	pkgconfig(netcdf)
+BuildRequires:	pkgconfig(nlohmann_json)
 BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(proj)
