@@ -90,6 +90,7 @@ BuildRequires:	pkgconfig(jsoncpp)
 BuildRequires:	pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(proj)
 BuildRequires:	pkgconfig(fmt)
+BuildRequires:	cmake(Verdict)
 BuildRequires:	sqlite-tools
 BuildRequires:	utf8cpp-devel >= 3.1.1
 BuildRequires:	pegtl-devel
