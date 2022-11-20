@@ -12,7 +12,7 @@
 # Documentation are download and built by vtk-doc separated package
 %bcond_without java
 
-%ifarch %aarch64
+%ifarch %{arm}
 %bcond_without gles
 %else
 %bcond_with    gles
@@ -49,7 +49,7 @@ Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
-# Patches for gles/aarch64 imported from ŁopenSUSE
+# Patches for gles/aarch64 imported from openSUSE
 Patch7:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
 # PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
 Patch8:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
