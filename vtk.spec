@@ -37,7 +37,7 @@
 
 Name:		vtk
 Version:	9.2.2
-Release:	1
+Release:	2
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -192,6 +192,7 @@ Conflicts:	%{libname} < 5.6.1-2
 Requires:	%{libname}-qt = %{version}-%{release}
 Requires:	python-%{name} >= %{EVRD}
 Requires:	%{name}-test-suite >= %{EVRD}
+Requires:	pkgconfig(nlohmann_json)
 %if %{with java}
 Requires:	java-%{name} >= %{EVRD}
 %endif
