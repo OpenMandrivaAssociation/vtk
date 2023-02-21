@@ -36,8 +36,8 @@
 %global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
 
 Name:		vtk
-Version:	9.2.2
-Release:	3
+Version:	9.2.6
+Release:	1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
