@@ -46,6 +46,7 @@ Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
 # Header-only library, not presently used by anything else...
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
+Patch0:		vtk-9.2.6-libstdc++13.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
