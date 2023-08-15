@@ -35,18 +35,21 @@
 # (cmake("python${vtk_python_version}") or cmake("Python${VTK_PYTHON_VERSION}"))
 %global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
 
+%define beta rc1
+
 Name:		vtk
-Version:	9.2.6
-Release:	3
+Version:	9.3.0
+Release:	%{?beta:0.%{beta}.}1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
 URL:		http://www.vtk.org/
-Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}.tar.gz
-Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}.tar.gz
+Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}%{?beta:.%{beta}}.tar.gz
+Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}%{?beta:.%{beta}}.tar.gz
 # Header-only library, not presently used by anything else...
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
-Patch0:		vtk-9.2.6-libstdc++13.patch
+Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
+Patch1:		vtk-9.3.0-buildfixes.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
@@ -75,6 +78,7 @@ BuildRequires:	pkgconfig(Qt5Sql)
 BuildRequires:	pkgconfig(Qt5WebKitWidgets)
 BuildRequires:	pkgconfig(Qt5UiTools)
 BuildRequires:	cmake(ECM)
+BuildRequires:	cmake(FastFloat)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gl)
@@ -369,7 +373,7 @@ vtk-examples package.
 #------------------------------------------------------------------------------
 
 %prep
-%autosetup -p1 -n VTK-%{version}
+%autosetup -p1 -n VTK-%{version}%{?beta:.%{beta}}
 
 # Replace relative path ../../../VTKData with %{_datadir}/vtkdata-%{version}
 # otherwise it will break on symlinks.
