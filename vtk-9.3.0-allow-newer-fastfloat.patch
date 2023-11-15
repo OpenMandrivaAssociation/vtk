@@ -1,6 +1,18 @@
-diff -up VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt.omv~ VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt
---- VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt.omv~	2023-08-15 21:55:27.306233366 +0200
-+++ VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt	2023-08-15 21:55:58.936527628 +0200
+diff -up VTK-9.3.0/Common/Core/vtkValueFromString.cxx.1~ VTK-9.3.0/Common/Core/vtkValueFromString.cxx
+--- VTK-9.3.0/Common/Core/vtkValueFromString.cxx.1~	2023-11-14 00:37:21.000000000 +0100
++++ VTK-9.3.0/Common/Core/vtkValueFromString.cxx	2023-11-15 14:50:22.448815661 +0100
+@@ -8,7 +8,7 @@
+ #include <limits>
+ #include <type_traits>
+ 
+-#include <vtkfast_float.h>
++#include <fast_float/fast_float.h>
+ 
+ /**
+  * @brief Implementation namespace for integer parser details
+diff -up VTK-9.3.0/ThirdParty/fast_float/CMakeLists.txt.1~ VTK-9.3.0/ThirdParty/fast_float/CMakeLists.txt
+--- VTK-9.3.0/ThirdParty/fast_float/CMakeLists.txt.1~	2023-11-15 14:50:22.447815650 +0100
++++ VTK-9.3.0/ThirdParty/fast_float/CMakeLists.txt	2023-11-15 15:04:18.676708856 +0100
 @@ -9,11 +9,11 @@ vtk_module_third_party(
      SPDX_DOWNLOAD_LOCATION
        "git+https://gitlab.kitware.com/third-party/fast_float.git@for/vtk-20230309-3.9.0"
@@ -14,17 +26,4 @@ diff -up VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt.omv~ VTK-9.3.0.rc1/T
 +    VERSION "5.1.0"
      PACKAGE FastFloat
      TARGETS FastFloat::fast_float
-     )
-diff -up VTK-9.3.0.rc1/Common/Core/vtkValueFromString.cxx.omv~ VTK-9.3.0.rc1/Common/Core/vtkValueFromString.cxx
---- VTK-9.3.0.rc1/Common/Core/vtkValueFromString.cxx.omv~	2023-08-15 22:00:17.494932930 +0200
-+++ VTK-9.3.0.rc1/Common/Core/vtkValueFromString.cxx	2023-08-15 22:00:36.058105611 +0200
-@@ -8,7 +8,7 @@
- #include <limits>
- #include <type_traits>
- 
--#include <vtkfast_float.h>
-+#include <fast_float/fast_float.h>
- 
- /**
-  * @brief Implementation namespace for integer parser details
-diff -up VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt.omv~ VTK-9.3.0.rc1/ThirdParty/fast_float/CMakeLists.txt
+     STANDARD_INCLUDE_DIRS

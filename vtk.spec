@@ -35,7 +35,7 @@
 # (cmake("python${vtk_python_version}") or cmake("Python${VTK_PYTHON_VERSION}"))
 %global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
 
-%define beta rc1
+#define beta rc1
 
 Name:		vtk
 Version:	9.3.0
@@ -49,7 +49,6 @@ Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}%{?
 # Header-only library, not presently used by anything else...
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
 Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
-Patch1:		vtk-9.3.0-buildfixes.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
@@ -477,8 +476,8 @@ rm -f CMake/FindBoost*
 	-DVTK_USE_SYSTEM_GL2PS=ON \
 	-DVTK_USE_BOOST:BOOL=ON \
 	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
-	-DVTK_JAVA_SOURCE_VERSION=17 \
-	-DVTK_JAVA_TARGET_VERSION=17 \
+	-DVTK_JAVA_SOURCE_VERSION=20 \
+	-DVTK_JAVA_TARGET_VERSION=20 \
 	-DVTK_FORBID_DOWNLOADS=ON \
 	-G Ninja
 export LD_LIBRARY_PATH="$(pwd)/%{_lib}"
