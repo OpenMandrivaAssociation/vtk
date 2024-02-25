@@ -39,7 +39,7 @@
 
 Name:		vtk
 Version:	9.3.0
-Release:	%{?beta:0.%{beta}.}3
+Release:	%{?beta:0.%{beta}.}4
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -71,10 +71,8 @@ BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(Qt5Core)
 BuildRequires:	pkgconfig(Qt5Gui)
 BuildRequires:	pkgconfig(Qt5Widgets)
-BuildRequires:	pkgconfig(Qt5X11Extras)
 BuildRequires:	pkgconfig(Qt5OpenGL)
 BuildRequires:	pkgconfig(Qt5Sql)
-BuildRequires:	pkgconfig(Qt5WebKitWidgets)
 BuildRequires:	pkgconfig(Qt5UiTools)
 BuildRequires:	cmake(ECM)
 BuildRequires:	cmake(FastFloat)
@@ -210,10 +208,8 @@ Requires:	pkgconfig(zlib)
 Requires:	pkgconfig(Qt5Core)
 Requires:	pkgconfig(Qt5Gui)
 Requires:	pkgconfig(Qt5Widgets)
-Requires:	pkgconfig(Qt5X11Extras)
 Requires:	pkgconfig(Qt5OpenGL)
 Requires:	pkgconfig(Qt5Sql)
-Requires:	pkgconfig(Qt5WebKitWidgets)
 Requires:	pkgconfig(Qt5UiTools)
 Requires:	cmake(ECM)
 Requires:	pkgconfig(freetype2)
