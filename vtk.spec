@@ -38,8 +38,8 @@
 #define beta rc1
 
 Name:		vtk
-Version:	9.3.0
-Release:	%{?beta:0.%{beta}.}4
+Version:	9.3.1
+Release:	%{?beta:0.%{beta}.}1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
