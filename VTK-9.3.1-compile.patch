@@ -1,0 +1,56 @@
+diff -up VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_IOFactory.C.omv~ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_IOFactory.C
+--- VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_IOFactory.C.omv~	2024-09-29 17:44:49.254546134 +0200
++++ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_IOFactory.C	2024-09-29 17:44:55.504614115 +0200
+@@ -12,6 +12,7 @@
+ #include <cstddef> // for nullptr
+ #include "vtk_fmt.h"
+ #include VTK_FMT(fmt/ostream.h)
++#include VTK_FMT(fmt/ranges.h)
+ #include <map>     // for _Rb_tree_iterator, etc
+ #include <ostream> // for basic_ostream, etc
+ #include <set>
+diff -up VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_StructuredBlock.C.omv~ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_StructuredBlock.C
+--- VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_StructuredBlock.C.omv~	2024-09-29 17:41:41.842507930 +0200
++++ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_StructuredBlock.C	2024-09-29 17:41:48.602581441 +0200
+@@ -15,6 +15,7 @@
+ #include <Ioss_StructuredBlock.h>
+ #include "vtk_fmt.h"
+ #include VTK_FMT(fmt/ostream.h)
++#include VTK_FMT(fmt/ranges.h)
+ 
+ #include <cstddef> // for size_t
+ #include <numeric>
+diff -up VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_Utils.C.omv~ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_Utils.C
+--- VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_Utils.C.omv~	2024-09-29 17:38:35.350480300 +0200
++++ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_Utils.C	2024-09-29 17:39:20.880975264 +0200
+@@ -21,6 +21,7 @@
+ #include VTK_FMT(fmt/chrono.h)
+ #include VTK_FMT(fmt/format.h)
+ #include VTK_FMT(fmt/ostream.h)
++#include VTK_FMT(fmt/ranges.h)
+ #include <fstream>
+ #include <sstream>
+ #include <string>
+diff -up VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_ZoneConnectivity.C.omv~ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_ZoneConnectivity.C
+--- VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_ZoneConnectivity.C.omv~	2024-09-29 17:44:24.754279655 +0200
++++ VTK-9.3.1/ThirdParty/ioss/vtkioss/Ioss_ZoneConnectivity.C	2024-09-29 17:44:31.234350135 +0200
+@@ -9,6 +9,7 @@
+ #include <cstddef> // for size_t
+ #include "vtk_fmt.h"
+ #include VTK_FMT(fmt/ostream.h)
++#include VTK_FMT(fmt/ranges.h)
+ #include <string> // for string
+ #include <vector> // for vector
+ 
+diff -up VTK-9.3.1/Utilities/octree/octree/octree_node.txx.omv~ VTK-9.3.1/Utilities/octree/octree/octree_node.txx
+--- VTK-9.3.1/Utilities/octree/octree/octree_node.txx.omv~	2024-09-29 17:41:06.192120271 +0200
++++ VTK-9.3.1/Utilities/octree/octree/octree_node.txx	2024-09-29 17:41:29.372372330 +0200
+@@ -210,7 +210,7 @@ const octree_node<T_, d_, A_>& octree_no
+   {
+     throw std::domain_error("Attempt to access children of an octree leaf node.");
+   }
+-  return this->_M_chilren[child];
++  return this->m_children[child];
+ }
+ 
+ /**\brief Return a reference to a child node.
