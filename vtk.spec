@@ -43,7 +43,7 @@ Release:	%{?beta:0.%{beta}.}2
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
-URL:		http://www.vtk.org/
+URL:		https://www.vtk.org/
 Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}%{?beta:.%{beta}}.tar.gz
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}%{?beta:.%{beta}}.tar.gz
 # Header-only library, not presently used by anything else...
