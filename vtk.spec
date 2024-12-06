@@ -27,7 +27,7 @@
 %define vtkdocdir %{_docdir}/vtk
 %define vtktcldir %{tcl_sitearch}/%{name}-%{short_version}
 
-%define qt_designer_plugins_dir %{_libdir}/qt5/plugins/designer
+%define qt_designer_plugins_dir %{_libdir}/qt6/plugins/designer
 
 # Workaround for the dependency generator not being able to
 # expand all cmake variables
@@ -69,12 +69,14 @@ BuildRequires:	pkgconfig(libjpeg)
 BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(libtiff-4)
 BuildRequires:	pkgconfig(zlib)
-BuildRequires:	pkgconfig(Qt5Core)
-BuildRequires:	pkgconfig(Qt5Gui)
-BuildRequires:	pkgconfig(Qt5Widgets)
-BuildRequires:	pkgconfig(Qt5OpenGL)
-BuildRequires:	pkgconfig(Qt5Sql)
-BuildRequires:	pkgconfig(Qt5UiTools)
+BuildRequires:	cmake(Qt63DRender)
+BuildRequires:	cmake(Qt6Core)
+BuildRequires:	cmake(Qt6Gui)
+BuildRequires:	cmake(Qt6Widgets)
+BuildRequires:	cmake(Qt6OpenGL)
+BuildRequires:	cmake(Qt6QmlNetwork)
+BuildRequires:	cmake(Qt6Sql)
+BuildRequires:	cmake(Qt6UiTools)
 BuildRequires:	cmake(ECM)
 BuildRequires:	cmake(FastFloat)
 BuildRequires:	pkgconfig(freetype2)
@@ -190,8 +192,6 @@ Requires:	%{libname} = %{EVRD}
 Group:		Development/C++
 Provides:	%{name}-devel = %{EVRD}
 Obsoletes:	%{name}-devel < %{EVRD}
-Conflicts:	%{libname}-qt < 5.0.3-4
-Conflicts:	%{libname} < 5.6.1-2
 Requires:	%{libname}-qt = %{version}-%{release}
 Requires:	python-%{name} >= %{EVRD}
 Requires:	%{name}-test-suite >= %{EVRD}
@@ -206,12 +206,12 @@ Requires:	pkgconfig(libjpeg)
 Requires:	pkgconfig(libpng)
 Requires:	pkgconfig(libtiff-4)
 Requires:	pkgconfig(zlib)
-Requires:	pkgconfig(Qt5Core)
-Requires:	pkgconfig(Qt5Gui)
-Requires:	pkgconfig(Qt5Widgets)
-Requires:	pkgconfig(Qt5OpenGL)
-Requires:	pkgconfig(Qt5Sql)
-Requires:	pkgconfig(Qt5UiTools)
+Requires:	cmake(Qt6Gui)
+Requires:	cmake(Qt6OpenGL)
+Requires:	cmake(Qt6Quick3DTools)
+Requires:	cmake(Qt6Sql)
+Requires:	cmake(Qt6UiTools)
+Requires:	cmake(Qt6Widgets)
 Requires:	cmake(ECM)
 Requires:	pkgconfig(freetype2)
 Requires:	pkgconfig(egl)
@@ -377,7 +377,7 @@ grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
   perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
 
 # (tpg) remove 3rd party software
-for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,glew,hdf5,jpeg,jsoncpp,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zfp,zlib}
+for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,hdf5,jpeg,jsoncpp,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zfp,zlib}
 do
   rm -r ThirdParty/*/${x}
 done
@@ -390,11 +390,11 @@ export CXXFLAGS="%{optflags} -D_UNICODE"
 %endif
 
 # Remove old cmake files
-rm -f CMake/FindBoost*
+#rm -f CMake/FindBoost*
 
 # Due to cmake prefix point already for _prefix, we need
 # push only the necessary extra paths
-%cmake \
+%cmake -Wno-dev \
 	-DVTK_INSTALL_LIBRARY_DIR=%{_lib}/vtk \
 	-DVTK_INSTALL_ARCHIVE_DIR=%{_lib}/vtk \
 	-DVTK_INSTALL_BIN_DIR=/bin \
@@ -407,14 +407,14 @@ rm -f CMake/FindBoost*
 	-DVTK_GROUP_ENABLE_Web=YES \
 	-DVTK_GROUP_ENABLE_Views=YES \
 	-DVTK_GROUP_ENABLE_Imaging=YES \
-	-DVTK_QT_VERSION=5 \
+	-DVTK_QT_VERSION=6 \
 	-DVTK_CUSTOM_LIBRARY_SUFFIX="" \
 	-DVTK_INSTALL_PACKAGE_DIR:PATH=%{_lib}/cmake/vtk \
-	-DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt5/plugins/designer \
+	-DVTK_INSTALL_QT_DIR:PATH=%{_lib}/qt6/plugins/designer \
 	-DVTK_INSTALL_TCL_DIR:PATH=share/tcl%{tcl_version}/vtk \
 	-DTK_INTERNAL_PATH:PATH=/usr/include/tk-private/generic \
 	-DExprTk_INCLUDE_DIR=${RPM_SOURCE_DIR} \
-	-DQMLPLUGINDUMP_EXECUTABLE=%{_libdir}/qt5/bin/qmlplugindump \
+	-DQMLPLUGINDUMP_EXECUTABLE=%{_libdir}/qt6/bin/qmlplugindump \
 %if %{with OSMesa}
 	-DVTK_OPENGL_HAS_OSMESA:BOOL=ON \
 %endif
