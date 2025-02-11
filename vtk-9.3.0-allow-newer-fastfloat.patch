@@ -18,12 +18,12 @@ diff -up VTK-9.3.0/ThirdParty/fast_float/CMakeLists.txt.1~ VTK-9.3.0/ThirdParty/
        "git+https://gitlab.kitware.com/third-party/fast_float.git@for/vtk-20230309-3.9.0"
      VERSION
 -      "3.9.0"
-+      "6.0.0"
++      "7.0.0"
      STANDARD_INCLUDE_DIRS
      HEADER_ONLY
    EXTERNAL
 -    VERSION "3.9.0"
-+    VERSION "6.0.0"
++    VERSION "7.0.0"
      PACKAGE FastFloat
      TARGETS FastFloat::fast_float
      STANDARD_INCLUDE_DIRS
