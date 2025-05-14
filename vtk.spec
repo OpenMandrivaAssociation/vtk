@@ -50,7 +50,7 @@ Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}%{?
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
 #Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
-Patch5:		VTK-9.3.1-compile.patch
+#Patch5:		VTK-9.3.1-compile.patch
 
 %if %{with gles}
 # Patches for gles/aarch64 imported from openSUSE
