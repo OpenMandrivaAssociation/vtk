@@ -51,7 +51,6 @@ Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
 #Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 #Patch5:		VTK-9.3.1-compile.patch
-Patch6:		https://gitlab.kitware.com/vtk/vtk/-/merge_requests/11550.patch
 
 %if %{with gles}
 # Patches for gles/aarch64 imported from openSUSE
@@ -479,6 +478,7 @@ export CXXFLAGS="%{optflags} -D_UNICODE"
 	-DVTK_USE_SYSTEM_GL2PS=ON \
 	-DVTK_USE_BOOST:BOOL=ON \
  	-DVTK_MODULE_USE_EXTERNAL_VTK_token:BOOL=OFF \
+  	-DVTK_MODULE_USE_EXTERNAL_VTK_fmt:BOOL=OFF \
 	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
 	-DVTK_JAVA_SOURCE_VERSION=20 \
 	-DVTK_JAVA_TARGET_VERSION=20 \
