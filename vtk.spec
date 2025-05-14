@@ -48,7 +48,7 @@ Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}%{?beta
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}%{?beta:.%{beta}}.tar.gz
 # Header-only library, not presently used by anything else...
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
-Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
+#Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 Patch5:		VTK-9.3.1-compile.patch
 
