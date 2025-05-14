@@ -38,8 +38,8 @@
 #define beta rc1
 
 Name:		vtk
-Version:	9.3.1
-Release:	%{?beta:0.%{beta}.}5
+Version:	9.4.2
+Release:	%{?beta:0.%{beta}.}1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -48,9 +48,9 @@ Source0:	http://www.vtk.org/files/release/%{short_version}/VTK-%{version}%{?beta
 Source1:	http://www.vtk.org/files/release/%{short_version}/VTKData-%{version}%{?beta:.%{beta}}.tar.gz
 # Header-only library, not presently used by anything else...
 Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
-Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
+#Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
-Patch5:		VTK-9.3.1-compile.patch
+#Patch5:		VTK-9.3.1-compile.patch
 
 %if %{with gles}
 # Patches for gles/aarch64 imported from openSUSE
@@ -80,6 +80,7 @@ BuildRequires:	cmake(Qt6Sql)
 BuildRequires:	cmake(Qt6UiTools)
 BuildRequires:	cmake(ECM)
 BuildRequires:	cmake(FastFloat)
+#BuildRequires:	cmake(token)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gl)
@@ -383,6 +384,9 @@ do
   rm -r ThirdParty/*/${x}
 done
 
+# Allow other versions for fast_float
+sed -i -e '/VERSION .*/ d' ThirdParty/fast_float/CMakeLists.txt
+
 %build
 export CFLAGS="%{optflags} -D_UNICODE"
 export CXXFLAGS="%{optflags} -D_UNICODE"
@@ -473,6 +477,8 @@ export CXXFLAGS="%{optflags} -D_UNICODE"
 	-DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=ON \
 	-DVTK_USE_BOOST:BOOL=ON \
+ 	-DVTK_MODULE_USE_EXTERNAL_VTK_token:BOOL=OFF \
+  	-DVTK_MODULE_USE_EXTERNAL_VTK_fmt:BOOL=OFF \
 	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
 	-DVTK_JAVA_SOURCE_VERSION=20 \
 	-DVTK_JAVA_TARGET_VERSION=20 \
