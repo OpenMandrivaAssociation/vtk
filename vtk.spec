@@ -39,7 +39,7 @@
 
 Name:		vtk
 Version:	9.4.2
-Release:	%{?beta:0.%{beta}.}5
+Release:	%{?beta:0.%{beta}.}1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -51,6 +51,7 @@ Source2:	https://raw.githubusercontent.com/ArashPartow/exprtk/master/exprtk.hpp
 #Patch0:		vtk-9.3.0-allow-newer-fastfloat.patch
 Patch4:		VTK-9.1.0-glx-linkage.patch
 #Patch5:		VTK-9.3.1-compile.patch
+Patch6:		https://gitlab.kitware.com/vtk/vtk/-/merge_requests/11550.patch
 
 %if %{with gles}
 # Patches for gles/aarch64 imported from openSUSE
