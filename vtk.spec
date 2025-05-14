@@ -384,6 +384,9 @@ do
   rm -r ThirdParty/*/${x}
 done
 
+# Allow other versions for fast_float
+sed -i -e '/VERSION .*/ d' ThirdParty/fast_float/CMakeLists.txt
+
 %build
 export CFLAGS="%{optflags} -D_UNICODE"
 export CXXFLAGS="%{optflags} -D_UNICODE"
