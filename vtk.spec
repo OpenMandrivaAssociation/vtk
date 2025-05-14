@@ -80,7 +80,7 @@ BuildRequires:	cmake(Qt6Sql)
 BuildRequires:	cmake(Qt6UiTools)
 BuildRequires:	cmake(ECM)
 BuildRequires:	cmake(FastFloat)
-BuildRequires:	cmake(token)
+#BuildRequires:	cmake(token)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(egl)
 BuildRequires:	pkgconfig(gl)
@@ -477,6 +477,7 @@ export CXXFLAGS="%{optflags} -D_UNICODE"
 	-DVTK_USE_SYSTEM_NETCDFCPP=OFF \
 	-DVTK_USE_SYSTEM_GL2PS=ON \
 	-DVTK_USE_BOOST:BOOL=ON \
+ 	-DVTK_MODULE_USE_EXTERNAL_VTK_token:BOOL=OFF \
 	-DINSTALL_PKG_CONFIG_MODULE:BOOL=ON \
 	-DVTK_JAVA_SOURCE_VERSION=20 \
 	-DVTK_JAVA_TARGET_VERSION=20 \
