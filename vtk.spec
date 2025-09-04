@@ -38,7 +38,7 @@
 #define beta rc1
 
 Name:		vtk
-Version:	9.4.2
+Version:	9.5.1
 Release:	%{?beta:0.%{beta}.}1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
@@ -307,7 +307,6 @@ The vtkQt classes combine VTK and Qt(TM) for X11.
 %{_libdir}/libvtkGUISupportQtSQL.so.*
 %{_libdir}/libvtkRenderingQt.so.*
 %{_libdir}/libvtkViewsQt.so.*
-%{_libdir}/qml/VTK.*
 
 %package -n python-vtk-qt
 Summary:	Qt Python bindings for VTK
@@ -379,7 +378,7 @@ grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
   perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
 
 # (tpg) remove 3rd party software
-for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,hdf5,jpeg,jsoncpp,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zfp,zlib}
+for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,hdf5,jpeg,jsoncpp,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zlib}
 do
   rm -r ThirdParty/*/${x}
 done
