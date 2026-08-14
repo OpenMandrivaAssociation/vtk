@@ -33,13 +33,15 @@
 # expand all cmake variables
 # Avoids dependency on
 # (cmake("python${vtk_python_version}") or cmake("Python${VTK_PYTHON_VERSION}"))
-%global __requires_exclude  ^(.*)cmake(.*)Python(.*)$
+# JOGL is only for VTK's Java wrapping; Viskores (ex-VTK-m) is optional and
+# not packaged. find_package(VTK) without those components does not need them.
+%global __requires_exclude ^(.*)cmake(.*)(Python|[Jj][Oo][Gg][Ll]|[Vv]iskores)(.*)$
 
 #define beta rc1
 
 Name:		vtk
 Version:	9.5.2
-Release:	%{?beta:0.%{beta}.}3
+Release:	%{?beta:0.%{beta}.}4
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
