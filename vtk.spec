@@ -377,10 +377,10 @@ vtk-examples package.
 grep -rl '\.\./\.\./\.\./\.\./VTKData' . | xargs \
   perl -pi -e's,\.\./\.\./\.\./\.\./VTKData,%{_datadir}/vtkdata-%{version},g'
 
-# (tpg) remove 3rd party software
+# (tpg) remove 3rd party software (skip names VTK 9.7 no longer vendors)
 for x in vtk{doubleconversion,eigen,expat,freetype,gl2ps,hdf5,jpeg,jsoncpp,libharu,libproj,libxml2,lz4,lzma,mpi4py,netcdf,ogg,pegtl,png,pugixml,sqlite,theora,tiff,utf8,zlib}
 do
-  rm -r ThirdParty/*/${x}
+	find ThirdParty -mindepth 2 -maxdepth 2 -type d -name "$x" -exec rm -rf {} +
 done
 
 # Allow other versions for fast_float
