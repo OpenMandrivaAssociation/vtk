@@ -40,8 +40,8 @@
 #define beta rc1
 
 Name:		vtk
-Version:	9.5.2
-Release:	%{?beta:0.%{beta}.}4
+Version:	9.7.0
+Release:	%{?beta:0.%{beta}.}1
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -56,13 +56,11 @@ Patch4:		VTK-9.1.0-glx-linkage.patch
 
 %if %{with gles}
 # Patches for gles/aarch64 imported from openSUSE
+# VTK 9.7 replaced GLEW with GLAD and already maps GL_*_LEFT to
+# GL_FRONT/GL_BACK, and guards GL_POINT_SPRITE / GL_DRAW_BUFFER.
 Patch7:         0001-Add-missing-guard-required-for-GLES-to-disable-stere.patch
 # PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
 Patch8:         0001-Correct-GL_BACK-GL_BACK_LEFT-mapping-on-GLES.patch
-# PATCH-FIX-UPSTREAM -- Fix building with Qt GLES builds
-Patch9:         0002-Use-GL_DRAW_BUFFER0-instead-of-GL_DRAW_BUFFER-for-GL.patch
-# PATCH-FIX-UPSTREAM
-Patch10:        0001-GL_POINT_SPRITE-is-only-available-for-Compatibility-.patch
 %endif
 
 BuildRequires:	double-conversion-devel >= 3.1.5
