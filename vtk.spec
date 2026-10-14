@@ -41,7 +41,7 @@
 
 Name:		vtk
 Version:	9.7.0
-Release:	%{?beta:0.%{beta}.}1
+Release:	%{?beta:0.%{beta}.}2
 Summary:	Toolkit for 3D computer graphics, image processing, and visualization
 License:	BSD
 Group:		Graphics
@@ -110,7 +110,7 @@ BuildRequires:	pkgconfig(tk) >= 8.5
 BuildRequires:	pkgconfig(tcl) >= 8.5
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	boost-devel
-BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(python3)
 BuildRequires:	python-sip
 BuildRequires:	hdf5-devel
 BuildRequires:	pugixml-devel
@@ -237,7 +237,7 @@ Requires:	pkgconfig(tk) >= 8.5
 Requires:	pkgconfig(tcl) >= 8.5
 Requires:	pkgconfig(libxml-2.0)
 Requires:	boost-devel
-Requires:	pkgconfig(python)
+Requires:	pkgconfig(python3)
 Requires:	python-sip
 Requires:	hdf5-devel
 Requires:	pugixml-devel
